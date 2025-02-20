@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.asset {
+    margin: 10px;
+}
+.asset img {
+    width: 200px;
+    height: auto;
+    border: 2px solid #2e03eb; /* Aggiunta della cornice */
+    border-radius: 5px; /* Opzionale: arrotondamento degli angoli */
+}
+button {
+    background-color: #2e03eb;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    color: white;
+}
