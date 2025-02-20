@@ -55,7 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
             errorMessage.style.display = "block";
         }
     };
-
+    passwordInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            checkPassword();
+        }
+    });
     function loadPrivateBanners() {
         const privateBannerContainer = document.getElementById("privateBannerContainer");
         const privateBannerList = Array.from({ length: 1 }, (_, i) => `banners/private/private-banner${i + 1}.png`);
