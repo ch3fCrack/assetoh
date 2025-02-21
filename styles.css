@@ -1,9 +1,14 @@
-
+@import url('https://fonts.cdnfonts.com/css/lovelo');
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Lovelo', sans-serif;
+    font-weight: 900;
     text-align: center;
     background-color: #121212;
     color: white;
+}
+h1, h2, p , strong{
+    font-family: 'Lovelo', sans-serif;
+    font-weight: 900; /* Specifica il peso del font per utilizzare lo stile "Black" */
 }
 header {
     background: #1e1e1e;

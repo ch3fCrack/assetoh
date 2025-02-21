@@ -1,11 +1,12 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Lovelo', sans-serif;
+    font-weight: 900;
     text-align: center;
     background-color: #121212;
     color: white;
     background-image: url('https://media1.tenor.com/m/NlXV9iYFiSIAAAAC/cry-animecry.gif'); /* Aggiungi il percorso della tua immagine qui */
     background-size: 500px ; /* Assicura che l'immagine copra l'intera area */
-    background-position: center 380px; /* Centra l'immagine */
+    background-position: center 450px; /* Centra l'immagine */
     background-repeat: no-repeat; /* Evita che l'immagine si ripeta */
     
 }
