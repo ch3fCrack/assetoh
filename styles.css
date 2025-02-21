@@ -4,11 +4,13 @@ body {
     font-weight: 900;
     text-align: center;
     background-color: #121212;
+    text-shadow: 2px 2px 2px rgb(46, 3, 235);
     color: white;
 }
 h1, h2, p , strong{
     font-family: 'Lovelo', sans-serif;
     font-weight: 900; /* Specifica il peso del font per utilizzare lo stile "Black" */
+    text-shadow: 2px 2px 2px rgb(46, 3, 235);
 }
 header {
     background: #1e1e1e;
@@ -27,7 +29,7 @@ nav ul li a {
     text-decoration: none;
 }
 #copyPaypal, button {
-    background-color: #2e03eb;
+    background-color: rgb(46, 3, 235);
     border: none;
     padding: 15px 20px;
     font-size: 18px;
