@@ -33,7 +33,8 @@ nav ul li a {
     font-size: 18px;
     cursor: pointer;
     color: white;
-    font-weight: bold;
+    font-family: 'Lovelo', sans-serif; /* Assicurati che i bottoni utilizzino il font */
+    font-weight: 900; 
     border-radius: 8px;
     transition: background 0.3s;
     margin-top: 20px;
