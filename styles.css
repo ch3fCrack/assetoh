@@ -13,7 +13,7 @@ h1, h2, p , strong{
     text-shadow: 2px 2px 2px rgb(46, 3, 235);
 }
 header {
-    background: #1e1e1e;
+    background: #302f2f;
     padding: 10px;
 }
 nav ul {
@@ -25,8 +25,20 @@ nav ul li {
     margin: 0 15px;
 }
 nav ul li a {
-    color: white;
+    color: rgb(255, 255, 255);
     text-decoration: none;
+    font-family: 'Lovelo', sans-serif; /* Assicurati che anche i link utilizzino il font */
+    font-weight: 900; /* Specifica il peso del font per utilizzare lo stile "Black" */
+    text-shadow: 2px 2px 2px rgb(46, 3, 235);
+    border: 2px rgb(46, 3, 235); /* Aggiungi una cornice bianca attorno ai link */
+    padding: 5px 10px; /* Aggiungi un po' di padding per distanziare il testo dalla cornice */
+    border-radius: 5px; /* Aggiungi angoli arrotondati alla cornice */
+    transition: background-color 0.3s, color 0.3s; /* Aggiungi una transizione per l'effetto hover */
+}
+
+nav ul li a:hover {
+    background-color: rgb(167, 8, 199); /* Cambia il colore di sfondo al passaggio del mouse */
+    color: rgb(255, 255, 255); /* Cambia il colore del testo al passaggio del mouse */
 }
 #copyPaypal, button {
     background-color: rgb(46, 3, 235);
