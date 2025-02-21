@@ -19,7 +19,7 @@ function copyToOBS(gifPath) {
     const obsUrl = baseUrl + gifPath;
 
     navigator.clipboard.writeText(obsUrl).then(() => {
-        alert("URL copiato per OBS: " + obsUrl);
+        alert("URL copied for OBS: " + obsUrl);
     });
 }
 
