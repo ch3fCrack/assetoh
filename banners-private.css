@@ -20,6 +20,10 @@ button {
     cursor: pointer;
     color: white;
 }
+button:hover {
+    background-color: rgb(167, 8, 199);
+    transform: translateY(-2px);
+}
 #downloadAll {
     
     background-color: #2e03eb;

@@ -41,7 +41,8 @@ nav ul li a {
 }
 
 #copyPaypal:hover {
-    background-color: #2e03eb;
+    background-color: rgb(167, 8, 199); /* Cambia il colore di sfondo al passaggio del mouse */
+    color: rgb(255, 255, 255); /* Cambia il colore del testo al passaggio del mouse */
 }
 .download-container {
     text-align: center;
