@@ -51,8 +51,8 @@
 }
 
 .banners-page nav ul li a:hover {
-    background-color: rgb(167, 8, 199); /* Cambia il colore di sfondo al passaggio del mouse */
-    color: rgb(255, 255, 255); /* Cambia il colore del testo al passaggio del mouse */
+    background-color: rgb(167, 8, 199);
+    color: rgb(255, 255, 255);
 }
 
 .banners-page .download-container {
@@ -78,15 +78,14 @@
     transform: translateY(-2px);
 }
 
-/* Key changes for banner sizing and layout */
 .banners-page .banner-presentation-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 40px; /* Increased from 30px */
-    max-width: 1400px; /* Increased from 1200px */
+    gap: 40px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 30px; /* Increased from 20px */
+    padding: 30px;
 }
 
 .banners-page .banner-presentation {
@@ -94,9 +93,9 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 432px; /* Increased from 320px (35% larger) */
-    height: 243px; /* Increased from 180px (35% larger) */
-    background-color: rgba(255, 0, 0, 0.2); /* Temporary red background to verify sizing */
+    width: 432px;
+    height: 243px;
+    margin-bottom: 40px;
 }
 
 .banners-page .banner-presentation img {
@@ -113,8 +112,8 @@
     background-color: rgba(0, 0, 0, 0.5);
     border: none;
     color: white;
-    font-size: 2.5em; /* Increased from 2em */
-    padding: 15px 20px; /* Increased from 10px 15px */
+    font-size: 2.5em;
+    padding: 15px 20px;
     cursor: pointer;
     position: absolute;
     top: 50%;
@@ -135,4 +134,26 @@
 .banners-page .nextBtn {
     right: 0;
     border-radius: 0 10px 10px 0;
+}
+
+.banners-page .pagination-dots {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.banners-page .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.banners-page .dot.active {
+    background-color: rgb(46, 3, 235);
 }

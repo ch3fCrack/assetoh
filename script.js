@@ -148,11 +148,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const bannerImage = container.querySelector(".bannerImage");
         const prevBtn = container.querySelector(".prevBtn");
         const nextBtn = container.querySelector(".nextBtn");
+        const dots = container.querySelectorAll(".dot");
         let currentIndex = 0;
 
         function showBanner(index) {
             bannerImage.src = presentation.images[index];
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === index);
+            });
         }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener("click", () => {
+                currentIndex = index;
+                showBanner(currentIndex);
+            });
+        });
 
         prevBtn.addEventListener("click", () => {
             currentIndex = (currentIndex > 0) ? currentIndex - 1 : presentation.images.length - 1;
@@ -164,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
             showBanner(currentIndex);
         });
 
-        // Show the first banner initially
         showBanner(currentIndex);
     });
 });
