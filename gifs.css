@@ -12,7 +12,7 @@
     height: auto;
     border: 2px solid #2e03eb; /* Aggiunta della cornice */
     border-radius: 5px;
-    background-color: #636363; /* Opzionale: arrotondamento degli angoli */
+    background-color: #55459b; /* Opzionale: arrotondamento degli angoli */
 }
 button {
     background-color: #2e03eb;
