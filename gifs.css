@@ -11,7 +11,8 @@
     width: 200px;
     height: auto;
     border: 2px solid #2e03eb; /* Aggiunta della cornice */
-    border-radius: 5px; /* Opzionale: arrotondamento degli angoli */
+    border-radius: 5px;
+    background-color: #636363; /* Opzionale: arrotondamento degli angoli */
 }
 button {
     background-color: #2e03eb;
