@@ -53,6 +53,7 @@
 .banners-page nav ul li a:hover {
     background-color: rgb(167, 8, 199);
     color: rgb(255, 255, 255);
+    transform: translateY(-2px);
 }
 
 .banners-page .download-container {
@@ -82,10 +83,10 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 40px;
-    max-width: 1400px;
+    gap: 180px; /* Aumentato significativamente per i pulsanti esterni */
+    max-width: 1800px; /* Aumentato per gestire il layout più largo */
     margin: 0 auto;
-    padding: 30px;
+    padding: 30px 80px; /* Aggiunto padding orizzontale */
 }
 
 .banners-page .banner-presentation {
@@ -96,6 +97,7 @@
     width: 432px;
     height: 243px;
     margin-bottom: 40px;
+    padding: 0 60px; /* Aggiunto spazio per i pulsanti */
 }
 
 .banners-page .banner-presentation img {
@@ -109,7 +111,7 @@
 }
 
 .banners-page .banner-presentation button {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(46, 3, 235);
     border: none;
     color: white;
     font-size: 2.5em;
@@ -119,21 +121,24 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .banners-page .banner-presentation button:hover {
-    background-color: rgba(46, 3, 235, 0.8);
+    background-color: rgb(167, 8, 199);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .banners-page .prevBtn {
     left: 0;
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px;
+    gap: 8px;
 }
 
 .banners-page .nextBtn {
     right: 0;
-    border-radius: 0 10px 10px 0;
+    border-radius: 10px;
+    gap: 8px;
 }
 
 .banners-page .pagination-dots {
@@ -149,7 +154,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.3); /* Cambiato per i dot inattivi */
     cursor: pointer;
     transition: background-color 0.3s ease;
 }

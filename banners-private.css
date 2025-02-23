@@ -4,6 +4,16 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+#error-message {
+    color: rgb(255, 0, 0); /* Rosso brillante per il testo */
+    display: none;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.7), /* Bagliore rosso interno */
+                 2px 2px 4px rgb(124, 123, 123); /* Ombra nera più profonda */
+    font-family: 'Lovelo', sans-serif;
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
 .asset {
     margin: 10px;
 }
