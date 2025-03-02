@@ -1,25 +1,59 @@
 // Caricamento delle GIF
 const gifContainer = document.getElementById("gifContainer");
-const gifList = Array.from({ length: 9 }, (_, i) => `gifs/gif${i + 1}.gif`); // modifica il numeri di gif caricate 
+const gifList = [
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif1.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1imFEepc6E8ykqfkPHtuR4jTgmfiB-376"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif2.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1SsoGlX3MJ3SHMbfk96reu1FeZDTHx53l"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif3.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1US96caKk6S2-kijEae7dG6hHnEgakssl"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif4.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1GxEMMeD40njnhPIQ2wgyepR1ASBbo0Pz"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif5.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1d_G033KukTKrnQ7RBLdTG_p1LUwqffJQ"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif6.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1cpOD5cXmZH5BTlA2qzjD4bwXS0JZRggA"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif7.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1CbLtd6YBtPQ2fkoh5hpReOXe5nfXIY-e"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif8.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1CX1cVjxVyT3SL5bAGpU-Y7qnyiZki0eT"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif9.gif",
+        obsUrl: "https://drive.google.com/uc?export=view&id=1chchTqNaRmMeAmK_th72axwBYioOeflF"
+    }
+];
+
 if (gifContainer) {
-    gifList.forEach(gif => {
+    gifList.forEach((gif, index) => {
         const div = document.createElement("div");
         div.classList.add("asset");
         div.innerHTML = `
-            <img src="${gif}" alt="GIF ${gif}">
-            <button onclick="copyToOBS('${gif}')">Copy for OBS</button>
+            <img src="${gif.preview}" alt="GIF ${index + 1}">
+            <button onclick="copyToOBS('${gif.obsUrl}')">Copy for OBS</button>
         `;
         gifContainer.appendChild(div);
     });
 }
 
-function copyToOBS(gifPath) {
-    // URL base del sito su Netlify o GitHub Pages
-    const baseUrl = "https://ch3f-nerd-art-asset.netlify.app/"; // Sostituiscilo con il tuo vero dominio
-    const obsUrl = baseUrl + gifPath;
-
-    navigator.clipboard.writeText(obsUrl).then(() => {
-        alert("URL copied for OBS: " + obsUrl);
+function copyToOBS(gifUrl) {
+    navigator.clipboard.writeText(gifUrl).then(() => {
+        alert("URL copied for OBS: " + gifUrl);
     });
 }
 
