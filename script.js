@@ -3,39 +3,23 @@ const gifContainer = document.getElementById("gifContainer");
 const gifList = [
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif1.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1imFEepc6E8ykqfkPHtuR4jTgmfiB-376"
+        obsUrl: "https://streamelements.com/overlay/67c4d703ba79e601beb727ac/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     },
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif2.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1SsoGlX3MJ3SHMbfk96reu1FeZDTHx53l"
+        obsUrl: "https://streamelements.com/overlay/67c4d76c9733efd5fbe5dd89/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     },
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif3.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1US96caKk6S2-kijEae7dG6hHnEgakssl"
+        obsUrl: "https://streamelements.com/overlay/67c4e04e29b98c5a5816fe26/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     },
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif4.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1GxEMMeD40njnhPIQ2wgyepR1ASBbo0Pz"
+        obsUrl: "https://streamelements.com/overlay/67c4e08688e40a6f4d932081/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     },
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif5.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1d_G033KukTKrnQ7RBLdTG_p1LUwqffJQ"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif6.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1cpOD5cXmZH5BTlA2qzjD4bwXS0JZRggA"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif7.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1CbLtd6YBtPQ2fkoh5hpReOXe5nfXIY-e"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif8.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1CX1cVjxVyT3SL5bAGpU-Y7qnyiZki0eT"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif9.gif",
-        obsUrl: "https://drive.google.com/uc?export=view&id=1chchTqNaRmMeAmK_th72axwBYioOeflF"
+        obsUrl: "https://streamelements.com/overlay/67c4e22c586aed6967b99e08/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     }
 ];
 
@@ -53,7 +37,7 @@ if (gifContainer) {
 
 function copyToOBS(gifUrl) {
     navigator.clipboard.writeText(gifUrl).then(() => {
-        alert("URL copied for OBS: " + gifUrl);
+        alert("URL copied for OBS: ");
     });
 }
 
