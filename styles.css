@@ -12,7 +12,7 @@ body {
 .imgbg {
     width: 100%;
     height: auto;
-    max-width: 500px; /* Imposta la larghezza massima desiderata */
+    max-width: 800px; /* Imposta la larghezza massima desiderata */
     border-bottom: 2px solid #ff0044; /* Bordo neon rosso */
 }
 
