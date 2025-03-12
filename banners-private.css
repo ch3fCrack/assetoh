@@ -20,23 +20,23 @@
 .asset img {
     width: 600px;
     height: auto;
-    border: 2px solid #2e03eb; /* Aggiunta della cornice */
+    border: 2px solid #00aaff; /* Aggiunta della cornice */
     border-radius: 5px; /* Opzionale: arrotondamento degli angoli */
 }
 button {
-    background-color: #2e03eb;
+    background-color: #00aaff;
     border: none;
     padding: 10px;
     cursor: pointer;
     color: white;
 }
 button:hover {
-    background-color: rgb(167, 8, 199);
+    background-color: #ff0044;
     transform: translateY(-2px);
 }
 #downloadAll {
     
-    background-color: #2e03eb;
+    background-color: #00aaff;
     font-family: 'Lovelo', sans-serif;
     font-weight: 900;
     border: none;
