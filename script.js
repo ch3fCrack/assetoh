@@ -1,3 +1,52 @@
+// Caricamento delle Asian GIFs
+const asianGifContainer = document.getElementById("asianGifContainer");
+const asianGifList = [
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/cina1.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99a72849145f544ef94cf/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/jap1.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99affe1732533b0687070/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/cina4.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99b69e1732533b0689927/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/jap2.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99c4667375fd89e883c6b/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/cina3.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99c989eb5cb5d3d2f7a94/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/jap3.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99d239eb5cb5d3d2fa0f7/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/cina2.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99dad6e2645d7d2aa54f2/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/jap4.gif",
+        obsUrl: "https://streamelements.com/overlay/67d99e1786f2e1e0efe5dddc/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    }
+    // Aggiungi altre GIF qui
+];
+
+if (asianGifContainer) {
+    asianGifList.forEach((gif, index) => {
+        const div = document.createElement("div");
+        div.classList.add("asset");
+        div.innerHTML = `
+            <img src="${gif.preview}" alt="Asian GIF ${index + 1}">
+            <button onclick="copyToOBS('${gif.obsUrl}')">Copy for OBS</button>
+        `;
+        asianGifContainer.appendChild(div);
+    });
+}
 // Caricamento delle GIF
 const gifContainer = document.getElementById("gifContainer");
 const gifList = [
@@ -156,6 +205,14 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             containerId: "presentation13",
+            images: ["banners/private/private-banner1.png","banners/private/private-banner1.png"]
+        },
+        {
+            containerId: "presentation14",
+            images: ["banners/private/private-banner1.png","banners/private/private-banner1.png"]
+        },
+        {
+            containerId: "presentation15",
             images: ["banners/private/private-banner1.png","banners/private/private-banner1.png"]
         }
         // Aggiungi altre presentazioni qui
