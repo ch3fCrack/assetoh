@@ -253,3 +253,86 @@ document.addEventListener("DOMContentLoaded", () => {
         showBanner(currentIndex);
     });
 });
+// ...existing code...
+
+// Caricamento dei Banner Asiatici
+const asianBannerContainer = document.getElementById("asianBannerContainer");
+const asianBannerPresentations = {
+    asianPresentation1: {
+        images: [
+            "banners/asianbanner/banners1.png",
+            "banners/asianbanner/banners2.png",
+            "banners/asianbanner/banners3.png"
+        ],
+        currentIndex: 0
+    },
+    asianPresentation2: {
+        images: [
+            "banners/asianbanner/banners4.png",
+            "banners/asianbanner/banners5.png",
+            "banners/asianbanner/banners6.png"
+        ],
+        currentIndex: 0
+    }
+    // Add more presentations as needed
+};
+
+// Initialize Asian Banner Presentations
+function initializeAsianBannerPresentations() {
+    for (const presentationId in asianBannerPresentations) {
+        const presentation = document.getElementById(presentationId);
+        if (presentation) {
+            const bannerImage = presentation.querySelector(".bannerImage");
+            const prevBtn = presentation.querySelector(".prevBtn");
+            const nextBtn = presentation.querySelector(".nextBtn");
+            const dots = presentation.querySelectorAll(".dot");
+
+            // Set initial image
+            bannerImage.src = asianBannerPresentations[presentationId].images[0];
+
+            // Add event listeners
+            prevBtn.addEventListener("click", () => navigateAsianBanner(presentationId, "prev"));
+            nextBtn.addEventListener("click", () => navigateAsianBanner(presentationId, "next"));
+            dots.forEach((dot, index) => {
+                dot.addEventListener("click", () => goToAsianBanner(presentationId, index));
+            });
+        }
+    }
+}
+
+// Navigation functions for Asian Banners
+function navigateAsianBanner(presentationId, direction) {
+    const presentation = asianBannerPresentations[presentationId];
+    const images = presentation.images;
+    let newIndex;
+
+    if (direction === "next") {
+        newIndex = (presentation.currentIndex + 1) % images.length;
+    } else {
+        newIndex = (presentation.currentIndex - 1 + images.length) % images.length;
+    }
+
+    updateAsianBannerDisplay(presentationId, newIndex);
+}
+
+function goToAsianBanner(presentationId, index) {
+    updateAsianBannerDisplay(presentationId, index);
+}
+
+function updateAsianBannerDisplay(presentationId, newIndex) {
+    const presentation = document.getElementById(presentationId);
+    const bannerImage = presentation.querySelector(".bannerImage");
+    const dots = presentation.querySelectorAll(".dot");
+
+    asianBannerPresentations[presentationId].currentIndex = newIndex;
+    bannerImage.src = asianBannerPresentations[presentationId].images[newIndex];
+
+    dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === newIndex);
+    });
+}
+
+// Initialize Asian Banners when the page loads
+if (document.querySelector(".banners-page")) {
+    initializeAsianBannerPresentations();
+}
