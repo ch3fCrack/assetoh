@@ -1,0 +1,49 @@
+
+
+
+.container {
+    width: 800px;
+    height: 200px;
+    border-radius: 200px;
+    margin: 1.5rem auto;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    color: #ffffff;
+    background-color: rgba(36, 36, 36, 0.7);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.container .fixed-gif {
+    position: relative;
+    border-radius: 200px;
+    
+    margin-left: 2px;
+    width: 200px;
+    height: 200px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.timer {
+    font-size: 3rem;
+   
+    margin-left: auto;
+    z-index: 2;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.message {
+    font-size: 1.125rem;
+
+    margin-left: 50px;
+    text-align: center;
+    z-index: 2;
+    color: #f0f0f0;
+}

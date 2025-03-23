@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banner OBS</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 800px;
+            height: 200px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            color: #ffffff;
+            background-color: rgba(36, 36, 36, 0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .fixed-gif {
+            position: relative;
+            border-radius: 16px;
+            border: 2px solid #646cff;
+            margin-left: 2px;
+            width: 200px;
+            height: 200px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .timer {
+            font-size: 3rem;
+            margin-left: auto;
+            z-index: 2;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            font-size: 1.125rem;
+            margin-left: 50px;
+            text-align: center;
+            z-index: 2;
+            color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="timerContainer">
+        <div class="fixed-gif" id="bannerImage"></div>
+        <div class="message" id="message"></div>
+        <div class="timer" id="timer"></div>
+    </div>
+
+    <script>
+        // Leggi i parametri dalla query string
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const bg1 = urlParams.get('bg1');
+        const text1 = decodeURIComponent(urlParams.get('text1') || '');
+        const bg2 = urlParams.get('bg2');
+        const text2 = decodeURIComponent(urlParams.get('text2') || '');
+        const customMin = parseInt(urlParams.get('customMin') || '0');
+        const customSec = parseInt(urlParams.get('customSec') || '0');
+
+        const timerContainer = document.getElementById('timerContainer');
+        const bannerImage = document.getElementById('bannerImage');
+        const messageElement = document.getElementById('message');
+        const timerElement = document.getElementById('timer');
+
+        // Imposta il banner iniziale
+        bannerImage.style.backgroundImage = `url('${bg1 || ''}')`;
+        messageElement.textContent = text1;
+
+        // Timer
+        let secondsRemaining = customMin * 60 + customSec;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(secondsRemaining / 60);
+            const seconds = secondsRemaining % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        function timerTick() {
+            if (secondsRemaining > 0) {
+                secondsRemaining--;
+            }
+            updateTimerDisplay();
+        }
+
+        // Aggiorna il timer ogni secondo
+        setInterval(timerTick, 1000);
+        updateTimerDisplay();
+    </script>
+</body>
+</html>
