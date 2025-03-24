@@ -9,10 +9,11 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: transparent !important;
+            background-color: #00000000;
             overflow: hidden;
         }
 
+ 
         .container {
             width: 800px;
             height: 200px;
@@ -71,37 +72,44 @@
     </div>
 
     <script>
-        // Storage key for persisting settings
         const STORAGE_KEY = 'lunarBannerSettings';
+        const START_TIME_KEY = 'lunarBannerStartTime';
 
-        // Initialize settings from localStorage or URL parameters
         function initializeSettings() {
             const urlParams = new URLSearchParams(window.location.search);
-            let settings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            let settings = JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || {};
+            let startTime = parseInt(sessionStorage.getItem(START_TIME_KEY)) || Date.now();
 
-            // Update settings with URL parameters if present
             if (urlParams.has('bg1')) settings.bg1 = urlParams.get('bg1');
             if (urlParams.has('text1')) settings.text1 = decodeURIComponent(urlParams.get('text1'));
             if (urlParams.has('bg2')) settings.bg2 = urlParams.get('bg2');
             if (urlParams.has('text2')) settings.text2 = decodeURIComponent(urlParams.get('text2'));
             if (urlParams.has('phase')) settings.phase = urlParams.get('phase');
-            if (urlParams.has('secondsRemaining')) settings.secondsRemaining = parseInt(urlParams.get('secondsRemaining'));
-            
-            // Save initial settings
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+            if (urlParams.has('secondsRemaining')) {
+                settings.initialSeconds = parseInt(urlParams.get('secondsRemaining'));
+                settings.secondsRemaining = settings.initialSeconds;
+                startTime = Date.now();
+            }
+
+            // Calculate elapsed time if timer was already running
+            if (settings.secondsRemaining !== undefined) {
+                const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+                settings.secondsRemaining = Math.max(0, settings.initialSeconds - elapsedSeconds);
+            }
+
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+            sessionStorage.setItem(START_TIME_KEY, startTime.toString());
             return settings;
         }
 
-        // Get DOM elements
         const timerContainer = document.getElementById('timerContainer');
         const messageElement = document.getElementById('message');
         const timerElement = document.getElementById('timer');
 
-        // Initialize settings
         const settings = initializeSettings();
         let secondsRemaining = settings.secondsRemaining || 0;
+        let initialSeconds = settings.initialSeconds || 0;
 
-        // Update display based on current settings
         function updateDisplay() {
             const phase = settings.phase || 'main';
             if (phase === 'main') {
@@ -118,24 +126,31 @@
             const seconds = secondsRemaining % 60;
             timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
             
-            // Save current time
             settings.secondsRemaining = secondsRemaining;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
         }
 
         function timerTick() {
             if (secondsRemaining > 0) {
-                secondsRemaining--;
+                const currentTime = Date.now();
+                const startTime = parseInt(sessionStorage.getItem(START_TIME_KEY));
+                const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+                secondsRemaining = Math.max(0, initialSeconds - elapsedSeconds);
                 updateTimerDisplay();
             }
         }
 
-        // Handle visibility changes
+        // Handle page visibility changes
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
-                const savedSettings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-                secondsRemaining = savedSettings.secondsRemaining || 0;
+                const savedSettings = JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || {};
+                const startTime = parseInt(sessionStorage.getItem(START_TIME_KEY)) || Date.now();
+                const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+                
+                initialSeconds = savedSettings.initialSeconds || 0;
+                secondsRemaining = Math.max(0, initialSeconds - elapsedSeconds);
                 Object.assign(settings, savedSettings);
+                
                 updateDisplay();
                 updateTimerDisplay();
             }
