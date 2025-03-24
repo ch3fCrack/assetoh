@@ -118,10 +118,11 @@ function saveState() {
 }
 
 function copyToOBS() {
+    const startTime = Date.now();
     const state = {
         phase,
-        secondsRemaining,
-        timerMinutes,
+        initialSeconds: secondsRemaining, // Store initial seconds instead of current
+        startTime, // Add start time
         bg1: bgBanner1Input.value,
         text1: encodeURIComponent(textBanner1Input.value),
         bg2: bgBanner2Input.value,
@@ -131,11 +132,8 @@ function copyToOBS() {
         transparent: true
     };
 
-    // Modifica qui: usa il percorso corretto del file
+    // Use file path with spaces properly encoded
     const baseUrl = window.location.origin + '/lunar%20banners.html';
-    // oppure usa
-    // const baseUrl = 'http://localhost:porta/lunar%20banners.html';
-
     const queryString = Object.entries(state)
         .filter(([_, value]) => value !== undefined && value !== '')
         .map(([key, value]) => `${key}=${value}`)
@@ -143,8 +141,16 @@ function copyToOBS() {
 
     const obsUrl = `${baseUrl}?${queryString}`;
 
+    // Store initial state in sessionStorage
+    sessionStorage.setItem('lunarBannerSettings', JSON.stringify({
+        ...state,
+        secondsRemaining,
+        initialSeconds: secondsRemaining
+    }));
+    sessionStorage.setItem('lunarBannerStartTime', startTime.toString());
+
     navigator.clipboard.writeText(obsUrl);
-    console.log("URL generato:", obsUrl); // Aggiungi questo per debug
+    console.log("URL generato:", obsUrl);
     
     alert(`URL per OBS copiato!\n\nIstruzioni:\n1. Apri OBS Studio\n2. Aggiungi una nuova "Fonte Browser"\n3. Incolla l'URL copiato\n4. Imposta la larghezza e l'altezza come desideri\n5. Attiva "Sfondo trasparente" se necessario`);
 }

@@ -9,11 +9,10 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #00000000;
+            background-color: transparent !important;
             overflow: hidden;
         }
 
- 
         .container {
             width: 800px;
             height: 200px;
@@ -30,6 +29,18 @@
             position: relative;
             background-size: cover;
             background-position: center;
+        }
+
+        .container.main {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container.short {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         .fixed-gif {
@@ -112,12 +123,14 @@
 
         function updateDisplay() {
             const phase = settings.phase || 'main';
+            timerContainer.className = `container ${phase}`; // Dynamically set the class based on the phase
+
             if (phase === 'main') {
                 timerContainer.style.backgroundImage = `url('${settings.bg1 || ''}')`; 
-                messageElement.textContent = settings.text1 || '';
+                messageElement.textContent = settings.text1 || 'Default Main Phase Text';
             } else {
                 timerContainer.style.backgroundImage = `url('${settings.bg2 || ''}')`; 
-                messageElement.textContent = settings.text2 || '';
+                messageElement.textContent = settings.text2 || 'Default Short Phase Text';
             }
         }
 
