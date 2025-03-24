@@ -27,14 +27,6 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             position: relative;
-        }
-
-        .container.main {
-            background-size: cover;
-            background-position: center;
-        }
-
-        .container.short {
             background-size: cover;
             background-position: center;
         }
@@ -70,7 +62,7 @@
     </style>
 </head>
 <body>
-    <div class="container main" id="timerContainer">
+    <div class="container" id="timerContainer">
         <img src="lunar.gif" alt="GIF" class="fixed-gif">
         <div>
             <div class="message" id="message"></div>
@@ -79,33 +71,56 @@
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // Get parameters from URL
-        const bg1 = urlParams.get('bg1');
-        const text1 = decodeURIComponent(urlParams.get('text1') || '');
-        const bg2 = urlParams.get('bg2');
-        const text2 = decodeURIComponent(urlParams.get('text2') || '');
-        const phase = urlParams.get('phase') || 'main';
-        let secondsRemaining = parseInt(urlParams.get('secondsRemaining')) || 0;
+        // Storage key for persisting settings
+        const STORAGE_KEY = 'lunarBannerSettings';
 
+        // Initialize settings from localStorage or URL parameters
+        function initializeSettings() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let settings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+            // Update settings with URL parameters if present
+            if (urlParams.has('bg1')) settings.bg1 = urlParams.get('bg1');
+            if (urlParams.has('text1')) settings.text1 = decodeURIComponent(urlParams.get('text1'));
+            if (urlParams.has('bg2')) settings.bg2 = urlParams.get('bg2');
+            if (urlParams.has('text2')) settings.text2 = decodeURIComponent(urlParams.get('text2'));
+            if (urlParams.has('phase')) settings.phase = urlParams.get('phase');
+            if (urlParams.has('secondsRemaining')) settings.secondsRemaining = parseInt(urlParams.get('secondsRemaining'));
+            
+            // Save initial settings
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+            return settings;
+        }
+
+        // Get DOM elements
         const timerContainer = document.getElementById('timerContainer');
         const messageElement = document.getElementById('message');
         const timerElement = document.getElementById('timer');
 
-        // Set initial state
-        if (phase === 'main') {
-            timerContainer.style.backgroundImage = `url('${bg1 || ''}')`; 
-            messageElement.textContent = text1;
-        } else {
-            timerContainer.style.backgroundImage = `url('${bg2 || ''}')`; 
-            messageElement.textContent = text2;
+        // Initialize settings
+        const settings = initializeSettings();
+        let secondsRemaining = settings.secondsRemaining || 0;
+
+        // Update display based on current settings
+        function updateDisplay() {
+            const phase = settings.phase || 'main';
+            if (phase === 'main') {
+                timerContainer.style.backgroundImage = `url('${settings.bg1 || ''}')`; 
+                messageElement.textContent = settings.text1 || '';
+            } else {
+                timerContainer.style.backgroundImage = `url('${settings.bg2 || ''}')`; 
+                messageElement.textContent = settings.text2 || '';
+            }
         }
 
         function updateTimerDisplay() {
             const minutes = Math.floor(secondsRemaining / 60);
             const seconds = secondsRemaining % 60;
             timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Save current time
+            settings.secondsRemaining = secondsRemaining;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
         }
 
         function timerTick() {
@@ -115,7 +130,19 @@
             }
         }
 
-        // Initialize timer and start countdown
+        // Handle visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                const savedSettings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+                secondsRemaining = savedSettings.secondsRemaining || 0;
+                Object.assign(settings, savedSettings);
+                updateDisplay();
+                updateTimerDisplay();
+            }
+        });
+
+        // Initialize display and start timer
+        updateDisplay();
         updateTimerDisplay();
         setInterval(timerTick, 1000);
     </script>
