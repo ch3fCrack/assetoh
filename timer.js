@@ -60,13 +60,31 @@ function setCustomTime() {
     }
 
     if (minutesToEvent < 0) {
-        minutesToEvent += 60;
+        // Se il minutaggio è già passato, avvia il timer da 15 minuti con il tempo rimanente
+        const elapsedMinutes = Math.abs(minutesToEvent);
+        const elapsedSeconds = Math.abs(secondsToEvent);
+        phase = "short";
+        timerMinutes = 15 - elapsedMinutes;
+        secondsRemaining = timerMinutes * 60 - elapsedSeconds;
+
+        if (secondsRemaining < 0) {
+            secondsRemaining = 0; // Evita valori negativi
+        }
+
+        updateMessage();
+        updateTimerDisplay();
+        saveState();
+
+        alert(`Il timer di 15 minuti è già iniziato e mancano ${Math.floor(secondsRemaining / 60)}:${secondsRemaining % 60 < 10 ? '0' : ''}${secondsRemaining % 60}.`);
+        return;
     }
 
+    // Se il minutaggio non è passato, calcola il tempo rimanente per il prossimo evento
     secondsRemaining = minutesToEvent * 60 + secondsToEvent;
     timerMinutes = Math.floor(secondsRemaining / 60);
     phase = "main";
     updateMessage();
+    updateTimerDisplay();
     saveState();
 
     alert(`Il timer di 15 minuti partirà alle ${customMinutes}:${customSeconds < 10 ? '0' : ''}${customSeconds}.`);
