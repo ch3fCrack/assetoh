@@ -1,8 +1,8 @@
 let timerMinutes = 45;
 let secondsRemaining = timerMinutes * 60;
-let phase = "main";
-let customMinutes = 10;
-let customSeconds = 30;
+let phase = "main"; // "main" per il timer da 45 minuti, "short" per il timer da 15 minuti
+let customMinutes = 10; // Minuto personalizzato per il timer da 15 minuti
+let customSeconds = 30; // Secondo personalizzato per il timer da 15 minuti
 
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
@@ -20,11 +20,11 @@ function updateTimerDisplay() {
 
 function updateMessage() {
     if (phase === "main") {
-        messageElement.textContent = textBanner1Input.value || "Scritta personalizzata per il timer di 45 minuti";
+        messageElement.textContent = textBanner1Input.value || "Timer di 45 minuti";
         timerContainer.className = "container main";
         timerContainer.style.backgroundImage = `url('${bgBanner1Input.value || ""}')`;
     } else {
-        messageElement.textContent = textBanner2Input.value || "Scritta personalizzata per il timer di 15 minuti";
+        messageElement.textContent = textBanner2Input.value || "Timer di 15 minuti";
         timerContainer.className = "container short";
         timerContainer.style.backgroundImage = `url('${bgBanner2Input.value || ""}')`;
     }
@@ -83,6 +83,7 @@ function checkSpecialCondition() {
     const currentMinutes = currentDate.getMinutes();
     const currentSeconds = currentDate.getSeconds();
 
+    // Controlla se è il momento di far partire il timer da 15 minuti
     if (currentMinutes === customMinutes && currentSeconds === customSeconds) {
         phase = "short";
         timerMinutes = 15;
@@ -121,8 +122,8 @@ function copyToOBS() {
     const startTime = Date.now();
     const state = {
         phase,
-        initialSeconds: secondsRemaining, // Store initial seconds instead of current
-        startTime, // Add start time
+        initialSeconds: secondsRemaining,
+        startTime,
         bg1: bgBanner1Input.value,
         text1: encodeURIComponent(textBanner1Input.value),
         bg2: bgBanner2Input.value,
@@ -132,7 +133,6 @@ function copyToOBS() {
         transparent: true
     };
 
-    // Use file path with spaces properly encoded
     const baseUrl = window.location.origin + '/lunar%20banners.html';
     const queryString = Object.entries(state)
         .filter(([_, value]) => value !== undefined && value !== '')
@@ -141,7 +141,6 @@ function copyToOBS() {
 
     const obsUrl = `${baseUrl}?${queryString}`;
 
-    // Store initial state in sessionStorage
     sessionStorage.setItem('lunarBannerSettings', JSON.stringify({
         ...state,
         secondsRemaining,
@@ -150,9 +149,7 @@ function copyToOBS() {
     sessionStorage.setItem('lunarBannerStartTime', startTime.toString());
 
     navigator.clipboard.writeText(obsUrl);
-    console.log("URL generato:", obsUrl);
-    
-    alert(`URL per OBS copiato!\n\nIstruzioni:\n1. Apri OBS Studio\n2. Aggiungi una nuova "Fonte Browser"\n3. Incolla l'URL copiato\n4. Imposta la larghezza e l'altezza come desideri\n5. Attiva "Sfondo trasparente" se necessario`);
+    alert(`URL per OBS copiato!`);
 }
 
 function initializeFromURL() {
