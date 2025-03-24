@@ -40,6 +40,7 @@ function switchPhase() {
     }
     secondsRemaining = timerMinutes * 60;
     updateMessage();
+    saveState();
 }
 
 function setCustomTime() {
@@ -66,12 +67,14 @@ function setCustomTime() {
     timerMinutes = Math.floor(secondsRemaining / 60);
     phase = "main";
     updateMessage();
+    saveState();
 
     alert(`Il timer di 15 minuti partirà alle ${customMinutes}:${customSeconds < 10 ? '0' : ''}${customSeconds}.`);
 }
 
 function applyCustomizations() {
     updateMessage();
+    saveState();
     alert("Personalizzazioni applicate!");
 }
 
@@ -85,56 +88,93 @@ function checkSpecialCondition() {
         timerMinutes = 15;
         secondsRemaining = timerMinutes * 60;
         updateMessage();
+        saveState();
     }
 }
 
 function timerTick() {
     if (secondsRemaining > 0) {
         secondsRemaining--;
+        saveState();
     } else {
         switchPhase();
     }
     updateTimerDisplay();
 }
 
+function saveState() {
+    const state = {
+        phase,
+        secondsRemaining,
+        timerMinutes,
+        customMinutes,
+        customSeconds,
+        bg1: bgBanner1Input.value,
+        text1: textBanner1Input.value,
+        bg2: bgBanner2Input.value,
+        text2: textBanner2Input.value
+    };
+    sessionStorage.setItem('timerState', JSON.stringify(state));
+}
+
 function copyToOBS() {
-    // Raccogli tutte le impostazioni personalizzate
-    const settings = {
+    const state = {
+        phase,
+        secondsRemaining,
+        timerMinutes,
         bg1: bgBanner1Input.value,
         text1: encodeURIComponent(textBanner1Input.value),
         bg2: bgBanner2Input.value,
         text2: encodeURIComponent(textBanner2Input.value),
         customMin: document.getElementById('customMinutes').value,
         customSec: document.getElementById('customSeconds').value,
-        transparent: true // Imposta lo sfondo trasparente per OBS
+        transparent: true
     };
 
-    // Crea il link base per il banner (es. lunar banners.html)
-    const baseUrl = window.location.origin + '/lunar banners.html';
+    // Modifica qui: usa il percorso corretto del file
+    const baseUrl = window.location.origin + '/lunar%20banners.html';
+    // oppure usa
+    // const baseUrl = 'http://localhost:porta/lunar%20banners.html';
 
-    // Crea la query string con i parametri personalizzati
-    const queryString = Object.entries(settings)
-        .filter(([_, value]) => value) // Filtra solo i valori non vuoti
+    const queryString = Object.entries(state)
+        .filter(([_, value]) => value !== undefined && value !== '')
         .map(([key, value]) => `${key}=${value}`)
         .join('&');
 
     const obsUrl = `${baseUrl}?${queryString}`;
 
-    // Copia il link negli appunti e mostra un messaggio di conferma
-    navigator.clipboard.writeText(obsUrl).then(() => {
-        alert(`URL per OBS copiato!\n\nIstruzioni:\n1. Apri OBS Studio\n2. Aggiungi una nuova "Fonte Browser"\n3. Incolla l'URL copiato\n4. Imposta la larghezza e l'altezza come desideri\n5. Attiva "Sfondo trasparente" se necessario`);
-    });
+    navigator.clipboard.writeText(obsUrl);
+    console.log("URL generato:", obsUrl); // Aggiungi questo per debug
+    
+    alert(`URL per OBS copiato!\n\nIstruzioni:\n1. Apri OBS Studio\n2. Aggiungi una nuova "Fonte Browser"\n3. Incolla l'URL copiato\n4. Imposta la larghezza e l'altezza come desideri\n5. Attiva "Sfondo trasparente" se necessario`);
 }
 
 function initializeFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
+    const savedState = sessionStorage.getItem('timerState');
     
-    if (urlParams.has('bg1')) bgBanner1Input.value = urlParams.get('bg1');
-    if (urlParams.has('text1')) textBanner1Input.value = decodeURIComponent(urlParams.get('text1'));
-    if (urlParams.has('bg2')) bgBanner2Input.value = urlParams.get('bg2');
-    if (urlParams.has('text2')) textBanner2Input.value = decodeURIComponent(urlParams.get('text2'));
-    if (urlParams.has('customMin')) document.getElementById('customMinutes').value = urlParams.get('customMin');
-    if (urlParams.has('customSec')) document.getElementById('customSeconds').value = urlParams.get('customSec');
+    if (savedState) {
+        const state = JSON.parse(savedState);
+        phase = state.phase;
+        secondsRemaining = state.secondsRemaining;
+        timerMinutes = state.timerMinutes;
+        customMinutes = state.customMinutes;
+        customSeconds = state.customSeconds;
+        
+        if (state.bg1) bgBanner1Input.value = state.bg1;
+        if (state.text1) textBanner1Input.value = state.text1;
+        if (state.bg2) bgBanner2Input.value = state.bg2;
+        if (state.text2) textBanner2Input.value = state.text2;
+    } else {
+        if (urlParams.has('phase')) phase = urlParams.get('phase');
+        if (urlParams.has('secondsRemaining')) secondsRemaining = parseInt(urlParams.get('secondsRemaining'));
+        if (urlParams.has('bg1')) bgBanner1Input.value = urlParams.get('bg1');
+        if (urlParams.has('text1')) textBanner1Input.value = decodeURIComponent(urlParams.get('text1'));
+        if (urlParams.has('bg2')) bgBanner2Input.value = urlParams.get('bg2');
+        if (urlParams.has('text2')) textBanner2Input.value = decodeURIComponent(urlParams.get('text2'));
+        if (urlParams.has('customMin')) document.getElementById('customMinutes').value = urlParams.get('customMin');
+        if (urlParams.has('customSec')) document.getElementById('customSeconds').value = urlParams.get('customSec');
+    }
     
     if (urlParams.has('transparent')) {
         document.body.style.backgroundColor = 'transparent';
@@ -142,6 +182,7 @@ function initializeFromURL() {
     }
     
     updateMessage();
+    updateTimerDisplay();
 }
 
 document.addEventListener('DOMContentLoaded', initializeFromURL);
