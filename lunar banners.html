@@ -83,54 +83,27 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'lunarBannerSettings';
-        const START_TIME_KEY = 'lunarBannerStartTime';
-
-        function initializeSettings() {
-            const urlParams = new URLSearchParams(window.location.search);
-            let settings = JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || {};
-            let startTime = parseInt(sessionStorage.getItem(START_TIME_KEY)) || Date.now();
-
-            if (urlParams.has('bg1')) settings.bg1 = urlParams.get('bg1');
-            if (urlParams.has('text1')) settings.text1 = decodeURIComponent(urlParams.get('text1'));
-            if (urlParams.has('bg2')) settings.bg2 = urlParams.get('bg2');
-            if (urlParams.has('text2')) settings.text2 = decodeURIComponent(urlParams.get('text2'));
-            if (urlParams.has('phase')) settings.phase = urlParams.get('phase');
-            if (urlParams.has('secondsRemaining')) {
-                settings.initialSeconds = parseInt(urlParams.get('secondsRemaining'));
-                settings.secondsRemaining = settings.initialSeconds;
-                startTime = Date.now();
-            }
-
-            // Calculate elapsed time if timer was already running
-            if (settings.secondsRemaining !== undefined) {
-                const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
-                settings.secondsRemaining = Math.max(0, settings.initialSeconds - elapsedSeconds);
-            }
-
-            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-            sessionStorage.setItem(START_TIME_KEY, startTime.toString());
-            return settings;
-        }
-
+        const urlParams = new URLSearchParams(window.location.search);
         const timerContainer = document.getElementById('timerContainer');
         const messageElement = document.getElementById('message');
         const timerElement = document.getElementById('timer');
 
-        const settings = initializeSettings();
-        let secondsRemaining = settings.secondsRemaining || 0;
-        let initialSeconds = settings.initialSeconds || 0;
+        let secondsRemaining = parseInt(urlParams.get('initialSeconds')) || 0;
+        const phase = urlParams.get('phase') || 'main';
+        const bg1 = urlParams.get('bg1') || '';
+        const text1 = decodeURIComponent(urlParams.get('text1') || 'Timer di 45 minuti');
+        const bg2 = urlParams.get('bg2') || '';
+        const text2 = decodeURIComponent(urlParams.get('text2') || 'Timer di 15 minuti');
 
         function updateDisplay() {
-            const phase = settings.phase || 'main';
-            timerContainer.className = `container ${phase}`; // Dynamically set the class based on the phase
-
             if (phase === 'main') {
-                timerContainer.style.backgroundImage = `url('${settings.bg1 || ''}')`; 
-                messageElement.textContent = settings.text1 || 'Default Main Phase Text';
+                timerContainer.className = 'container main';
+                timerContainer.style.backgroundImage = `url('${bg1}')`;
+                messageElement.textContent = text1;
             } else {
-                timerContainer.style.backgroundImage = `url('${settings.bg2 || ''}')`; 
-                messageElement.textContent = settings.text2 || 'Default Short Phase Text';
+                timerContainer.className = 'container short';
+                timerContainer.style.backgroundImage = `url('${bg2}')`;
+                messageElement.textContent = text2;
             }
         }
 
@@ -138,38 +111,16 @@
             const minutes = Math.floor(secondsRemaining / 60);
             const seconds = secondsRemaining % 60;
             timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            
-            settings.secondsRemaining = secondsRemaining;
-            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
         }
 
         function timerTick() {
             if (secondsRemaining > 0) {
-                const currentTime = Date.now();
-                const startTime = parseInt(sessionStorage.getItem(START_TIME_KEY));
-                const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
-                secondsRemaining = Math.max(0, initialSeconds - elapsedSeconds);
+                secondsRemaining--;
                 updateTimerDisplay();
             }
         }
 
-        // Handle page visibility changes
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                const savedSettings = JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || {};
-                const startTime = parseInt(sessionStorage.getItem(START_TIME_KEY)) || Date.now();
-                const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
-                
-                initialSeconds = savedSettings.initialSeconds || 0;
-                secondsRemaining = Math.max(0, initialSeconds - elapsedSeconds);
-                Object.assign(settings, savedSettings);
-                
-                updateDisplay();
-                updateTimerDisplay();
-            }
-        });
-
-        // Initialize display and start timer
+        // Inizializza il display e il timer
         updateDisplay();
         updateTimerDisplay();
         setInterval(timerTick, 1000);
