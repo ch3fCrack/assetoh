@@ -9,7 +9,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: transparent;
+            background-color: transparent !important;
             overflow: hidden;
         }
 
@@ -29,6 +29,16 @@
             position: relative;
         }
 
+        .container.main {
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container.short {
+            background-size: cover;
+            background-position: center;
+        }
+
         .fixed-gif {
             position: relative;
             border-radius: 100px;
@@ -40,54 +50,57 @@
         }
 
         .timer {
+            font-family: 'Lovelo', sans-serif;
             font-size: 3rem;
             margin-left: 50px;
             z-index: 2;
             color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
         .message {
+            font-family: 'Lovelo', sans-serif;
             font-size: 1.125rem;
             margin-left: 50px;
             text-align: center;
             z-index: 2;
             color: #f0f0f0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
     </style>
 </head>
 <body>
-    <body>
-        <div class="container main" id="timerContainer">
-            <img src="lunar.gif" alt="GIF" class="fixed-gif">
-            <div>
-                <div class="message" id="message"></div>
-                <div class="timer" id="timer"></div>
-            </div>
+    <div class="container main" id="timerContainer">
+        <img src="lunar.gif" alt="GIF" class="fixed-gif">
+        <div>
+            <div class="message" id="message"></div>
+            <div class="timer" id="timer"></div>
         </div>
+    </div>
 
     <script>
-        // Leggi i parametri dalla query string
         const urlParams = new URLSearchParams(window.location.search);
-
+        
+        // Get parameters from URL
         const bg1 = urlParams.get('bg1');
         const text1 = decodeURIComponent(urlParams.get('text1') || '');
         const bg2 = urlParams.get('bg2');
         const text2 = decodeURIComponent(urlParams.get('text2') || '');
-        const customMin = parseInt(urlParams.get('customMin') || '0');
-        const customSec = parseInt(urlParams.get('customSec') || '0');
+        const phase = urlParams.get('phase') || 'main';
+        let secondsRemaining = parseInt(urlParams.get('secondsRemaining')) || 0;
 
         const timerContainer = document.getElementById('timerContainer');
-        const bannerImage = document.getElementById('bannerImage');
         const messageElement = document.getElementById('message');
         const timerElement = document.getElementById('timer');
 
-        // Imposta il banner iniziale
-        bannerImage.style.backgroundImage = `url('${bg1 || ''}')`;
-        messageElement.textContent = text1;
-
-        // Timer
-        let secondsRemaining = customMin * 60 + customSec;
+        // Set initial state
+        if (phase === 'main') {
+            timerContainer.style.backgroundImage = `url('${bg1 || ''}')`; 
+            messageElement.textContent = text1;
+        } else {
+            timerContainer.style.backgroundImage = `url('${bg2 || ''}')`; 
+            messageElement.textContent = text2;
+        }
 
         function updateTimerDisplay() {
             const minutes = Math.floor(secondsRemaining / 60);
@@ -98,13 +111,13 @@
         function timerTick() {
             if (secondsRemaining > 0) {
                 secondsRemaining--;
+                updateTimerDisplay();
             }
-            updateTimerDisplay();
         }
 
-        // Aggiorna il timer ogni secondo
-        setInterval(timerTick, 1000);
+        // Initialize timer and start countdown
         updateTimerDisplay();
+        setInterval(timerTick, 1000);
     </script>
 </body>
 </html>
