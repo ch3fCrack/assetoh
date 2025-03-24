@@ -3,50 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer Personalizzabile</title>
+    <title>Customizable Timer</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="timer.css">
-    
     <link href="https://fonts.cdnfonts.com/css/lovelo" rel="stylesheet">
 </head>
 <body>
-    <h1>Timer Personalizzabile</h1>
+    <h1>Customizable Timer</h1>
     <div class="inputs">
-        <label>Minuti: <input type="number" id="customMinutes" value="10"></label>
-        <label>Secondi: <input type="number" id="customSeconds" value="30"></label>
-        <button onclick="setCustomTime()">Imposta</button>
+        <label>Minutes: <input type="number" id="customMinutes" value="10"></label>
+        <label>Seconds: <input type="number" id="customSeconds" value="30"></label>
+        <button onclick="setCustomTime()">Set</button>
     </div>
 
     <div class="settings">
-        <h2>Personalizza i Banner</h2>
+        <h2>Customize Banners</h2>
         <div>
-            <label>URL Banner 1 (45 min):</label>
-            <input type="text" id="bgBanner1" placeholder="Inserisci URL immagine">
+            <label>Banner 1 URL (45 min):</label>
+            <input type="text" id="bgBanner1" placeholder="Enter image URL">
         </div>
         <div>
-            <label>Testo Banner 1:</label>
-            <input type="text" id="textBanner1" placeholder="Inserisci testo">
+            <label>Banner 1 Text:</label>
+            <input type="text" id="textBanner1" placeholder="Enter text">
         </div>
         <div>
-            <label>URL Banner 2 (15 min):</label>
-            <input type="text" id="bgBanner2" placeholder="Inserisci URL immagine">
+            <label>Banner 2 URL (15 min):</label>
+            <input type="text" id="bgBanner2" placeholder="Enter image URL">
         </div>
         <div>
-            <label>Testo Banner 2:</label>
-            <input type="text" id="textBanner2" placeholder="Inserisci testo">
+            <label>Banner 2 Text:</label>
+            <input type="text" id="textBanner2" placeholder="Enter text">
         </div>
-        <button onclick="applyCustomizations()">Applica Personalizzazioni</button>
+        <button onclick="applyCustomizations()">Apply Customizations</button>
     </div>
 
     <div class="container main" id="timerContainer">
         <img src="lunar.gif" alt="GIF" class="fixed-gif">
         <div>
             <div class="timer" id="timer">45:00</div>
-            <div class="message" id="message">Scritta esempio</div>
+            <div class="message" id="message">Example text</div>
         </div>
     </div>
 
-    <button class="obs-btn" onclick="copyToOBS()">Usa in OBS</button>
+    <button class="obs-btn" onclick="copyToOBS()">Use in OBS</button>
     <script src="timer.js"></script>
 </body>
 </html>
