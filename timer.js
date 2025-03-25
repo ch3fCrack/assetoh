@@ -1,8 +1,8 @@
 let timerMinutes = 45;
 let secondsRemaining = timerMinutes * 60;
-let phase = "main"; // "main" for the 45-minute timer, "short" for the 15-minute timer
-let customMinutes = 10; // Custom minute for the 15-minute timer
-let customSeconds = 30; // Custom second for the 15-minute timer
+let phase = "main"; // "main" per il timer da 45 minuti, "short" per il timer da 15 minuti
+let customMinutes = 10; // Minuto personalizzato per il timer da 15 minuti
+let customSeconds = 30; // Secondo personalizzato per il timer da 15 minuti
 
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
@@ -11,8 +11,6 @@ const bgBanner1Input = document.getElementById('bgBanner1');
 const textBanner1Input = document.getElementById('textBanner1');
 const bgBanner2Input = document.getElementById('bgBanner2');
 const textBanner2Input = document.getElementById('textBanner2');
-const timerColorInput = document.getElementById('timerColor');
-const messageColorInput = document.getElementById('messageColor');
 
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
@@ -22,11 +20,11 @@ function updateTimerDisplay() {
 
 function updateMessage() {
     if (phase === "main") {
-        messageElement.textContent = textBanner1Input.value || "45-minute Timer";
+        messageElement.textContent = textBanner1Input.value || "Timer di 45 minuti";
         timerContainer.className = "container main";
         timerContainer.style.backgroundImage = `url('${bgBanner1Input.value || ""}')`;
     } else {
-        messageElement.textContent = textBanner2Input.value || "15-minute Timer";
+        messageElement.textContent = textBanner2Input.value || "Timer di 15 minuti";
         timerContainer.className = "container short";
         timerContainer.style.backgroundImage = `url('${bgBanner2Input.value || ""}')`;
     }
@@ -62,7 +60,7 @@ function setCustomTime() {
     }
 
     if (minutesToEvent < 0) {
-        // If the time has already passed, start the 15-minute timer with the remaining time
+        // Se il minutaggio è già passato, avvia il timer da 15 minuti con il tempo rimanente
         const elapsedMinutes = Math.abs(minutesToEvent);
         const elapsedSeconds = Math.abs(secondsToEvent);
         phase = "short";
@@ -70,18 +68,18 @@ function setCustomTime() {
         secondsRemaining = timerMinutes * 60 - elapsedSeconds;
 
         if (secondsRemaining < 0) {
-            secondsRemaining = 0; // Avoid negative values
+            secondsRemaining = 0; // Evita valori negativi
         }
 
         updateMessage();
         updateTimerDisplay();
         saveState();
 
-        alert(`The 15-minute timer has already started. ${Math.floor(secondsRemaining / 60)}:${secondsRemaining % 60 < 10 ? '0' : ''}${secondsRemaining % 60} remaining.`);
+        alert(`Il timer di 15 minuti è già iniziato e mancano ${Math.floor(secondsRemaining / 60)}:${secondsRemaining % 60 < 10 ? '0' : ''}${secondsRemaining % 60}.`);
         return;
     }
 
-    // If the time has not passed, calculate the remaining time for the next event
+    // Se il minutaggio non è passato, calcola il tempo rimanente per il prossimo evento
     secondsRemaining = minutesToEvent * 60 + secondsToEvent;
     timerMinutes = Math.floor(secondsRemaining / 60);
     phase = "main";
@@ -89,20 +87,13 @@ function setCustomTime() {
     updateTimerDisplay();
     saveState();
 
-    alert(`The 15-minute timer will start at ${customMinutes}:${customSeconds < 10 ? '0' : ''}${customSeconds}.`);
+    alert(`Il timer di 15 minuti partirà alle ${customMinutes}:${customSeconds < 10 ? '0' : ''}${customSeconds}.`);
 }
 
 function applyCustomizations() {
-    const timerColor = timerColorInput.value;
-    const messageColor = messageColorInput.value;
-
-    // Apply the selected colors
-    timerElement.style.color = timerColor;
-    messageElement.style.color = messageColor;
-
-    // Save the colors in the state
+    updateMessage();
     saveState();
-    alert("Customizations applied!");
+    alert("Personalizzazioni applicate!");
 }
 
 function checkSpecialCondition() {
@@ -110,7 +101,7 @@ function checkSpecialCondition() {
     const currentMinutes = currentDate.getMinutes();
     const currentSeconds = currentDate.getSeconds();
 
-    // Check if it's time to start the 15-minute timer
+    // Controlla se è il momento di far partire il timer da 15 minuti
     if (currentMinutes === customMinutes && currentSeconds === customSeconds) {
         phase = "short";
         timerMinutes = 15;
@@ -140,23 +131,24 @@ function saveState() {
         bg1: bgBanner1Input.value,
         text1: textBanner1Input.value,
         bg2: bgBanner2Input.value,
-        text2: textBanner2Input.value,
-        timerColor: timerColorInput.value,
-        messageColor: messageColorInput.value
+        text2: textBanner2Input.value
     };
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
 
 function copyToOBS() {
+    const startTime = Date.now();
     const state = {
         phase,
         initialSeconds: secondsRemaining,
+        startTime,
         bg1: bgBanner1Input.value,
         text1: encodeURIComponent(textBanner1Input.value),
         bg2: bgBanner2Input.value,
         text2: encodeURIComponent(textBanner2Input.value),
-        timerColor: timerColorInput.value,
-        messageColor: messageColorInput.value
+        customMin: document.getElementById('customMinutes').value,
+        customSec: document.getElementById('customSeconds').value,
+        transparent: true
     };
 
     const baseUrl = window.location.origin + '/lunar%20banners.html';
@@ -166,13 +158,22 @@ function copyToOBS() {
         .join('&');
 
     const obsUrl = `${baseUrl}?${queryString}`;
+
+    sessionStorage.setItem('lunarBannerSettings', JSON.stringify({
+        ...state,
+        secondsRemaining,
+        initialSeconds: secondsRemaining
+    }));
+    sessionStorage.setItem('lunarBannerStartTime', startTime.toString());
+
     navigator.clipboard.writeText(obsUrl);
-    alert(`URL for OBS copied!\n\n${obsUrl}`);
+    alert(`URL per OBS copiato!`);
 }
 
 function initializeFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
     const savedState = sessionStorage.getItem('timerState');
-
+    
     if (savedState) {
         const state = JSON.parse(savedState);
         phase = state.phase;
@@ -180,16 +181,29 @@ function initializeFromURL() {
         timerMinutes = state.timerMinutes;
         customMinutes = state.customMinutes;
         customSeconds = state.customSeconds;
-
+        
         if (state.bg1) bgBanner1Input.value = state.bg1;
         if (state.text1) textBanner1Input.value = state.text1;
         if (state.bg2) bgBanner2Input.value = state.bg2;
         if (state.text2) textBanner2Input.value = state.text2;
-
-        // Apply saved colors
-        if (state.timerColor) timerElement.style.color = state.timerColor;
-        if (state.messageColor) messageElement.style.color = state.messageColor;
+    } else {
+        if (urlParams.has('phase')) phase = urlParams.get('phase');
+        if (urlParams.has('secondsRemaining')) secondsRemaining = parseInt(urlParams.get('secondsRemaining'));
+        if (urlParams.has('bg1')) bgBanner1Input.value = urlParams.get('bg1');
+        if (urlParams.has('text1')) textBanner1Input.value = decodeURIComponent(urlParams.get('text1'));
+        if (urlParams.has('bg2')) bgBanner2Input.value = urlParams.get('bg2');
+        if (urlParams.has('text2')) textBanner2Input.value = decodeURIComponent(urlParams.get('text2'));
+        if (urlParams.has('customMin')) document.getElementById('customMinutes').value = urlParams.get('customMin');
+        if (urlParams.has('customSec')) document.getElementById('customSeconds').value = urlParams.get('customSec');
     }
+    
+    if (urlParams.has('transparent')) {
+        document.body.style.backgroundColor = 'transparent';
+        timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
+    }
+    
+    updateMessage();
+    updateTimerDisplay();
 }
 
 document.addEventListener('DOMContentLoaded', initializeFromURL);
