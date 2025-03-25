@@ -124,11 +124,53 @@ function initializeFromURL() {
     updateTimerDisplay();
 }
 
+function initializeTimer() {
+    const now = new Date();
+    const currentMinute = now.getMinutes();
+    const currentSecond = now.getSeconds();
+
+    // Calcola il tempo trascorso dall'inizio dell'ora attuale
+    const currentTimeInSeconds = currentMinute * 60 + currentSecond;
+    const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
+
+    // Se siamo prima del tempo target nell'ora corrente
+    if (currentTimeInSeconds < targetTimeInSeconds) {
+        phase = "main";
+        secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+    } else {
+        // Se siamo dopo il tempo target
+        phase = "short";
+        const timePassedSinceTarget = currentTimeInSeconds - targetTimeInSeconds;
+        const shortTimerSec = 15 * 60;
+        secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
+    }
+
+    timerMinutes = phase === "main" ? 45 : 15;
+    updateMessage();
+    updateTimerDisplay();
+    saveState();
+}
+
+function timerTick() {
+    if (secondsRemaining > 0) {
+        secondsRemaining--;
+        saveState();
+    } else {
+        switchPhase();
+    }
+    updateTimerDisplay();
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('setTimeBtn').addEventListener('click', function() {
         const minute = parseInt(document.getElementById('minuteInput').value, 10);
         const second = parseInt(document.getElementById('secondInput').value, 10);
+        
+        if (minute < 0 || minute > 59 || second < 0 || second > 59) {
+            alert('Inserisci valori validi (0-59) per minuti e secondi.');
+            return;
+        }
         
         CONFIG.eventStartMinute = minute;
         CONFIG.eventStartSecond = second;
@@ -153,39 +195,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initializeFromURL();
 });
-
-function initializeTimer() {
-    const now = new Date();
-    let targetTime = new Date();
-    targetTime.setMinutes(CONFIG.eventStartMinute);
-    targetTime.setSeconds(CONFIG.eventStartSecond);
-    targetTime.setMilliseconds(0);
-
-    if (targetTime < now) {
-        const diffMs = now - targetTime;
-        const diffSec = Math.floor(diffMs / 1000);
-        const shortTimerSec = 15 * 60;
-        secondsRemaining = shortTimerSec - (diffSec % shortTimerSec);
-        phase = "short";
-    } else {
-        const diffMs = targetTime - now;
-        secondsRemaining = Math.floor(diffMs / 1000);
-        phase = "main";
-    }
-
-    updateMessage();
-    updateTimerDisplay();
-    saveState();
-}
-
-function timerTick() {
-    if (secondsRemaining > 0) {
-        secondsRemaining--;
-        saveState();
-    } else {
-        switchPhase();
-    }
-    updateTimerDisplay();
-}
 
 setInterval(timerTick, 1000);
