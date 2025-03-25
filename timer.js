@@ -6,6 +6,8 @@ var CONFIG = {
 let timerMinutes = 45;
 let secondsRemaining = timerMinutes * 60;
 let phase = "main";
+let lastTickTime = performance.now();
+let accumulatedTime = 0;
 
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
@@ -23,13 +25,17 @@ function updateTimerDisplay() {
 
 function updateMessage() {
     if (phase === "main") {
-        messageElement.textContent = textBanner1Input.value || "Timer di 45 minuti";
+        messageElement.textContent = textBanner1Input?.value || "Timer di 45 minuti";
         timerContainer.className = "container main";
-        timerContainer.style.backgroundImage = `url('${bgBanner1Input.value || ""}')`;
+        if (bgBanner1Input?.value) {
+            timerContainer.style.backgroundImage = `url('${bgBanner1Input.value}')`;
+        }
     } else {
-        messageElement.textContent = textBanner2Input.value || "Timer di 15 minuti";
+        messageElement.textContent = textBanner2Input?.value || "Timer di 15 minuti";
         timerContainer.className = "container short";
-        timerContainer.style.backgroundImage = `url('${bgBanner2Input.value || ""}')`;
+        if (bgBanner2Input?.value) {
+            timerContainer.style.backgroundImage = `url('${bgBanner2Input.value}')`;
+        }
     }
 }
 
@@ -52,10 +58,10 @@ function saveState() {
         secondsRemaining,
         timerMinutes,
         startTime: Date.now(),
-        bg1: bgBanner1Input.value,
-        text1: textBanner1Input.value,
-        bg2: bgBanner2Input.value,
-        text2: textBanner2Input.value,
+        bg1: bgBanner1Input?.value,
+        text1: textBanner1Input?.value,
+        bg2: bgBanner2Input?.value,
+        text2: textBanner2Input?.value,
         eventStartMinute: CONFIG.eventStartMinute,
         eventStartSecond: CONFIG.eventStartSecond
     };
@@ -66,10 +72,10 @@ function copyToOBS() {
     const state = {
         minute: CONFIG.eventStartMinute,
         second: CONFIG.eventStartSecond,
-        bg1: bgBanner1Input.value,
-        text1: encodeURIComponent(textBanner1Input.value),
-        bg2: bgBanner2Input.value,
-        text2: encodeURIComponent(textBanner2Input.value),
+        bg1: bgBanner1Input?.value,
+        text1: encodeURIComponent(textBanner1Input?.value || ''),
+        bg2: bgBanner2Input?.value,
+        text2: encodeURIComponent(textBanner2Input?.value || ''),
         phase,
         transparent: true,
         startTime: Date.now()
@@ -88,20 +94,29 @@ function copyToOBS() {
 
 function initializeTimer() {
     const now = new Date();
+    const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
     const currentSecond = now.getSeconds();
+    const currentMs = now.getMilliseconds();
 
-    const currentTimeInSeconds = currentMinute * 60 + currentSecond;
-    const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
+    // Calcola il tempo preciso dall'inizio dell'ora corrente
+    const currentTimeFromHourStart = (currentMinute * 60 + currentSecond) * 1000 + currentMs;
+    const targetTimeFromHourStart = (CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond) * 1000;
 
-    if (currentTimeInSeconds < targetTimeInSeconds) {
+    // Reset accumulatori
+    accumulatedTime = 0;
+    lastTickTime = performance.now();
+
+    if (currentTimeFromHourStart < targetTimeFromHourStart) {
+        // Siamo prima del target in questa ora
         phase = "main";
-        secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+        secondsRemaining = Math.ceil((targetTimeFromHourStart - currentTimeFromHourStart) / 1000);
     } else {
+        // Siamo dopo il target
         phase = "short";
-        const timePassedSinceTarget = currentTimeInSeconds - targetTimeInSeconds;
-        const shortTimerSec = 15 * 60;
-        secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
+        const timePassedMs = currentTimeFromHourStart - targetTimeFromHourStart;
+        const shortTimerMs = 15 * 60 * 1000;
+        secondsRemaining = Math.ceil((shortTimerMs - (timePassedMs % shortTimerMs)) / 1000);
     }
 
     timerMinutes = phase === "main" ? 45 : 15;
@@ -124,63 +139,87 @@ function initializeFromURL() {
         CONFIG.eventStartMinute = state.eventStartMinute;
         CONFIG.eventStartSecond = state.eventStartSecond;
 
-        if (state.bg1) bgBanner1Input.value = state.bg1;
-        if (state.text1) textBanner1Input.value = state.text1;
-        if (state.bg2) bgBanner2Input.value = state.bg2;
-        if (state.text2) textBanner2Input.value = state.text2;
+        if (bgBanner1Input && state.bg1) bgBanner1Input.value = state.bg1;
+        if (textBanner1Input && state.text1) textBanner1Input.value = state.text1;
+        if (bgBanner2Input && state.bg2) bgBanner2Input.value = state.bg2;
+        if (textBanner2Input && state.text2) textBanner2Input.value = state.text2;
     } else {
         if (params.has('minute')) CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
         if (params.has('second')) CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
         initializeTimer();
     }
 
+    if (params.has('bg1') && bgBanner1Input) bgBanner1Input.value = params.get('bg1');
+    if (params.has('text1') && textBanner1Input) textBanner1Input.value = decodeURIComponent(params.get('text1'));
+    if (params.has('bg2') && bgBanner2Input) bgBanner2Input.value = params.get('bg2');
+    if (params.has('text2') && textBanner2Input) textBanner2Input.value = decodeURIComponent(params.get('text2'));
+    
+    if (params.has('transparent')) {
+        document.body.style.backgroundColor = 'transparent';
+        timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
+    }
+
     updateMessage();
+    updateTimerDisplay();
+}
+
+function timerTick() {
+    const currentTime = performance.now();
+    const deltaTime = currentTime - lastTickTime;
+    lastTickTime = currentTime;
+    
+    accumulatedTime += deltaTime;
+    
+    while (accumulatedTime >= 1000) {
+        if (secondsRemaining > 0) {
+            secondsRemaining--;
+            saveState();
+        } else {
+            switchPhase();
+        }
+        accumulatedTime -= 1000;
+    }
+    
     updateTimerDisplay();
 }
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('setTimeBtn').addEventListener('click', function() {
-        const minute = parseInt(document.getElementById('minuteInput').value, 10);
-        const second = parseInt(document.getElementById('secondInput').value, 10);
-        
-        if (minute < 0 || minute > 59 || second < 0 || second > 59) {
-            alert('Inserisci valori validi (0-59) per minuti e secondi.');
-            return;
-        }
-        
-        CONFIG.eventStartMinute = minute;
-        CONFIG.eventStartSecond = second;
-        initializeTimer();
-    });
+    const inputs = document.querySelectorAll('input[type="number"]');
+    if (inputs.length > 0) {
+        document.getElementById('setTimeBtn')?.addEventListener('click', function() {
+            const minute = parseInt(document.getElementById('minuteInput').value, 10);
+            const second = parseInt(document.getElementById('secondInput').value, 10);
+            
+            if (minute < 0 || minute > 59 || second < 0 || second > 59) {
+                alert('Inserisci valori validi (0-59) per minuti e secondi.');
+                return;
+            }
+            
+            CONFIG.eventStartMinute = minute;
+            CONFIG.eventStartSecond = second;
+            initializeTimer();
+        });
 
-    document.getElementById('defaultBtn').addEventListener('click', function() {
-        document.getElementById('minuteInput').value = '52';
-        document.getElementById('secondInput').value = '25';
-        CONFIG.eventStartMinute = 52;
-        CONFIG.eventStartSecond = 25;
-        initializeTimer();
-    });
+        document.getElementById('defaultBtn')?.addEventListener('click', function() {
+            document.getElementById('minuteInput').value = '52';
+            document.getElementById('secondInput').value = '25';
+            CONFIG.eventStartMinute = 52;
+            CONFIG.eventStartSecond = 25;
+            initializeTimer();
+        });
 
-    document.getElementById('applyCustomizationsBtn').addEventListener('click', function() {
-        updateMessage();
-        saveState();
-        alert('Customizations applied!');
-    });
+        document.getElementById('applyCustomizationsBtn')?.addEventListener('click', function() {
+            updateMessage();
+            saveState();
+            alert('Customizations applied!');
+        });
 
-    document.getElementById('copyToOBSBtn').addEventListener('click', copyToOBS);
+        document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
+    }
 
     initializeFromURL();
 });
 
-function timerTick() {
-    if (secondsRemaining > 0) {
-        secondsRemaining--;
-        saveState();
-    } else {
-        switchPhase();
-    }
-    updateTimerDisplay();
-}
-
-setInterval(timerTick, 1000);
+// Avvia il timer con maggiore precisione
+setInterval(timerTick, 100);
