@@ -55,7 +55,7 @@
 
         .timer {
             font-family: 'Lovelo', sans-serif;
-            font-weight: 900;
+            font-size: 3rem;
             margin-left: 50px;
             z-index: 2;
             color: #ffffff;
@@ -64,21 +64,43 @@
 
         .message {
             font-family: 'Lovelo', sans-serif;
-            font-weight: 900;
+            font-size: 1.125rem;
             margin-left: 50px;
             text-align: center;
             z-index: 2;
             color: #f0f0f0;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
+
+        .settings {
+            margin: 20px;
+        }
+
+        .inputs {
+            margin: 20px;
+        }
     </style>
 </head>
 <body>
+    <h1>Customize Timer</h1>
+    <div class="settings">
+        <h2>Customize Text Colors</h2>
+        <div>
+            <label for="timerColor">Timer Color:</label>
+            <input type="color" id="timerColor" value="#ffffff">
+        </div>
+        <div>
+            <label for="messageColor">Message Color:</label>
+            <input type="color" id="messageColor" value="#f0f0f0">
+        </div>
+        <button onclick="applyTextColors()">Apply Colors</button>
+    </div>
+
     <div class="container" id="timerContainer">
         <img src="lunar.gif" alt="GIF" class="fixed-gif">
         <div>
-            <div class="message" id="message"></div>
             <div class="timer" id="timer"></div>
+            <div class="message" id="message"></div>
         </div>
     </div>
 
@@ -89,6 +111,8 @@
         const timerContainer = document.getElementById('timerContainer');
         const messageElement = document.getElementById('message');
         const timerElement = document.getElementById('timer');
+        const timerColorInput = document.getElementById('timerColor');
+        const messageColorInput = document.getElementById('messageColor');
 
         let settings = {};
         let secondsRemaining = 0;
@@ -103,15 +127,19 @@
                 // Calcola il tempo trascorso dall'ultimo aggiornamento
                 const elapsedSeconds = Math.floor((Date.now() - lastUpdate) / 1000);
                 secondsRemaining = Math.max(0, (settings.secondsRemaining || 0) - elapsedSeconds);
+
+                // Applica i colori salvati
+                if (settings.timerColor) timerElement.style.color = settings.timerColor;
+                if (settings.messageColor) messageElement.style.color = settings.messageColor;
             } else {
                 // Se non ci sono impostazioni salvate, usa i parametri URL
                 const urlParams = new URLSearchParams(window.location.search);
                 settings = {
                     phase: urlParams.get('phase') || 'main',
                     bg1: urlParams.get('bg1') || '',
-                    text1: decodeURIComponent(urlParams.get('text1') || 'Timer di 45 minuti'),
+                    text1: decodeURIComponent(urlParams.get('text1') || '45-minute Timer'),
                     bg2: urlParams.get('bg2') || '',
-                    text2: decodeURIComponent(urlParams.get('text2') || 'Timer di 15 minuti'),
+                    text2: decodeURIComponent(urlParams.get('text2') || '15-minute Timer'),
                     secondsRemaining: parseInt(urlParams.get('initialSeconds')) || 0
                 };
                 secondsRemaining = settings.secondsRemaining;
@@ -159,6 +187,20 @@
                 updateDisplay();
                 updateTimerDisplay();
             }
+        }
+
+        function applyTextColors() {
+            const timerColor = timerColorInput.value;
+            const messageColor = messageColorInput.value;
+
+            // Applica i colori selezionati
+            timerElement.style.color = timerColor;
+            messageElement.style.color = messageColor;
+
+            // Salva i colori nelle impostazioni
+            settings.timerColor = timerColor;
+            settings.messageColor = messageColor;
+            saveSettings();
         }
 
         // Carica le impostazioni salvate o dai parametri URL
