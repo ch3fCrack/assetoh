@@ -62,6 +62,15 @@
                 box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8);
             }
         }
+        .rotating-shadow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.8);
+            animation: rotate-shadow 2s linear infinite;
+            z-index: 0;
+        }
 
         .fixed-gif {
             position: relative;
@@ -74,7 +83,7 @@
             10px 10px 50px 1px #810303;
             z-index: 1;
             pointer-events: none;
-            animation: animate-shadow 2s infinite ease-in-out, rotate-shadow 10s linear infinite;
+            animation: animate-shadow 2s infinite ease-in-out;
         }
 
         .timer {
