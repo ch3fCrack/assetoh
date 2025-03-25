@@ -31,6 +31,18 @@
             background-position: center;
         }
 
+        .container.main {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container.short {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
         .fixed-gif {
             position: relative;
             border-radius: 100px;
@@ -46,7 +58,7 @@
             font-weight: 900;
             margin-left: 50px;
             z-index: 2;
-            font-size: 3rem;
+            color: #ffffff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
@@ -56,7 +68,7 @@
             margin-left: 50px;
             text-align: center;
             z-index: 2;
-            font-size: 1.125rem;
+            color: #f0f0f0;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
     </style>
@@ -67,6 +79,7 @@
         <div>
             <div class="timer" id="timer"></div>
             <div class="message" id="message"></div>
+            
         </div>
     </div>
 
@@ -84,29 +97,26 @@
         function loadSettings() {
             const savedSettings = sessionStorage.getItem(STORAGE_KEY);
             const lastUpdate = parseInt(sessionStorage.getItem(LAST_UPDATE_KEY)) || Date.now();
-            const urlParams = new URLSearchParams(window.location.search);
 
             if (savedSettings) {
                 settings = JSON.parse(savedSettings);
+
+                // Calcola il tempo trascorso dall'ultimo aggiornamento
                 const elapsedSeconds = Math.floor((Date.now() - lastUpdate) / 1000);
                 secondsRemaining = Math.max(0, (settings.secondsRemaining || 0) - elapsedSeconds);
             } else {
+                // Se non ci sono impostazioni salvate, usa i parametri URL
+                const urlParams = new URLSearchParams(window.location.search);
                 settings = {
                     phase: urlParams.get('phase') || 'main',
                     bg1: urlParams.get('bg1') || '',
                     text1: decodeURIComponent(urlParams.get('text1') || 'Timer di 45 minuti'),
                     bg2: urlParams.get('bg2') || '',
                     text2: decodeURIComponent(urlParams.get('text2') || 'Timer di 15 minuti'),
-                    secondsRemaining: parseInt(urlParams.get('initialSeconds')) || 0,
-                    timerColor: urlParams.get('timerColor') || '#ffffff',
-                    messageColor: urlParams.get('messageColor') || '#f0f0f0'
+                    secondsRemaining: parseInt(urlParams.get('initialSeconds')) || 0
                 };
                 secondsRemaining = settings.secondsRemaining;
             }
-
-            // Apply colors from settings
-            timerElement.style.color = settings.timerColor;
-            messageElement.style.color = settings.messageColor;
         }
 
         function saveSettings() {
@@ -138,12 +148,13 @@
                 secondsRemaining--;
                 updateTimerDisplay();
             } else {
+                // Cambia fase quando il timer raggiunge 0
                 if (settings.phase === 'main') {
                     settings.phase = 'short';
-                    secondsRemaining = 15 * 60;
+                    secondsRemaining = 15 * 60; // Timer di 15 minuti
                 } else {
                     settings.phase = 'main';
-                    secondsRemaining = 45 * 60;
+                    secondsRemaining = 45 * 60; // Timer di 45 minuti
                 }
                 saveSettings();
                 updateDisplay();
@@ -151,21 +162,16 @@
             }
         }
 
-        // Initialize
+        // Carica le impostazioni salvate o dai parametri URL
         loadSettings();
+
+        // Inizializza il display e il timer
         updateDisplay();
         updateTimerDisplay();
-
-        // Start timer
         setInterval(() => {
             timerTick();
             saveSettings();
         }, 1000);
-
-        // Apply transparent background if needed
-        if (new URLSearchParams(window.location.search).has('transparent')) {
-            document.body.style.backgroundColor = 'transparent';
-        }
     </script>
 </body>
 </html>

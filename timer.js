@@ -1,8 +1,8 @@
 let timerMinutes = 45;
 let secondsRemaining = timerMinutes * 60;
-let phase = "main";
-let customMinutes = 10;
-let customSeconds = 30;
+let phase = "main"; // "main" per il timer da 45 minuti, "short" per il timer da 15 minuti
+let customMinutes = 10; // Minuto personalizzato per il timer da 15 minuti
+let customSeconds = 30; // Secondo personalizzato per il timer da 15 minuti
 
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
@@ -11,8 +11,6 @@ const bgBanner1Input = document.getElementById('bgBanner1');
 const textBanner1Input = document.getElementById('textBanner1');
 const bgBanner2Input = document.getElementById('bgBanner2');
 const textBanner2Input = document.getElementById('textBanner2');
-const timerColorInput = document.getElementById('timerColor');
-const messageColorInput = document.getElementById('messageColor');
 
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
@@ -30,10 +28,6 @@ function updateMessage() {
         timerContainer.className = "container short";
         timerContainer.style.backgroundImage = `url('${bgBanner2Input.value || ""}')`;
     }
-    
-    // Apply current colors
-    timerElement.style.color = timerColorInput.value;
-    messageElement.style.color = messageColorInput.value;
 }
 
 function switchPhase() {
@@ -66,6 +60,7 @@ function setCustomTime() {
     }
 
     if (minutesToEvent < 0) {
+        // Se il minutaggio è già passato, avvia il timer da 15 minuti con il tempo rimanente
         const elapsedMinutes = Math.abs(minutesToEvent);
         const elapsedSeconds = Math.abs(secondsToEvent);
         phase = "short";
@@ -73,7 +68,7 @@ function setCustomTime() {
         secondsRemaining = timerMinutes * 60 - elapsedSeconds;
 
         if (secondsRemaining < 0) {
-            secondsRemaining = 0;
+            secondsRemaining = 0; // Evita valori negativi
         }
 
         updateMessage();
@@ -84,6 +79,7 @@ function setCustomTime() {
         return;
     }
 
+    // Se il minutaggio non è passato, calcola il tempo rimanente per il prossimo evento
     secondsRemaining = minutesToEvent * 60 + secondsToEvent;
     timerMinutes = Math.floor(secondsRemaining / 60);
     phase = "main";
@@ -105,6 +101,7 @@ function checkSpecialCondition() {
     const currentMinutes = currentDate.getMinutes();
     const currentSeconds = currentDate.getSeconds();
 
+    // Controlla se è il momento di far partire il timer da 15 minuti
     if (currentMinutes === customMinutes && currentSeconds === customSeconds) {
         phase = "short";
         timerMinutes = 15;
@@ -134,9 +131,7 @@ function saveState() {
         bg1: bgBanner1Input.value,
         text1: textBanner1Input.value,
         bg2: bgBanner2Input.value,
-        text2: textBanner2Input.value,
-        timerColor: timerColorInput.value,
-        messageColor: messageColorInput.value
+        text2: textBanner2Input.value
     };
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
@@ -153,8 +148,6 @@ function copyToOBS() {
         text2: encodeURIComponent(textBanner2Input.value),
         customMin: document.getElementById('customMinutes').value,
         customSec: document.getElementById('customSeconds').value,
-        timerColor: timerColorInput.value,
-        messageColor: messageColorInput.value,
         transparent: true
     };
 
@@ -193,8 +186,6 @@ function initializeFromURL() {
         if (state.text1) textBanner1Input.value = state.text1;
         if (state.bg2) bgBanner2Input.value = state.bg2;
         if (state.text2) textBanner2Input.value = state.text2;
-        if (state.timerColor) timerColorInput.value = state.timerColor;
-        if (state.messageColor) messageColorInput.value = state.messageColor;
     } else {
         if (urlParams.has('phase')) phase = urlParams.get('phase');
         if (urlParams.has('secondsRemaining')) secondsRemaining = parseInt(urlParams.get('secondsRemaining'));
@@ -204,8 +195,6 @@ function initializeFromURL() {
         if (urlParams.has('text2')) textBanner2Input.value = decodeURIComponent(urlParams.get('text2'));
         if (urlParams.has('customMin')) document.getElementById('customMinutes').value = urlParams.get('customMin');
         if (urlParams.has('customSec')) document.getElementById('customSeconds').value = urlParams.get('customSec');
-        if (urlParams.has('timerColor')) timerColorInput.value = urlParams.get('timerColor');
-        if (urlParams.has('messageColor')) messageColorInput.value = urlParams.get('messageColor');
     }
     
     if (urlParams.has('transparent')) {
