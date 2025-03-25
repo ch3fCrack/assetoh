@@ -43,6 +43,25 @@
             background-repeat: no-repeat;
         }
 
+        .rotating-shadow {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.8);
+            animation: rotate-shadow 2s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate-shadow {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         .fixed-gif {
             position: relative;
             border-radius: 100px;
@@ -56,30 +75,34 @@
         .timer {
             font-family: 'Lovelo', sans-serif;
             font-weight: 900;
+            font-size: 50px;
             margin-left: 50px;
             z-index: 2;
             color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 2px 4px rgb(0, 0, 0);
         }
 
         .message {
             font-family: 'Lovelo', sans-serif;
             font-weight: 900;
             margin-left: 50px;
+            font-size: 50px;
             text-align: center;
             z-index: 2;
             color: #f0f0f0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 2px 4px rgb(0, 0, 0);
         }
     </style>
 </head>
 <body>
     <div class="container" id="timerContainer">
+        <!-- Ombra rotante -->
+        <div class="rotating-shadow"></div>
+        <!-- GIF -->
         <img src="lunar.gif" alt="GIF" class="fixed-gif">
         <div>
             <div class="timer" id="timer"></div>
             <div class="message" id="message"></div>
-            
         </div>
     </div>
 
