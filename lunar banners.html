@@ -43,16 +43,6 @@
             background-repeat: no-repeat;
         }
 
-        .fixed-gif {
-            position: relative;
-            border-radius: 100px;
-            margin-left: 2px;
-            width: 200px;
-            height: 200px;
-            z-index: 1;
-            pointer-events: none;
-        }
-
         .timer {
             font-family: 'Lovelo', sans-serif;
             font-size: 3rem;
@@ -71,33 +61,10 @@
             color: #f0f0f0;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
-
-        .settings {
-            margin: 20px;
-        }
-
-        .inputs {
-            margin: 20px;
-        }
     </style>
 </head>
 <body>
-    <h1>Customize Timer</h1>
-    <div class="settings">
-        <h2>Customize Text Colors</h2>
-        <div>
-            <label for="timerColor">Timer Color:</label>
-            <input type="color" id="timerColor" value="#ffffff">
-        </div>
-        <div>
-            <label for="messageColor">Message Color:</label>
-            <input type="color" id="messageColor" value="#f0f0f0">
-        </div>
-        <button onclick="applyTextColors()">Apply Colors</button>
-    </div>
-
     <div class="container" id="timerContainer">
-        <img src="lunar.gif" alt="GIF" class="fixed-gif">
         <div>
             <div class="timer" id="timer"></div>
             <div class="message" id="message"></div>
@@ -105,114 +72,33 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'lunarBannerSettings';
-        const LAST_UPDATE_KEY = 'lunarBannerLastUpdate';
+        const urlParams = new URLSearchParams(window.location.search);
 
-        const timerContainer = document.getElementById('timerContainer');
-        const messageElement = document.getElementById('message');
         const timerElement = document.getElementById('timer');
-        const timerColorInput = document.getElementById('timerColor');
-        const messageColorInput = document.getElementById('messageColor');
+        const messageElement = document.getElementById('message');
+        const timerColor = urlParams.get('timerColor') || '#ffffff';
+        const messageColor = urlParams.get('messageColor') || '#f0f0f0';
 
-        let settings = {};
-        let secondsRemaining = 0;
+        // Apply colors
+        timerElement.style.color = timerColor;
+        messageElement.style.color = messageColor;
 
-        function loadSettings() {
-            const savedSettings = sessionStorage.getItem(STORAGE_KEY);
-            const lastUpdate = parseInt(sessionStorage.getItem(LAST_UPDATE_KEY)) || Date.now();
+        // Apply other settings (e.g., background, text)
+        const bg1 = urlParams.get('bg1');
+        const text1 = decodeURIComponent(urlParams.get('text1') || '');
+        const bg2 = urlParams.get('bg2');
+        const text2 = decodeURIComponent(urlParams.get('text2') || '');
 
-            if (savedSettings) {
-                settings = JSON.parse(savedSettings);
+        const phase = urlParams.get('phase') || 'main';
+        const timerContainer = document.getElementById('timerContainer');
 
-                // Calcola il tempo trascorso dall'ultimo aggiornamento
-                const elapsedSeconds = Math.floor((Date.now() - lastUpdate) / 1000);
-                secondsRemaining = Math.max(0, (settings.secondsRemaining || 0) - elapsedSeconds);
-
-                // Applica i colori salvati
-                if (settings.timerColor) timerElement.style.color = settings.timerColor;
-                if (settings.messageColor) messageElement.style.color = settings.messageColor;
-            } else {
-                // Se non ci sono impostazioni salvate, usa i parametri URL
-                const urlParams = new URLSearchParams(window.location.search);
-                settings = {
-                    phase: urlParams.get('phase') || 'main',
-                    bg1: urlParams.get('bg1') || '',
-                    text1: decodeURIComponent(urlParams.get('text1') || '45-minute Timer'),
-                    bg2: urlParams.get('bg2') || '',
-                    text2: decodeURIComponent(urlParams.get('text2') || '15-minute Timer'),
-                    secondsRemaining: parseInt(urlParams.get('initialSeconds')) || 0
-                };
-                secondsRemaining = settings.secondsRemaining;
-            }
+        if (phase === 'main') {
+            timerContainer.style.backgroundImage = `url('${bg1}')`;
+            messageElement.textContent = text1;
+        } else {
+            timerContainer.style.backgroundImage = `url('${bg2}')`;
+            messageElement.textContent = text2;
         }
-
-        function saveSettings() {
-            settings.secondsRemaining = secondsRemaining;
-            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-            sessionStorage.setItem(LAST_UPDATE_KEY, Date.now().toString());
-        }
-
-        function updateDisplay() {
-            if (settings.phase === 'main') {
-                timerContainer.className = 'container main';
-                timerContainer.style.backgroundImage = `url('${settings.bg1}')`;
-                messageElement.textContent = settings.text1;
-            } else {
-                timerContainer.className = 'container short';
-                timerContainer.style.backgroundImage = `url('${settings.bg2}')`;
-                messageElement.textContent = settings.text2;
-            }
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(secondsRemaining / 60);
-            const seconds = secondsRemaining % 60;
-            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        }
-
-        function timerTick() {
-            if (secondsRemaining > 0) {
-                secondsRemaining--;
-                updateTimerDisplay();
-            } else {
-                // Cambia fase quando il timer raggiunge 0
-                if (settings.phase === 'main') {
-                    settings.phase = 'short';
-                    secondsRemaining = 15 * 60; // Timer di 15 minuti
-                } else {
-                    settings.phase = 'main';
-                    secondsRemaining = 45 * 60; // Timer di 45 minuti
-                }
-                saveSettings();
-                updateDisplay();
-                updateTimerDisplay();
-            }
-        }
-
-        function applyTextColors() {
-            const timerColor = timerColorInput.value;
-            const messageColor = messageColorInput.value;
-
-            // Applica i colori selezionati
-            timerElement.style.color = timerColor;
-            messageElement.style.color = messageColor;
-
-            // Salva i colori nelle impostazioni
-            settings.timerColor = timerColor;
-            settings.messageColor = messageColor;
-            saveSettings();
-        }
-
-        // Carica le impostazioni salvate o dai parametri URL
-        loadSettings();
-
-        // Inizializza il display e il timer
-        updateDisplay();
-        updateTimerDisplay();
-        setInterval(() => {
-            timerTick();
-            saveSettings();
-        }, 1000);
     </script>
 </body>
 </html>

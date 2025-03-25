@@ -147,44 +147,7 @@ function saveState() {
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
 
-function copyToOBS() {
-    const startTime = Date.now();
-    const state = {
-        phase,
-        initialSeconds: secondsRemaining,
-        startTime,
-        bg1: bgBanner1Input.value,
-        text1: encodeURIComponent(textBanner1Input.value),
-        bg2: bgBanner2Input.value,
-        text2: encodeURIComponent(textBanner2Input.value),
-        customMin: document.getElementById('customMinutes').value,
-        customSec: document.getElementById('customSeconds').value,
-        timerColor: timerColorInput.value,
-        messageColor: messageColorInput.value,
-        transparent: true
-    };
-
-    const baseUrl = window.location.origin + '/lunar%20banners.html';
-    const queryString = Object.entries(state)
-        .filter(([_, value]) => value !== undefined && value !== '')
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
-
-    const obsUrl = `${baseUrl}?${queryString}`;
-
-    sessionStorage.setItem('lunarBannerSettings', JSON.stringify({
-        ...state,
-        secondsRemaining,
-        initialSeconds: secondsRemaining
-    }));
-    sessionStorage.setItem('lunarBannerStartTime', startTime.toString());
-
-    navigator.clipboard.writeText(obsUrl);
-    alert(`URL for OBS copied!`);
-}
-
 function initializeFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
     const savedState = sessionStorage.getItem('timerState');
 
     if (savedState) {
@@ -203,13 +166,6 @@ function initializeFromURL() {
         // Apply saved colors
         if (state.timerColor) timerElement.style.color = state.timerColor;
         if (state.messageColor) messageElement.style.color = state.messageColor;
-    } else {
-        if (urlParams.has('phase')) phase = urlParams.get('phase');
-        if (urlParams.has('secondsRemaining')) secondsRemaining = parseInt(urlParams.get('secondsRemaining'));
-        if (urlParams.has('bg1')) bgBanner1Input.value = urlParams.get('bg1');
-        if (urlParams.has('text1')) textBanner1Input.value = decodeURIComponent(urlParams.get('text1'));
-        if (urlParams.has('bg2')) bgBanner2Input.value = urlParams.get('bg2');
-        if (urlParams.has('text2')) textBanner2Input.value = decodeURIComponent(urlParams.get('text2'));
     }
 }
 
