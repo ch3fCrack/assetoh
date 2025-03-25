@@ -147,6 +147,29 @@ function saveState() {
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
 
+function copyToOBS() {
+    const state = {
+        phase,
+        initialSeconds: secondsRemaining,
+        bg1: bgBanner1Input.value,
+        text1: encodeURIComponent(textBanner1Input.value),
+        bg2: bgBanner2Input.value,
+        text2: encodeURIComponent(textBanner2Input.value),
+        timerColor: timerColorInput.value,
+        messageColor: messageColorInput.value
+    };
+
+    const baseUrl = window.location.origin + '/lunar%20banners.html';
+    const queryString = Object.entries(state)
+        .filter(([_, value]) => value !== undefined && value !== '')
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
+
+    const obsUrl = `${baseUrl}?${queryString}`;
+    navigator.clipboard.writeText(obsUrl);
+    alert(`URL for OBS copied!\n\n${obsUrl}`);
+}
+
 function initializeFromURL() {
     const savedState = sessionStorage.getItem('timerState');
 
