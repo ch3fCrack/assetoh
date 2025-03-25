@@ -44,24 +44,16 @@
         }
 
         @keyframes rotate-shadow {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
+
         @keyframes animate-shadow {
-            0% {
-                box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8);
-            }
-            50% {
-                box-shadow: 0 0 30px 10px rgba(255, 0, 0, 0.5);
-            }
-            100% {
-                box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8);
-            }
+            0% { box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8); }
+            50% { box-shadow: 0 0 30px 10px rgba(255, 0, 0, 0.5); }
+            100% { box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8); }
         }
+
         .rotating-shadow {
             position: absolute;
             width: 200px;
@@ -79,8 +71,8 @@
             width: 200px;
             height: 200px;
             box-shadow:
-            10px 10px 50px 1px rgb(255, 1, 1),
-            10px 10px 50px 1px #810303;
+                10px 10px 50px 1px rgb(255, 1, 1),
+                10px 10px 50px 1px #810303;
             z-index: 1;
             pointer-events: none;
             animation: animate-shadow 2s infinite ease-in-out;
@@ -106,7 +98,7 @@
             color: #f0f0f0;
             text-shadow: 0 2px 4px rgb(0, 0, 0);
         }
-        </style>
+    </style>
 </head>
 <body>
     <div class="container" id="timerContainer">
@@ -137,7 +129,9 @@
                 phase,
                 secondsRemaining,
                 timerMinutes,
-                startTime: Date.now()
+                startTime: Date.now(),
+                eventStartMinute: CONFIG.eventStartMinute,
+                eventStartSecond: CONFIG.eventStartSecond
             };
             sessionStorage.setItem('timerState', JSON.stringify(state));
         }
@@ -150,6 +144,8 @@
                 phase = state.phase;
                 secondsRemaining = Math.max(0, state.secondsRemaining - elapsedSeconds);
                 timerMinutes = state.timerMinutes;
+                CONFIG.eventStartMinute = state.eventStartMinute;
+                CONFIG.eventStartSecond = state.eventStartSecond;
                 return true;
             }
             return false;
@@ -196,14 +192,12 @@
         function initializeTimer() {
             const params = new URLSearchParams(window.location.search);
             
-            // Se c'è uno stato salvato, usalo
             if (loadState()) {
                 updateMessage();
                 updateTimerDisplay();
                 return;
             }
 
-            // Altrimenti inizializza con i parametri URL
             if (params.has('minute')) {
                 CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
             }
@@ -212,21 +206,20 @@
             }
 
             const now = new Date();
-            let targetTime = new Date();
-            targetTime.setMinutes(CONFIG.eventStartMinute);
-            targetTime.setSeconds(CONFIG.eventStartSecond);
-            targetTime.setMilliseconds(0);
+            const currentMinute = now.getMinutes();
+            const currentSecond = now.getSeconds();
 
-            if (targetTime < now) {
-                const diffMs = now - targetTime;
-                const diffSec = Math.floor(diffMs / 1000);
-                const shortTimerSec = 15 * 60;
-                secondsRemaining = shortTimerSec - (diffSec % shortTimerSec);
-                phase = "short";
-            } else {
-                const diffMs = targetTime - now;
-                secondsRemaining = Math.floor(diffMs / 1000);
+            const currentTimeInSeconds = currentMinute * 60 + currentSecond;
+            const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
+
+            if (currentTimeInSeconds < targetTimeInSeconds) {
                 phase = "main";
+                secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+            } else {
+                phase = "short";
+                const timePassedSinceTarget = currentTimeInSeconds - targetTimeInSeconds;
+                const shortTimerSec = 15 * 60;
+                secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
             }
 
             updateMessage();

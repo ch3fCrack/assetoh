@@ -86,6 +86,30 @@ function copyToOBS() {
     alert(`URL per OBS copiato!`);
 }
 
+function initializeTimer() {
+    const now = new Date();
+    const currentMinute = now.getMinutes();
+    const currentSecond = now.getSeconds();
+
+    const currentTimeInSeconds = currentMinute * 60 + currentSecond;
+    const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
+
+    if (currentTimeInSeconds < targetTimeInSeconds) {
+        phase = "main";
+        secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+    } else {
+        phase = "short";
+        const timePassedSinceTarget = currentTimeInSeconds - targetTimeInSeconds;
+        const shortTimerSec = 15 * 60;
+        secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
+    }
+
+    timerMinutes = phase === "main" ? 45 : 15;
+    updateMessage();
+    updateTimerDisplay();
+    saveState();
+}
+
 function initializeFromURL() {
     const params = new URLSearchParams(window.location.search);
     const savedState = sessionStorage.getItem('timerState');
@@ -110,54 +134,7 @@ function initializeFromURL() {
         initializeTimer();
     }
 
-    if (params.has('bg1')) bgBanner1Input.value = params.get('bg1');
-    if (params.has('text1')) textBanner1Input.value = decodeURIComponent(params.get('text1'));
-    if (params.has('bg2')) bgBanner2Input.value = params.get('bg2');
-    if (params.has('text2')) textBanner2Input.value = decodeURIComponent(params.get('text2'));
-    
-    if (params.has('transparent')) {
-        document.body.style.backgroundColor = 'transparent';
-        timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
-    }
-
     updateMessage();
-    updateTimerDisplay();
-}
-
-function initializeTimer() {
-    const now = new Date();
-    const currentMinute = now.getMinutes();
-    const currentSecond = now.getSeconds();
-
-    // Calcola il tempo trascorso dall'inizio dell'ora attuale
-    const currentTimeInSeconds = currentMinute * 60 + currentSecond;
-    const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
-
-    // Se siamo prima del tempo target nell'ora corrente
-    if (currentTimeInSeconds < targetTimeInSeconds) {
-        phase = "main";
-        secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
-    } else {
-        // Se siamo dopo il tempo target
-        phase = "short";
-        const timePassedSinceTarget = currentTimeInSeconds - targetTimeInSeconds;
-        const shortTimerSec = 15 * 60;
-        secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
-    }
-
-    timerMinutes = phase === "main" ? 45 : 15;
-    updateMessage();
-    updateTimerDisplay();
-    saveState();
-}
-
-function timerTick() {
-    if (secondsRemaining > 0) {
-        secondsRemaining--;
-        saveState();
-    } else {
-        switchPhase();
-    }
     updateTimerDisplay();
 }
 
@@ -195,5 +172,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initializeFromURL();
 });
+
+function timerTick() {
+    if (secondsRemaining > 0) {
+        secondsRemaining--;
+        saveState();
+    } else {
+        switchPhase();
+    }
+    updateTimerDisplay();
+}
 
 setInterval(timerTick, 1000);
