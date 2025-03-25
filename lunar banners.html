@@ -43,22 +43,23 @@
             background-repeat: no-repeat;
         }
 
-        .rotating-shadow {
-            position: absolute;
-            width: 220px;
-            height: 220px;
-            border-radius: 100px;
-            box-shadow: 0 0 20px 10px rgb(255, 0, 0);
-            animation: rotate-shadow 2s linear infinite;
-            z-index: 0;
-        }
-
         @keyframes rotate-shadow {
             0% {
                 transform: rotate(0deg);
             }
             100% {
                 transform: rotate(360deg);
+            }
+        }
+        @keyframes animate-shadow {
+            0% {
+                box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8);
+            }
+            50% {
+                box-shadow: 0 0 30px 10px rgba(255, 0, 0, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8);
             }
         }
 
@@ -68,8 +69,12 @@
             margin-left: 2px;
             width: 200px;
             height: 200px;
+            box-shadow:
+            10px 10px 50px 1px rgb(255, 1, 1),
+            10px 10px 50px 1px #810303;
             z-index: 1;
             pointer-events: none;
+            animation: animate-shadow 2s infinite ease-in-out, rotate-shadow 10s linear infinite;
         }
 
         .timer {
