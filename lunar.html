@@ -7,6 +7,45 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="timer.css">
     <link href="https://fonts.cdnfonts.com/css/lovelo" rel="stylesheet">
+    <style>
+        .preview-container {
+            margin-top: 20px;
+            width: 800px;
+            height: 200px;
+            border-radius: 100px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            color: #ffffff;
+            background-color: rgba(36, 36, 36, 0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .preview-timer {
+            font-family: 'Lovelo', sans-serif;
+            font-size: 3rem;
+            margin-left: 50px;
+            z-index: 2;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .preview-message {
+            font-family: 'Lovelo', sans-serif;
+            font-size: 1.125rem;
+            margin-left: 50px;
+            text-align: center;
+            z-index: 2;
+            color: #f0f0f0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+    </style>
 </head>
 <body>
     <h1>Customizable Timer</h1>
@@ -20,34 +59,65 @@
         <h2>Customize Banners</h2>
         <div>
             <label>Banner 1 URL (45 min):</label>
-            <input type="text" id="bgBanner1" placeholder="Enter image URL">
+            <input type="text" id="bgBanner1" placeholder="Enter image URL" oninput="updatePreview()">
         </div>
         <div>
             <label>Banner 1 Text:</label>
-            <input type="text" id="textBanner1" placeholder="Enter text">
+            <input type="text" id="textBanner1" placeholder="Enter text" oninput="updatePreview()">
         </div>
         <div>
             <label>Banner 2 URL (15 min):</label>
-            <input type="text" id="bgBanner2" placeholder="Enter image URL">
+            <input type="text" id="bgBanner2" placeholder="Enter image URL" oninput="updatePreview()">
         </div>
         <div>
             <label>Banner 2 Text:</label>
-            <input type="text" id="textBanner2" placeholder="Enter text">
+            <input type="text" id="textBanner2" placeholder="Enter text" oninput="updatePreview()">
         </div>
         <h2>Customize Text Colors</h2>
         <div>
             <label for="timerColor">Timer Color:</label>
-            <input type="color" id="timerColor" value="#ffffff">
+            <input type="color" id="timerColor" value="#ffffff" oninput="updatePreview()">
         </div>
         <div>
             <label for="messageColor">Message Color:</label>
-            <input type="color" id="messageColor" value="#f0f0f0">
+            <input type="color" id="messageColor" value="#f0f0f0" oninput="updatePreview()">
         </div>
         <button onclick="applyCustomizations()">Apply Customizations</button>
+    </div>
+
+    <h2>Preview</h2>
+    <div class="preview-container" id="previewContainer">
+        <div>
+            <div class="preview-timer" id="previewTimer">45:00</div>
+            <div class="preview-message" id="previewMessage">Example text</div>
+        </div>
     </div>
 
     <button class="obs-btn" onclick="copyToOBS()">Use in OBS</button>
 
     <script src="timer.js"></script>
+    <script>
+        function updatePreview() {
+            const previewContainer = document.getElementById('previewContainer');
+            const previewTimer = document.getElementById('previewTimer');
+            const previewMessage = document.getElementById('previewMessage');
+
+            const bg1 = document.getElementById('bgBanner1').value;
+            const text1 = document.getElementById('textBanner1').value;
+            const timerColor = document.getElementById('timerColor').value;
+            const messageColor = document.getElementById('messageColor').value;
+
+            // Update background and text
+            previewContainer.style.backgroundImage = `url('${bg1}')`;
+            previewMessage.textContent = text1 || "Example text";
+
+            // Update colors
+            previewTimer.style.color = timerColor;
+            previewMessage.style.color = messageColor;
+        }
+
+        // Initialize preview on page load
+        document.addEventListener('DOMContentLoaded', updatePreview);
+    </script>
 </body>
 </html>
