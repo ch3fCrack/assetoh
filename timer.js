@@ -1,8 +1,11 @@
+var CONFIG = {
+    eventStartMinute: 52,
+    eventStartSecond: 25
+};
+
 let timerMinutes = 45;
 let secondsRemaining = timerMinutes * 60;
-let phase = "main"; // "main" per il timer da 45 minuti, "short" per il timer da 15 minuti
-let customMinutes = 10; // Minuto personalizzato per il timer da 15 minuti
-let customSeconds = 30; // Secondo personalizzato per il timer da 15 minuti
+let phase = "main";
 
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
@@ -43,72 +46,136 @@ function switchPhase() {
     saveState();
 }
 
-function setCustomTime() {
-    customMinutes = parseInt(document.getElementById('customMinutes').value);
-    customSeconds = parseInt(document.getElementById('customSeconds').value);
+function saveState() {
+    const state = {
+        phase,
+        secondsRemaining,
+        timerMinutes,
+        startTime: Date.now(),
+        bg1: bgBanner1Input.value,
+        text1: textBanner1Input.value,
+        bg2: bgBanner2Input.value,
+        text2: textBanner2Input.value,
+        eventStartMinute: CONFIG.eventStartMinute,
+        eventStartSecond: CONFIG.eventStartSecond
+    };
+    sessionStorage.setItem('timerState', JSON.stringify(state));
+}
 
-    const currentDate = new Date();
-    const currentMinutes = currentDate.getMinutes();
-    const currentSeconds = currentDate.getSeconds();
+function copyToOBS() {
+    const state = {
+        minute: CONFIG.eventStartMinute,
+        second: CONFIG.eventStartSecond,
+        bg1: bgBanner1Input.value,
+        text1: encodeURIComponent(textBanner1Input.value),
+        bg2: bgBanner2Input.value,
+        text2: encodeURIComponent(textBanner2Input.value),
+        phase,
+        transparent: true,
+        startTime: Date.now()
+    };
 
-    let minutesToEvent = customMinutes - currentMinutes;
-    let secondsToEvent = customSeconds - currentSeconds;
+    const baseUrl = window.location.origin + '/lunar%20banners.html';
+    const queryString = Object.entries(state)
+        .filter(([_, value]) => value !== undefined && value !== '')
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
 
-    if (secondsToEvent < 0) {
-        secondsToEvent += 60;
-        minutesToEvent--;
+    const obsUrl = `${baseUrl}?${queryString}`;
+    navigator.clipboard.writeText(obsUrl);
+    alert(`URL per OBS copiato!`);
+}
+
+function initializeFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const savedState = sessionStorage.getItem('timerState');
+    
+    if (savedState) {
+        const state = JSON.parse(savedState);
+        const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+        
+        phase = state.phase;
+        secondsRemaining = Math.max(0, state.secondsRemaining - elapsedSeconds);
+        timerMinutes = state.timerMinutes;
+        CONFIG.eventStartMinute = state.eventStartMinute;
+        CONFIG.eventStartSecond = state.eventStartSecond;
+
+        if (state.bg1) bgBanner1Input.value = state.bg1;
+        if (state.text1) textBanner1Input.value = state.text1;
+        if (state.bg2) bgBanner2Input.value = state.bg2;
+        if (state.text2) textBanner2Input.value = state.text2;
+    } else {
+        if (params.has('minute')) CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
+        if (params.has('second')) CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
+        initializeTimer();
     }
 
-    if (minutesToEvent < 0) {
-        // Se il minutaggio è già passato, avvia il timer da 15 minuti con il tempo rimanente
-        const elapsedMinutes = Math.abs(minutesToEvent);
-        const elapsedSeconds = Math.abs(secondsToEvent);
-        phase = "short";
-        timerMinutes = 15 - elapsedMinutes;
-        secondsRemaining = timerMinutes * 60 - elapsedSeconds;
+    if (params.has('bg1')) bgBanner1Input.value = params.get('bg1');
+    if (params.has('text1')) textBanner1Input.value = decodeURIComponent(params.get('text1'));
+    if (params.has('bg2')) bgBanner2Input.value = params.get('bg2');
+    if (params.has('text2')) textBanner2Input.value = decodeURIComponent(params.get('text2'));
+    
+    if (params.has('transparent')) {
+        document.body.style.backgroundColor = 'transparent';
+        timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
+    }
 
-        if (secondsRemaining < 0) {
-            secondsRemaining = 0; // Evita valori negativi
-        }
+    updateMessage();
+    updateTimerDisplay();
+}
 
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('setTimeBtn').addEventListener('click', function() {
+        const minute = parseInt(document.getElementById('minuteInput').value, 10);
+        const second = parseInt(document.getElementById('secondInput').value, 10);
+        
+        CONFIG.eventStartMinute = minute;
+        CONFIG.eventStartSecond = second;
+        initializeTimer();
+    });
+
+    document.getElementById('defaultBtn').addEventListener('click', function() {
+        document.getElementById('minuteInput').value = '52';
+        document.getElementById('secondInput').value = '25';
+        CONFIG.eventStartMinute = 52;
+        CONFIG.eventStartSecond = 25;
+        initializeTimer();
+    });
+
+    document.getElementById('applyCustomizationsBtn').addEventListener('click', function() {
         updateMessage();
-        updateTimerDisplay();
         saveState();
+        alert('Customizations applied!');
+    });
 
-        alert(`Il timer di 15 minuti è già iniziato e mancano ${Math.floor(secondsRemaining / 60)}:${secondsRemaining % 60 < 10 ? '0' : ''}${secondsRemaining % 60}.`);
-        return;
+    document.getElementById('copyToOBSBtn').addEventListener('click', copyToOBS);
+
+    initializeFromURL();
+});
+
+function initializeTimer() {
+    const now = new Date();
+    let targetTime = new Date();
+    targetTime.setMinutes(CONFIG.eventStartMinute);
+    targetTime.setSeconds(CONFIG.eventStartSecond);
+    targetTime.setMilliseconds(0);
+
+    if (targetTime < now) {
+        const diffMs = now - targetTime;
+        const diffSec = Math.floor(diffMs / 1000);
+        const shortTimerSec = 15 * 60;
+        secondsRemaining = shortTimerSec - (diffSec % shortTimerSec);
+        phase = "short";
+    } else {
+        const diffMs = targetTime - now;
+        secondsRemaining = Math.floor(diffMs / 1000);
+        phase = "main";
     }
 
-    // Se il minutaggio non è passato, calcola il tempo rimanente per il prossimo evento
-    secondsRemaining = minutesToEvent * 60 + secondsToEvent;
-    timerMinutes = Math.floor(secondsRemaining / 60);
-    phase = "main";
     updateMessage();
     updateTimerDisplay();
     saveState();
-
-    alert(`Il timer di 15 minuti partirà alle ${customMinutes}:${customSeconds < 10 ? '0' : ''}${customSeconds}.`);
-}
-
-function applyCustomizations() {
-    updateMessage();
-    saveState();
-    alert("Personalizzazioni applicate!");
-}
-
-function checkSpecialCondition() {
-    const currentDate = new Date();
-    const currentMinutes = currentDate.getMinutes();
-    const currentSeconds = currentDate.getSeconds();
-
-    // Controlla se è il momento di far partire il timer da 15 minuti
-    if (currentMinutes === customMinutes && currentSeconds === customSeconds) {
-        phase = "short";
-        timerMinutes = 15;
-        secondsRemaining = timerMinutes * 60;
-        updateMessage();
-        saveState();
-    }
 }
 
 function timerTick() {
@@ -121,97 +188,4 @@ function timerTick() {
     updateTimerDisplay();
 }
 
-function saveState() {
-    const state = {
-        phase,
-        secondsRemaining,
-        timerMinutes,
-        customMinutes,
-        customSeconds,
-        bg1: bgBanner1Input.value,
-        text1: textBanner1Input.value,
-        bg2: bgBanner2Input.value,
-        text2: textBanner2Input.value
-    };
-    sessionStorage.setItem('timerState', JSON.stringify(state));
-}
-
-function copyToOBS() {
-    const startTime = Date.now();
-    const state = {
-        phase,
-        initialSeconds: secondsRemaining,
-        startTime,
-        bg1: bgBanner1Input.value,
-        text1: encodeURIComponent(textBanner1Input.value),
-        bg2: bgBanner2Input.value,
-        text2: encodeURIComponent(textBanner2Input.value),
-        customMin: document.getElementById('customMinutes').value,
-        customSec: document.getElementById('customSeconds').value,
-        transparent: true
-    };
-
-    const baseUrl = window.location.origin + '/lunar%20banners.html';
-    const queryString = Object.entries(state)
-        .filter(([_, value]) => value !== undefined && value !== '')
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
-
-    const obsUrl = `${baseUrl}?${queryString}`;
-
-    sessionStorage.setItem('lunarBannerSettings', JSON.stringify({
-        ...state,
-        secondsRemaining,
-        initialSeconds: secondsRemaining
-    }));
-    sessionStorage.setItem('lunarBannerStartTime', startTime.toString());
-
-    navigator.clipboard.writeText(obsUrl);
-    alert(`URL per OBS copiato!`);
-}
-
-function initializeFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const savedState = sessionStorage.getItem('timerState');
-    
-    if (savedState) {
-        const state = JSON.parse(savedState);
-        phase = state.phase;
-        secondsRemaining = state.secondsRemaining;
-        timerMinutes = state.timerMinutes;
-        customMinutes = state.customMinutes;
-        customSeconds = state.customSeconds;
-        
-        if (state.bg1) bgBanner1Input.value = state.bg1;
-        if (state.text1) textBanner1Input.value = state.text1;
-        if (state.bg2) bgBanner2Input.value = state.bg2;
-        if (state.text2) textBanner2Input.value = state.text2;
-    } else {
-        if (urlParams.has('phase')) phase = urlParams.get('phase');
-        if (urlParams.has('secondsRemaining')) secondsRemaining = parseInt(urlParams.get('secondsRemaining'));
-        if (urlParams.has('bg1')) bgBanner1Input.value = urlParams.get('bg1');
-        if (urlParams.has('text1')) textBanner1Input.value = decodeURIComponent(urlParams.get('text1'));
-        if (urlParams.has('bg2')) bgBanner2Input.value = urlParams.get('bg2');
-        if (urlParams.has('text2')) textBanner2Input.value = decodeURIComponent(urlParams.get('text2'));
-        if (urlParams.has('customMin')) document.getElementById('customMinutes').value = urlParams.get('customMin');
-        if (urlParams.has('customSec')) document.getElementById('customSeconds').value = urlParams.get('customSec');
-    }
-    
-    if (urlParams.has('transparent')) {
-        document.body.style.backgroundColor = 'transparent';
-        timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
-    }
-    
-    updateMessage();
-    updateTimerDisplay();
-}
-
-document.addEventListener('DOMContentLoaded', initializeFromURL);
-
-setInterval(() => {
-    checkSpecialCondition();
-    timerTick();
-}, 1000);
-
-updateMessage();
-updateTimerDisplay();
+setInterval(timerTick, 1000);

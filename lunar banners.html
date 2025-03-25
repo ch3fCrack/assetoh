@@ -106,13 +106,11 @@
             color: #f0f0f0;
             text-shadow: 0 2px 4px rgb(0, 0, 0);
         }
-    </style>
+        </style>
 </head>
 <body>
     <div class="container" id="timerContainer">
-        <!-- Ombra rotante -->
         <div class="rotating-shadow"></div>
-        <!-- GIF -->
         <img src="lunar.gif" alt="GIF" class="fixed-gif">
         <div>
             <div class="timer" id="timer"></div>
@@ -121,94 +119,133 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'lunarBannerSettings';
-        const LAST_UPDATE_KEY = 'lunarBannerLastUpdate';
+        var CONFIG = {
+            eventStartMinute: 52,
+            eventStartSecond: 25
+        };
 
-        const timerContainer = document.getElementById('timerContainer');
-        const messageElement = document.getElementById('message');
+        let timerMinutes = 45;
+        let secondsRemaining = timerMinutes * 60;
+        let phase = "main";
+
         const timerElement = document.getElementById('timer');
+        const messageElement = document.getElementById('message');
+        const timerContainer = document.getElementById('timerContainer');
 
-        let settings = {};
-        let secondsRemaining = 0;
-
-        function loadSettings() {
-            const savedSettings = sessionStorage.getItem(STORAGE_KEY);
-            const lastUpdate = parseInt(sessionStorage.getItem(LAST_UPDATE_KEY)) || Date.now();
-
-            if (savedSettings) {
-                settings = JSON.parse(savedSettings);
-
-                // Calcola il tempo trascorso dall'ultimo aggiornamento
-                const elapsedSeconds = Math.floor((Date.now() - lastUpdate) / 1000);
-                secondsRemaining = Math.max(0, (settings.secondsRemaining || 0) - elapsedSeconds);
-            } else {
-                // Se non ci sono impostazioni salvate, usa i parametri URL
-                const urlParams = new URLSearchParams(window.location.search);
-                settings = {
-                    phase: urlParams.get('phase') || 'main',
-                    bg1: urlParams.get('bg1') || '',
-                    text1: decodeURIComponent(urlParams.get('text1') || 'Timer di 45 minuti'),
-                    bg2: urlParams.get('bg2') || '',
-                    text2: decodeURIComponent(urlParams.get('text2') || 'Timer di 15 minuti'),
-                    secondsRemaining: parseInt(urlParams.get('initialSeconds')) || 0
-                };
-                secondsRemaining = settings.secondsRemaining;
-            }
+        function saveState() {
+            const state = {
+                phase,
+                secondsRemaining,
+                timerMinutes,
+                startTime: Date.now()
+            };
+            sessionStorage.setItem('timerState', JSON.stringify(state));
         }
 
-        function saveSettings() {
-            settings.secondsRemaining = secondsRemaining;
-            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-            sessionStorage.setItem(LAST_UPDATE_KEY, Date.now().toString());
-        }
-
-        function updateDisplay() {
-            if (settings.phase === 'main') {
-                timerContainer.className = 'container main';
-                timerContainer.style.backgroundImage = `url('${settings.bg1}')`;
-                messageElement.textContent = settings.text1;
-            } else {
-                timerContainer.className = 'container short';
-                timerContainer.style.backgroundImage = `url('${settings.bg2}')`;
-                messageElement.textContent = settings.text2;
+        function loadState() {
+            const savedState = sessionStorage.getItem('timerState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+                phase = state.phase;
+                secondsRemaining = Math.max(0, state.secondsRemaining - elapsedSeconds);
+                timerMinutes = state.timerMinutes;
+                return true;
             }
+            return false;
         }
 
         function updateTimerDisplay() {
-            const minutes = Math.floor(secondsRemaining / 60);
-            const seconds = secondsRemaining % 60;
+            let minutes = Math.floor(secondsRemaining / 60);
+            let seconds = secondsRemaining % 60;
             timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        function updateMessage() {
+            const params = new URLSearchParams(window.location.search);
+            if (phase === "main") {
+                messageElement.textContent = params.has('text1') ? 
+                    decodeURIComponent(params.get('text1')) : "Timer di 45 minuti";
+                timerContainer.className = "container main";
+                if (params.has('bg1')) {
+                    timerContainer.style.backgroundImage = `url('${params.get('bg1')}')`;
+                }
+            } else {
+                messageElement.textContent = params.has('text2') ? 
+                    decodeURIComponent(params.get('text2')) : "Timer di 15 minuti";
+                timerContainer.className = "container short";
+                if (params.has('bg2')) {
+                    timerContainer.style.backgroundImage = `url('${params.get('bg2')}')`;
+                }
+            }
+        }
+
+        function switchPhase() {
+            if (phase === "main") {
+                phase = "short";
+                timerMinutes = 15;
+            } else {
+                phase = "main";
+                timerMinutes = 45;
+            }
+            secondsRemaining = timerMinutes * 60;
+            updateMessage();
+            saveState();
+        }
+
+        function initializeTimer() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Se c'è uno stato salvato, usalo
+            if (loadState()) {
+                updateMessage();
+                updateTimerDisplay();
+                return;
+            }
+
+            // Altrimenti inizializza con i parametri URL
+            if (params.has('minute')) {
+                CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
+            }
+            if (params.has('second')) {
+                CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
+            }
+
+            const now = new Date();
+            let targetTime = new Date();
+            targetTime.setMinutes(CONFIG.eventStartMinute);
+            targetTime.setSeconds(CONFIG.eventStartSecond);
+            targetTime.setMilliseconds(0);
+
+            if (targetTime < now) {
+                const diffMs = now - targetTime;
+                const diffSec = Math.floor(diffMs / 1000);
+                const shortTimerSec = 15 * 60;
+                secondsRemaining = shortTimerSec - (diffSec % shortTimerSec);
+                phase = "short";
+            } else {
+                const diffMs = targetTime - now;
+                secondsRemaining = Math.floor(diffMs / 1000);
+                phase = "main";
+            }
+
+            updateMessage();
+            updateTimerDisplay();
+            saveState();
         }
 
         function timerTick() {
             if (secondsRemaining > 0) {
                 secondsRemaining--;
-                updateTimerDisplay();
+                saveState();
             } else {
-                // Cambia fase quando il timer raggiunge 0
-                if (settings.phase === 'main') {
-                    settings.phase = 'short';
-                    secondsRemaining = 15 * 60; // Timer di 15 minuti
-                } else {
-                    settings.phase = 'main';
-                    secondsRemaining = 45 * 60; // Timer di 45 minuti
-                }
-                saveSettings();
-                updateDisplay();
-                updateTimerDisplay();
+                switchPhase();
             }
+            updateTimerDisplay();
         }
 
-        // Carica le impostazioni salvate o dai parametri URL
-        loadSettings();
-
-        // Inizializza il display e il timer
-        updateDisplay();
-        updateTimerDisplay();
-        setInterval(() => {
-            timerTick();
-            saveSettings();
-        }, 1000);
+        initializeTimer();
+        setInterval(timerTick, 1000);
     </script>
 </body>
 </html>
