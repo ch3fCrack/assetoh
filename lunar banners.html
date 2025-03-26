@@ -188,14 +188,14 @@
             const params = new URLSearchParams(window.location.search);
             if (phase === "main") {
                 messageElement.textContent = params.has('text1') ? 
-                    decodeURIComponent(params.get('text1')) : "Timer di 45 minuti";
+                    decodeURIComponent(params.get('text1')) : "Timer Text 45 min";
                 timerContainer.className = "container main";
                 if (params.has('bg1')) {
                     timerContainer.style.backgroundImage = `url('${params.get('bg1')}')`;
                 }
             } else {
                 messageElement.textContent = params.has('text2') ? 
-                    decodeURIComponent(params.get('text2')) : "Timer di 15 minuti";
+                    decodeURIComponent(params.get('text2')) : "Timer Text 15 min";
                 timerContainer.className = "container short";
                 if (params.has('bg2')) {
                     timerContainer.style.backgroundImage = `url('${params.get('bg2')}')`;

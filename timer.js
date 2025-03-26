@@ -25,13 +25,13 @@ function updateTimerDisplay() {
 
 function updateMessage() {
     if (phase === "main") {
-        messageElement.textContent = textBanner1Input?.value || "Timer di 45 minuti";
+        messageElement.textContent = textBanner1Input?.value || "Timer Text 45 min";
         timerContainer.className = "container main";
         if (bgBanner1Input?.value) {
             timerContainer.style.backgroundImage = `url('${bgBanner1Input.value}')`;
         }
     } else {
-        messageElement.textContent = textBanner2Input?.value || "Timer di 15 minuti";
+        messageElement.textContent = textBanner2Input?.value || "Timer Text 15 min";
         timerContainer.className = "container short";
         if (bgBanner2Input?.value) {
             timerContainer.style.backgroundImage = `url('${bgBanner2Input.value}')`;
