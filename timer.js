@@ -78,7 +78,8 @@ function copyToOBS() {
         text2: encodeURIComponent(textBanner2Input?.value || ''),
         phase,
         transparent: true,
-        startTime: Date.now()
+        startTime: Date.now(),
+        showSignature: true
     };
 
     const baseUrl = window.location.origin + '/lunar%20banners.html';
@@ -158,7 +159,10 @@ function initializeFromURL() {
         document.body.style.backgroundColor = 'transparent';
         timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
     }
-
+    const signature = document.querySelector('.signature');
+    if (signature) {
+        signature.style.display = params.get('showSignature') === 'true' ? 'block' : 'none';
+    }
     updateMessage();
     updateTimerDisplay();
 }

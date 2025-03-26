@@ -1,41 +1,41 @@
 @import url('https://fonts.cdnfonts.com/css/lovelo');
+
+/* Stili base */
 .container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
-#error-message {
-    color: rgb(255, 0, 0); /* Rosso brillante per il testo */
-    display: none;
-    text-shadow: 0 0 10px rgba(255, 0, 0, 0.7), /* Bagliore rosso interno */
-                 2px 2px 4px rgb(124, 123, 123); /* Ombra nera più profonda */
-    font-family: 'Lovelo', sans-serif;
-    font-weight: 900;
-    font-size: 1.2em;
-    margin-top: 10px;
-}
+
+/* Stili per gli asset */
 .asset {
     margin: 10px;
 }
+
 .asset img {
     width: 600px;
     height: auto;
-    border: 2px solid #00aaff; /* Aggiunta della cornice */
-    border-radius: 5px; /* Opzionale: arrotondamento degli angoli */
+    border: 2px solid #00aaff;
+    border-radius: 5px;
 }
+
+/* Stili per i bottoni generici */
 button {
     background-color: #00aaff;
     border: none;
     padding: 10px;
     cursor: pointer;
     color: white;
+    font-family: 'Lovelo', sans-serif;
 }
+
 button:hover {
     background-color: #ff0044;
     transform: translateY(-2px);
 }
+
+/* Stili per il bottone download */
 #downloadAll {
-    
     background-color: #00aaff;
     font-family: 'Lovelo', sans-serif;
     font-weight: 900;
@@ -44,9 +44,128 @@ button:hover {
     font-size: 16px;
     cursor: pointer;
     color: white;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
     display: block;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+/* Stili per i messaggi di errore */
+#error-message {
+    color: rgb(255, 0, 0);
+    display: none;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.7),
+                 2px 2px 4px rgb(124, 123, 123);
+    font-family: 'Lovelo', sans-serif;
+    font-weight: 900;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+/* Container principale dei banner privati */
+#privateBannerContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 100px;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+/* Stili per la presentazione dei banner */
+#privateBannerContainer .presentation {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 432px;
+    height: 243px;
+    margin-bottom: 40px;
+    padding: 0 70px;
+    overflow: visible;
+}
+
+#privateBannerContainer .bannerImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 10px;
+    border: 2px solid #00aaff;
+    background-color: #2a2a2a;
+}
+
+/* Stili per i controlli di navigazione */
+#privateBannerContainer .navigation {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#privateBannerContainer .prevBtn,
+#privateBannerContainer .nextBtn {
+    background-color: #00aaff;
+    border: none;
+    color: white;
+    font-size: 2.5em;
+    padding: 15px 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    font-family: 'Lovelo', sans-serif;
+}
+
+#privateBannerContainer .prevBtn {
+    left: 10px;
+}
+
+#privateBannerContainer .nextBtn {
+    right: 10px;
+}
+
+#privateBannerContainer .prevBtn:hover,
+#privateBannerContainer .nextBtn:hover {
+    background-color: #ff0044;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Stili per i dots di navigazione */
+#privateBannerContainer .dots {
+    display: flex;
+    gap: 8px;
+}
+
+#privateBannerContainer .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#privateBannerContainer .dot.active {
+    background-color: #00aaff;
+}
+
+/* Stili per il contenuto protetto */
+#protected-content {
+    text-align: center;
+    padding: 20px;
+}
+
+#protected-content h2 {
+    font-family: 'Lovelo', sans-serif;
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 170, 255, 0.7);
+    margin-bottom: 30px;
 }
