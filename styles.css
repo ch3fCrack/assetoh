@@ -16,7 +16,7 @@ body {
     border-bottom: 2px solid #ff0044; /* Bordo neon rosso */
 }
 
-h1, h2, p, strong {
+h1, h2,h3,h4,h5, p, strong {
     font-family: 'Lovelo', sans-serif;
     font-weight: 900;
     color: #ffffff;

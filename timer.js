@@ -166,7 +166,25 @@ function initializeFromURL() {
     updateMessage();
     updateTimerDisplay();
 }
+function rotateSignatures() {
+    const signatures = [
+        "Created by Ch3f_nerd_art",
+        "Ch3f_nerd_art が制作",
+        "由 Ch3f_nerd_art 创作"
+    ];
+    const signatureElement = document.querySelector('.signature');
+    if (!signatureElement) return;
 
+    let currentIndex = 0;
+    setInterval(() => {
+        signatureElement.style.opacity = '0';
+        setTimeout(() => {
+            signatureElement.textContent = signatures[currentIndex];
+            signatureElement.style.opacity = '1';
+            currentIndex = (currentIndex + 1) % signatures.length;
+        }, 500);
+    }, 30000);
+}
 function timerTick() {
     const currentTime = performance.now();
     const deltaTime = currentTime - lastTickTime;
@@ -223,6 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     initializeFromURL();
+    rotateSignatures();
 });
 
 // Avvia il timer con maggiore precisione

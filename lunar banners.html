@@ -82,7 +82,7 @@
         .timer {
             font-family: 'Lovelo', sans-serif;
             font-weight: 900;
-            font-size: 60px;
+            font-size: 50px;
             margin-left: 50px;
             z-index: 2;
             color: #ffffff;
@@ -100,13 +100,14 @@
         0 0 2px rgba(0, 0, 0, 0.8),
         0 0 4px rgba(255, 0, 0, 0.5),
         1px 1px 2px rgba(0, 0, 0, 0.9);
-        z-index: 2;
+        z-index: 12;
         letter-spacing: 0.5px;
+        transition: opacity 0.5s ease;
         }
         .message {
             font-family: 'Lovelo', sans-serif;
             font-weight: 900;
-            margin-left: 60px;
+            margin-left: 50px;
             font-size: 30px;
             text-align: center;
             z-index: 2;
@@ -117,7 +118,6 @@
 </head>
 <body>
     <div class="container" id="timerContainer">
-        <div class="rotating-shadow"></div>
         <img src="lunar.gif" alt="GIF" class="fixed-gif">
         <div>
             <div class="timer" id="timer"></div>
@@ -127,6 +127,7 @@
     </div>
 
     <script>
+
         var CONFIG = {
             eventStartMinute: 52,
             eventStartSecond: 25
@@ -139,7 +140,25 @@
         const timerElement = document.getElementById('timer');
         const messageElement = document.getElementById('message');
         const timerContainer = document.getElementById('timerContainer');
+        function rotateSignatures() {
+        const signatures = [
+            "Created by Ch3f_nerd_art",
+            "Ch3f_nerd_art が制作",
+            "由 Ch3f_nerd_art 创作"
+        ];
+        const signatureElement = document.querySelector('.signature');
+        if (!signatureElement) return;
 
+        let currentIndex = 0;
+        setInterval(() => {
+            signatureElement.style.opacity = '0';
+            setTimeout(() => {
+                signatureElement.textContent = signatures[currentIndex];
+                signatureElement.style.opacity = '1';
+                currentIndex = (currentIndex + 1) % signatures.length;
+            }, 500);
+        }, 30000); // Cambiato a 30000ms (30 secondi)
+        }
         function saveState() {
             const state = {
                 phase,
@@ -254,6 +273,7 @@
         }
 
         initializeTimer();
+        rotateSignatures();
         setInterval(timerTick, 1000);
     </script>
 </body>
