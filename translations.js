@@ -2,6 +2,10 @@ const translations = {
     en: {
         // Navigation
         home: "Home",
+        siteTitle: "Ch3f Nerd Art Asset for Creator",
+        mainTitle: "Ch3f Nerd Art Asset Hub for Creator",
+        welcomeTitle: "Welcome to Ch3f Nerd Art Asset Hub for Creators",
+        welcomeText: "We share free resources for Once Human content creators!",
         asianBanner: "Asian Banners By Ch3f Nerd Art",
         gifs: "GIF's",
         asianGifs: "Asian GIF's",
@@ -81,6 +85,10 @@ const translations = {
     jp: {
         // Navigation
         home: "ホーム",
+        siteTitle: "Ch3f Nerd Art クリエイターアセット",
+        mainTitle: "Ch3f Nerd Art クリエイターアセットハブ",
+        welcomeTitle: "Ch3f Nerd Art クリエイターアセットハブへようこそ",
+        welcomeText: "Once Human コンテンツクリエイター向けの無料リソースを共有しています！",
         gifSectionNote: "英語のGIFセクション！",
         bannersTitle: "Ch3f Nerd Art のバナー",
         asianBanner: "Ch3f Nerd Art のアジアンバナー",
@@ -159,6 +167,10 @@ const translations = {
     cn: {
         // Navigation
         home: "主页",
+        siteTitle: "Ch3f Nerd Art 创作者资源",
+        mainTitle: "Ch3f Nerd Art 创作者资源中心",
+        welcomeTitle: "欢迎来到 Ch3f Nerd Art 创作者资源中心",
+        welcomeText: "我们为 Once Human 内容创作者分享免费资源！",
         gifSectionNote: "英文GIF区域！",
         bannersTitle: "Ch3f Nerd Art 的横幅",
         asianBanner: "Ch3f Nerd Art 亚洲横幅",
@@ -235,6 +247,10 @@ const translations = {
     it: {
         // Navigation
         home: "Home",
+        siteTitle: "Ch3f Nerd Art Asset per Creatori",
+        mainTitle: "Ch3f Nerd Art Hub Asset per Creatori",
+        welcomeTitle: "Benvenuti nel Ch3f Nerd Art Hub Asset per Creatori",
+        welcomeText: "Condividiamo risorse gratuite per i creatori di contenuti Once Human!",
         gifSectionNote: "Sezione GIF in Inglese!",
         bannersTitle: "Banner di Ch3f Nerd Art",
         asianBanner: "Banner Asiatici di Ch3f Nerd Art",
