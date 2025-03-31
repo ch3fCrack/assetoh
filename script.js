@@ -176,12 +176,6 @@ function loadPrivateBanners() {
 }
 
 // ===== FUNZIONI UTILITY =====
-function copyToOBS(url) {
-    navigator.clipboard.writeText(url).then(() => {
-        alert("URL copied for OBS");
-    });
-}
-
 function loadGifs(container, list) {
     if (!container) return;
     
@@ -190,9 +184,19 @@ function loadGifs(container, list) {
         div.classList.add("asset");
         div.innerHTML = `
             <img src="${gif.preview}" alt="GIF ${index + 1}">
-            <button onclick="copyToOBS('${gif.obsUrl}')">Copy for OBS</button>
+            <button class="obs-btn" data-translate="copyForOBS" onclick="copyToOBS('${gif.obsUrl}')">Copy for OBS</button>
         `;
         container.appendChild(div);
+    });
+
+    // Update translations for new elements
+    updatePageLanguage();
+}
+
+function copyToOBS(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        const message = translations[currentLang].urlCopied || "URL copied for OBS";
+        alert(message);
     });
 }
 

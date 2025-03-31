@@ -105,62 +105,103 @@ nav ul li a:hover {
     height: auto;
     border-bottom: 2px solid #ff0044; /* Bordo neon rosso */
 }
+/* ...existing code... */
+
 .language-selector {
     position: fixed;
     top: 20px;
-    left: 20px;
+    right: 20px;
     z-index: 1000;
     display: flex;
-    gap: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 8px;
     border-radius: 10px;
     backdrop-filter: blur(5px);
+    transition: transform 0.3s ease;
+}
+
+.language-selector:not(:hover) .lang-btn:not(.active) {
+    display: none;
 }
 
 .lang-btn {
     background: none;
     border: 2px solid #00aaff;
-    border-radius: 5px;
-    padding: 0; /* Removed padding */
-    font-size: 32px; /* Increased font size for larger flags */
+    border-radius: 100px;
+    padding: 0;
     cursor: pointer;
     transition: all 0.3s ease;
     color: white;
-    width: 50px; /* Increased width */
-    height: 50px; /* Increased height */
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
-    overflow: hidden; /* Hide any overflow */
+    overflow: hidden;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    opacity: 0.7;
 }
 
-/* Flag emojis for each language */
-.lang-btn[data-lang="en"]::before { 
-    content: "🇬🇧";
-    transform: scale(1.5); /* Scale up the flag */
+/* Flag images for each language */
+.lang-btn[data-lang="en"] { 
+    background-image: url('images/flag/gbflag.png');
 }
-.lang-btn[data-lang="jp"]::before { 
-    content: "🇯🇵";
-    transform: scale(1.5);
+.lang-btn[data-lang="jp"] { 
+    background-image: url('images/flag/jpflag.png');
 }
-.lang-btn[data-lang="cn"]::before { 
-    content: "🇨🇳";
-    transform: scale(1.5);
+.lang-btn[data-lang="cn"] { 
+    background-image: url('images/flag/cnflag.png');
 }
-.lang-btn[data-lang="it"]::before { 
-    content: "🇮🇹";
-    transform: scale(1.5);
+.lang-btn[data-lang="it"] { 
+    background-image: url('images/flag/itflag.png');
 }
+
 .lang-btn:hover {
-    transform: translateY(-2px);
+    opacity: 1;
+    transform: scale(1.1);
     border-color: #ff0044;
     box-shadow: 0 0 10px rgba(255, 0, 68, 0.5);
 }
 
 .lang-btn.active {
+    opacity: 1;
+    order: -1;
     border-color: #ff0044;
-    box-shadow: 0 0 10px rgba(255, 0, 68, 0.5);
-    background: rgba(255, 0, 68, 0.2);
+    box-shadow: 0 0 15px #ff0044;
 }
+
+/* Add dropdown arrow indicator */
+.lang-btn.active::before {
+    content: '▼';
+    position: absolute;
+    left: -20px;
+    color: #ff0044;
+    text-shadow: 0 0 5px #ff0044;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when menu is open */
+.language-selector:hover .lang-btn.active::before {
+    transform: rotate(180deg);
+}
+
+/* Glow effect for active language */
+.lang-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 0, 68, 0.2);
+    pointer-events: none;
+    border-radius: 100px;
+}
+

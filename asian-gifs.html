@@ -1,42 +1,45 @@
 
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIFs </title>
+    <title data-translate="asianGifs">Asian GIFs</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="gifs.css">
+    <link href="https://fonts.cdnfonts.com/css/lovelo" rel="stylesheet">
+    <link rel="icon" href="images/icon.png" type="image/x-icon">
+    
+    <!-- Add translation system scripts -->
+    <script src="translations.js"></script>
+    <script src="loadCommon.js"></script>
+    <script src="languageManager.js"></script>
+    
+    <!-- Existing scripts -->
     <script defer src="script.js"></script>
     <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
-    <link href="https://fonts.cdnfonts.com/css/lovelo" rel="stylesheet">
-    <link rel="icon" href="images/icon.png" type="image/x-icon"> <!-- Aggiungi questa riga -->
 </head>
 <body>
     <header>
-        <h1>GIFs</h1>
+        <h1 data-translate="asianGifs">Asian GIFs</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="banners.html">Banners</a></li>
-                <li><a href="lunar.html">Lunar timer Beta Version </a></li>
-                <li><a href="asian-banners.html">Asian Banners</a></li>
-                <li><a href="donate.html">Donate</a></li>
-                <li><a href="gifs.html">Gif's</a></li>
-                <li><a href="private-banners.html">Creator Group Missions Banners</a></li>
-                <li><a href="https://www.twitch.tv/ch3f_nerd_art" target="_blank">My Twitch Channel</a></li>
-                <li><a href="https://chaultv-tools.up.railway.app/oh/lunar-timer-admin.html" target="_blank">Lunar Timers By ChaulTV</a></li>
+                <li><a href="index.html" data-translate="home">Home</a></li>
+                <li><a href="banners.html" data-translate="banners">Banners</a></li>
+                <li><a href="lunar.html" data-translate="lunarTimer">Lunar timer Beta Version</a></li>
+                <li><a href="asian-banners.html" data-translate="asianBanners">Asian Banners</a></li>
+                <li><a href="donate.html" data-translate="donate">Donate</a></li>
+                <li><a href="gifs.html" data-translate="gifs">GIF's</a></li>
+                <li><a href="private-banners.html" data-translate="creatorGroup">Creator Group Missions Banners</a></li>
+                <li><a href="https://www.twitch.tv/ch3f_nerd_art" target="_blank" data-translate="twitchChannel">My Twitch Channel</a></li>
+                <li><a href="https://chaultv-tools.up.railway.app/oh/lunar-timer-admin.html" target="_blank" data-translate="lunarTimerChaulTV">Lunar Timers By ChaulTV</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <p>中国語と日本語のGIFセクション</p></p>
-        <p><strong>OBSのソースを800x800ピクセルに設定することが重要です。</strong></p>
-        <p></p>
-        <p></p>
-        <p>中文和日语的GIF部分</p>
-        <p><strong>重要的是在OBS上将源设置为800x800像素</strong></p>
+        <p data-translate="asianGifsSectionTitle">Asian GIFs Section</p>
+        <p data-translate="obsNote"><strong>Important: Set the source in OBS to 800x800 pixels.</strong></p>
         <div class="container" id="asianGifContainer"></div>
     </main>
 </body>
