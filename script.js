@@ -55,6 +55,14 @@ const gifList = [
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif5.gif",
         obsUrl: "https://streamelements.com/overlay/67c4e22c586aed6967b99e08/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif10.gif",
+        obsUrl: "https://streamelements.com/overlay/67ec28b3132e23fff9898b3f/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif11.gif",
+        obsUrl: "https://streamelements.com/overlay/67ec294f16fc1ab077b999dc/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     }
 ];
 
@@ -113,8 +121,16 @@ const presentations = [
         images: ["banners/private/private-banner1.png", "banners/private/private-banner1.png"]
     },
     {
-        containerId: "presentation14",
+        containerId: "presentation16",
         images: ["banners/private/private-banner1.png", "banners/private/private-banner1.png"]
+    },
+     {
+        containerId: "presentation14",
+        images: ["banners/banner61.png", "banners/banner62.png", "banners/banner63.png"]
+    },
+    {
+        containerId: "presentation15",
+        images: ["banners/banner64.png", "banners/banner65.png", "banners/banner66.png"]
     }
 ];
 
