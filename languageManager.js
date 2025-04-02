@@ -22,6 +22,10 @@ function initializeLanguage() {
         <button class="lang-btn" data-lang="jp" title="日本語"></button>
         <button class="lang-btn" data-lang="cn" title="中文"></button>
         <button class="lang-btn" data-lang="it" title="Italiano"></button>
+        <button class="lang-btn" data-lang="fr" title="Français"></button>
+        <button class="lang-btn" data-lang="de" title="Deutsch"></button>
+        <button class="lang-btn" data-lang="es" title="Español"></button>
+        <button class="lang-btn" data-lang="pt" title="Português"></button>
     `;
 
     document.body.insertAdjacentElement('afterbegin', languageSelector);

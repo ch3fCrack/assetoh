@@ -359,7 +359,8 @@ function setupPayPal() {
     paypalButton.addEventListener("click", () => {
         const paypalEmail = "Ch3fcrack2@outlook.it";
         navigator.clipboard.writeText(paypalEmail).then(() => {
-            alert("PayPal email copied: " + paypalEmail);
+            const message = translations[currentLang].paypalCopied || "PayPal email copied: ";
+            alert(message + paypalEmail);
         });
     });
 }

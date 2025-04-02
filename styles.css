@@ -161,6 +161,18 @@ nav ul li a:hover {
 .lang-btn[data-lang="it"] { 
     background-image: url('images/flag/itflag.png');
 }
+.lang-btn[data-lang="fr"] { 
+    background-image: url('images/flag/frflag.png');
+}
+.lang-btn[data-lang="de"] { 
+    background-image: url('images/flag/deflag.png');
+}
+.lang-btn[data-lang="es"] { 
+    background-image: url('images/flag/esflag.png');
+}
+.lang-btn[data-lang="pt"] { 
+    background-image: url('images/flag/ptflag.png');
+}
 
 .lang-btn:hover {
     opacity: 1;
