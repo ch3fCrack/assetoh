@@ -45,7 +45,7 @@ const translations = {
         customizeBanners: "Customize Banners",
         applyCustomizations: "Apply Customizations",
         useInOBS: "Use in OBS",
-       
+        timerSetupNote: "IMPORTANT: First set your lunar phase start time above. Then you can customize your banners below. If you don't set the time first, your customizations will be reset.",
 
         // Banners
         banner1URLLabel: "Banner 1 URL image (timer 45 min)",
@@ -80,7 +80,16 @@ const translations = {
             So please, do not feel obligated to donate. Your appreciation is enough! 😊`,
         
         urlCopied: "URL copied for OBS",
-        paypalCopied: "PayPal email copied: "
+        paypalCopied: "PayPal email copied: ",
+        translationCredits: "Translation Revision Credits",
+        englishTranslation: "English Translation Review:",
+        japaneseTranslation: "Japanese Translation Review:",
+        chineseTranslation: "Chinese Translation Review:",
+        frenchTranslation: "French Translation Review:",
+        germanTranslation: "German Translation Review:",
+        spanishTranslation: "Spanish Translation Review:",
+        portugueseTranslation: "Portuguese Translation Review:",
+        italianTranslation: "Italian Translation Review:"
     },
 
     jp: {
@@ -127,6 +136,7 @@ const translations = {
         enterText: "テキストを入力",
         applyCustomizations: "カスタマイズを適用",
         useInOBS: "OBSで使用",
+        timerSetupNote: "重要：まず上で月齢の開始時間を設定してください。その後、下のバナーをカスタマイズできます。時間を先に設定しないと、カスタマイズがリセットされます。",
 
         // Banners
         banner1URLLabel: "バナー1 URL 画像（タイマー45分）",
@@ -162,8 +172,16 @@ const translations = {
             寄付の義務は全くありません。皆様の感謝の気持ちだけで十分です！😊`,
         
         urlCopied: "URLがOBSにコピーされました",
-        paypalCopied: "PayPalメールをコピーしました："
-        
+        paypalCopied: "PayPalメールをコピーしました：",
+        translationCredits: "翻訳校正クレジット",
+        englishTranslation: "英語翻訳校正：",
+        japaneseTranslation: "日本語翻訳校正：",
+        chineseTranslation: "中国語翻訳校正：",
+        italianTranslation: "イタリア語翻訳校正：",
+        frenchTranslation: "フランス語翻訳校正：",
+        germanTranslation: "ドイツ語翻訳校正：",
+        spanishTranslation: "スペイン語翻訳校正：",
+        portugueseTranslation: "ポルトガル語翻訳校正："
     },
 
     cn: {
@@ -210,6 +228,7 @@ const translations = {
         enterText: "输入文本",
         applyCustomizations: "应用自定义设置",
         useInOBS: "在OBS中使用",
+        timerSetupNote: "重要：请先在上方设置月相开始时间。然后您可以在下方自定义横幅。如果不先设置时间，您的自定义设置将被重置。",
 
         // Banners
         banner1URLLabel: "横幅1 URL图片（计时器45分钟）",
@@ -244,7 +263,16 @@ const translations = {
             请不要觉得有义务捐款。您的欣赏就足够了！😊`,
         
         urlCopied: "URL已复制到OBS",
-        paypalCopied: "已复制PayPal邮箱："
+        paypalCopied: "已复制PayPal邮箱：",
+        translationCredits: "翻译审校鸣谢",
+        englishTranslation: "英语翻译审校：",
+        japaneseTranslation: "日语翻译审校：",
+        chineseTranslation: "中文翻译审校：",
+        italianTranslation: "意大利语翻译审校：",
+        frenchTranslation: "法语翻译审校：",
+        germanTranslation: "德语翻译审校：",
+        spanishTranslation: "西班牙语翻译审校：",
+        portugueseTranslation: "葡萄牙语翻译审校："
     },
 
     it: {
@@ -291,6 +319,7 @@ const translations = {
         enterText: "Inserisci testo",
         applyCustomizations: "Applica Personalizzazioni",
         useInOBS: "Usa in OBS",
+        timerSetupNote: "IMPORTANTE: Prima imposta l'ora di inizio della tua fase lunare sopra. Poi potrai personalizzare i tuoi banner qui sotto. Se non imposti prima l'ora, le tue personalizzazioni verranno resettate。",
 
         // Banners
         banner1URLLabel: "URL immagine Banner 1 (timer 45 min)",
@@ -323,14 +352,23 @@ const translations = {
         donateDisclaimer: `IMPORTANTE: Quello che faccio è per passione, non per profitto. Sono felice di condividere tutto ciò che creo per il mio canale.
             Quindi per favore, non sentirti obbligato a donare. Il tuo apprezzamento è più che sufficiente! 😊`,
         
-            copyForOBS: "Copia per OBS",
+        copyForOBS: "Copia per OBS",
         urlCopied: "URL copiato per OBS",
-        paypalCopied: "Email PayPal copiata: "
+        paypalCopied: "Email PayPal copiata: ",
+        translationCredits: "Crediti Revisione Traduzioni",
+        englishTranslation: "Revisione Traduzione Inglese:",
+        japaneseTranslation: "Revisione Traduzione Giapponese:",
+        chineseTranslation: "Revisione Traduzione Cinese:",
+        italianTranslation: "Revisione Traduzione Italiana:",
+        frenchTranslation: "Revisione Traduzione Francese:",
+        germanTranslation: "Revisione Traduzione Tedesca:",
+        spanishTranslation: "Revisione Traduzione Spagnola:",
+        portugueseTranslation: "Revisione Traduzione Portoghese:"
     },
     fr: {
         home: "Accueil",
         copyForOBS: "Copier pour OBS",
-
+        passwordNote: "Écrivez-moi en MP sur Discord (ch3ftv) et je vous enverrai le mot de passe.... Aqua le devinera immédiatement", 
         siteTitle: "Ch3f Nerd Art Asset pour Créateurs",
         mainTitle: "Ch3f Nerd Art Asset Hub pour Créateurs",
         welcomeTitle: "Bienvenue sur Ch3f Nerd Art Asset Hub pour Créateurs",
@@ -370,10 +408,23 @@ const translations = {
         donateIntro: "Bonjour à tous! Si vous êtes membre du programme Once Human Content Creator, vous me connaissez sûrement pour mes bannières et GIFs.",
         donateDisclaimer: "IMPORTANT: Ce que je fais est par passion, pas pour le profit. Tout ce que je crée pour ma chaîne, je suis heureux de le partager avec vous.",
         urlCopied: "URL copiée pour OBS",
-        paypalCopied: "Email PayPal copiée : "
+        paypalCopied: "Email PayPal copiée : ",
+         gifSectionNote: "Section avec GIFs en anglais !",
+        obsNote: "Il est important de définir la source sur OBS à 800x800 pixels.",
+        timerSetupNote: "IMPORTANT : Définissez d'abord l'heure de début de votre phase lunaire ci-dessus. Ensuite, vous pourrez personnaliser vos bannières ci-dessous. Si vous ne définissez pas l'heure d'abord, vos personnalisations seront réinitialisées.",
+        translationCredits: "Crédits de Révision des Traductions",
+        englishTranslation: "Révision Traduction Anglaise :",
+        japaneseTranslation: "Révision Traduction Japonaise :",
+        chineseTranslation: "Révision Traduction Chinoise :",
+        italianTranslation: "Révision Traduction Italienne :",
+        frenchTranslation: "Révision Traduction Française :",
+        germanTranslation: "Révision Traduction Allemande :",
+        spanishTranslation: "Révision Traduction Espagnole :",
+        portugueseTranslation: "Révision Traduction Portugaise :"
     },
     es: {
         home: "Inicio",
+        passwordNote: "Escríbeme por MD en Discord (ch3ftv) y te enviaré la contraseña.... Aqua la adivinará inmediatamente",
         copyForOBS: "Copiar para OBS",
         siteTitle: "Ch3f Nerd Art Asset para Creadores",
         mainTitle: "Ch3f Nerd Art Asset Hub para Creadores",
@@ -414,10 +465,25 @@ const translations = {
         donateIntro: "¡Hola a todos! Si eres miembro del programa Once Human Content Creator, probablemente me conozcas por mis banners y GIFs.",
         donateDisclaimer: "IMPORTANTE: Lo que hago es por pasión, no por lucro. Todo lo que creo para mi canal, estoy feliz de compartirlo contigo.",
         urlCopied: "URL copiada para OBS",
-        paypalCopied: "Email de PayPal copiado: "
+        paypalCopied: "Email de PayPal copiado: ",
+        bannerNote: "NOTA: Las imágenes pueden ser GIF o estáticas pero deben estar en formato 800x200. P.D.: Está en beta, así que si hay problemas o errores, contáctame en Discord (ch3ftv).",
+        gifSectionNote: "¡Sección con GIFs en inglés!",
+        obsNote: "Es importante configurar la fuente en OBS a 800x800 píxeles.",
+        timerSetupNote: "IMPORTANTE: Primero establezca la hora de inicio de su fase lunar arriba. Luego puede personalizar sus banners abajo. Si no establece la hora primero, sus personalizaciones se reiniciarán.",
+        translationCredits: "Créditos de Revisión de Traducciones",
+        englishTranslation: "Revisión Traducción Inglés:",
+        japaneseTranslation: "Revisión Traducción Japonés:",
+        chineseTranslation: "Revisión Traducción Chino:",
+        italianTranslation: "Revisión Traducción Italiano:",
+        frenchTranslation: "Revisión Traducción Francés:",
+        germanTranslation: "Revisión Traducción Alemán:",
+        spanishTranslation: "Revisión Traducción Español:",
+        portugueseTranslation: "Revisión Traducción Portugués:"
     },
     de: {
         home: "Startseite",
+        bannerNote: "HINWEIS: Die Bilder können GIFs oder statisch sein, müssen aber im Format 800x200 sein. P.S.: Es ist noch in der Beta-Phase, bei Problemen oder Fehlern kontaktiere mich bitte auf Discord (ch3ftv).",
+        passwordNote: "Schreib mir eine DM auf Discord (ch3ftv) und ich sende dir das Passwort.... Aqua wird es sofort erraten",
         copyForOBS: "Kopieren für OBS",
         siteTitle: "Ch3f Nerd Art Asset für Kreatoren",
         mainTitle: "Ch3f Nerd Art Asset Hub für Kreatoren",
@@ -458,10 +524,24 @@ const translations = {
         donateIntro: "Hallo zusammen! Falls du Mitglied des Once Human Content Creator Programms bist, kennst du mich wahrscheinlich für meine Banner und GIFs.",
         donateDisclaimer: "WICHTIG: Ich mache das aus Leidenschaft, nicht für Profit. Alles, was ich für meinen Kanal erstelle, teile ich gerne mit euch.",
         urlCopied: "URL für OBS kopiert",
-        paypalCopied: "PayPal E-Mail kopiert: "
+        paypalCopied: "PayPal E-Mail kopiert: ",
+        gifSectionNote: "Bereich mit GIFs auf Englisch!",
+        obsNote: "Es ist wichtig, die Quelle in OBS auf 800x800 Pixel einzustellen.",
+        timerSetupNote: "WICHTIG: Legen Sie zuerst oben Ihre Mondphasen-Startzeit fest. Dann können Sie unten Ihre Banner anpassen. Wenn Sie die Zeit nicht zuerst einstellen, werden Ihre Anpassungen zurückgesetzt.",
+        translationCredits: "Übersetzungsprüfung Credits",
+        englishTranslation: "Englische Übersetzungsprüfung:",
+        japaneseTranslation: "Japanische Übersetzungsprüfung:",
+        chineseTranslation: "Chinesische Übersetzungsprüfung:",
+        italianTranslation: "Italienische Übersetzungsprüfung:",
+        frenchTranslation: "Französische Übersetzungsprüfung:",
+        germanTranslation: "Deutsche Übersetzungsprüfung:",
+        spanishTranslation: "Spanische Übersetzungsprüfung:",
+        portugueseTranslation: "Portugiesische Übersetzungsprüfung:"
     },
     pt: {
         home: "Início",
+        bannerNote:"Nota: As imagens podem ser animadas (GIFs) ou estáticas, mas precisam estar no formato 800x200. P.S.: Ele está na versão BETA, então se houver algum problema ou erro, entre em contato comigo no Discord (CH3FTV).",
+        passwordNote:"Me envie uma mensagem no Discord (CH3TV) e eu vou te mandar a senha.",
         copyForOBS: "Copiar para OBS",
         siteTitle: "Ch3f Nerd Art Asset para Criadores",
         mainTitle: "Ch3f Nerd Art Asset Hub para Criadores",
@@ -479,7 +559,7 @@ const translations = {
         lunarTimerChaulTV: "Temporizadores Lunares por ChaulTV",
         customizableTimer: "Temporizador Personalizável",
         supportWork: "Apoie Meu Trabalho",
-        thanksSupport: "Obrigado pelo Seu Apoio!",
+        thanksSupport: "OBRIGADO PELO SEU APOIO!",
         timerTitle: "Temporizador Personalizável",
         minutes: "Minutos:",
         seconds: "Segundos:",
@@ -493,15 +573,28 @@ const translations = {
         downloadAll: "Link do Google Drive",
         copyPaypal: "Copiar Email do PayPal",
         enterPassword: "Insira a senha para acessar",
-        importantNote: "IMPORTANTE!! Seção de Missões de Assets para Membros do Grupo de Criadores",
+        importantNote: "Importante! Seção de Assets das missões para membros do Grupo de Criadores",
         passwordPlaceholder: "Senha",
         wrongPassword: "Aqua não aprovou! Senha incorreta!",
         downloadBanners: "Baixar Todos os Banners",
         donateTitle: "Apoie Meu Trabalho",
         supportMyWork: "Apoie Meu Trabalho",
-        donateIntro: "Olá a todos! Se você é membro do programa Once Human Content Creator, provavelmente me conhece pelos meus banners e GIFs.",
-        donateDisclaimer: "IMPORTANTE: O que faço é por paixão, não por lucro. Tudo o que crio para o meu canal, fico feliz em compartilhar com vocês.",
+        donateIntro: "Olá a todos! Se você é membro do Programa de Criadores de Conteúdo do Once Human, provavelmente você já me conhece pelos meus banners e gifs. Esta página é apenas para as pessoas que gostariam de me pagar um café ou apenas me agradecer pelo meu trabalho.",
+        donateDisclaimer: "IMPORTANTE: O que eu faço é por paixão, não por lucro. Tudo o que eu crio para o meu canal, eu fico feliz em compartilhar com vocês. Então, por favor, não se sinta obrigado a doar. Sua apreciação é o suficiente!",
         urlCopied: "URL copiado para OBS",
-        paypalCopied: "Email do PayPal copiado: "
+        bannerNote: "Nota: As imagens podem ser animadas (GIFs) ou estáticas, mas precisam estar no formato 800x200. P.S.: Ele está na versão BETA, então se houver algum problema ou erro, entre em contato comigo no Discord (CH3FTV)",
+        paypalCopied: "Email do PayPal copiado: ",
+        gifSectionNote: "Seção com GIFs em inglês!",
+        obsNote: "É importante configurar a fonte no OBS para 800x800 pixels.",
+        timerSetupNote: "IMPORTANTE: Primeiro defina o horário de início da sua fase lunar acima. Depois você pode personalizar seus banners abaixo. Se você não definir o horário primeiro, suas personalizações serão redefinidas.",
+        translationCredits: "Créditos de Revisão das Traduções",
+        englishTranslation: "Revisão da Tradução Inglesa:",
+        japaneseTranslation: "Revisão da Tradução Japonesa:",
+        chineseTranslation: "Revisão da Tradução Chinesa:",
+        italianTranslation: "Revisão da Tradução Italiana:",
+        frenchTranslation: "Revisão da Tradução Francesa:",
+        germanTranslation: "Revisão da Tradução Alemã:",
+        spanishTranslation: "Revisão da Tradução Espanhola:",
+        portugueseTranslation: "Revisão da Tradução Portuguesa:"
     }
 };

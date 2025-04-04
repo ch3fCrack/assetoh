@@ -19,6 +19,7 @@ body {
 h1, h2,h3,h4,h5, p, strong {
     font-family: 'Lovelo', sans-serif;
     font-weight: 900;
+    font-size: 1rem;
     color: #ffffff;
     text-shadow: 0 0 10px #ff0044, 0 0 20px #ff0044; /* Effetto neon rosso */
 }
@@ -215,5 +216,36 @@ nav ul li a:hover {
     background: rgba(255, 0, 68, 0.2);
     pointer-events: none;
     border-radius: 100px;
+}
+
+.translation-credits {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 1rem;
+    background: #0a0a0a;
+    border-radius: 8px;
+}
+
+.credits-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.credits-list li {
+    padding: 0.5rem;
+}
+
+.credits-list a {
+    color: #00aaff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.credits-list a:hover {
+    color: #ff0044;
 }
 
