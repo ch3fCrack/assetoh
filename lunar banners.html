@@ -167,12 +167,53 @@
             return false;
         }
 
+        // Aggiungi questa funzione dopo loadState()
+        function loadAppearanceFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Carica le impostazioni di aspetto se presenti nell'URL
+            if (params.has('appearance')) {
+                try {
+                    const appearance = JSON.parse(decodeURIComponent(params.get('appearance')));
+                    const timer = document.getElementById('timer');
+                    const message = document.getElementById('message');
+                    
+                    // Applica colori e ombre al timer
+                    timer.style.color = appearance.timerColor || '#ffffff';
+                    timer.style.textShadow = `${appearance.shadowSize || '0'}px ${appearance.shadowSize || '0'}px ${appearance.shadowBlur || '4'}px ${appearance.shadowColor || '#000000'}`;
+                    
+                    // Applica colori e ombre al messaggio
+                    message.style.color = appearance.messageColor || '#f0f0f0';
+                    message.style.textShadow = `${appearance.shadowSize || '0'}px ${appearance.shadowSize || '0'}px ${appearance.shadowBlur || '4'}px ${appearance.shadowColor || '#000000'}`;
+                } catch (e) {
+                    console.error('Error loading appearance settings:', e);
+                }
+            }
+        }
+
+        // Modifica la funzione initializeTimer()
+        function initializeTimer() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Carica lo stato del timer
+            if (loadState()) {
+                updateMessage();
+                updateTimerDisplay();
+            } else {
+                // ...existing timer initialization code...
+            }
+
+            // Carica le impostazioni di aspetto
+            loadAppearanceFromUrl();
+        }
+
         function updateTimerDisplay() {
             let minutes = Math.floor(secondsRemaining / 60);
             let seconds = secondsRemaining % 60;
             timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         }
 
+        // Modifica la funzione updateMessage()
         function updateMessage() {
             const params = new URLSearchParams(window.location.search);
             if (phase === "main") {
@@ -190,6 +231,9 @@
                     timerContainer.style.backgroundImage = `url('${params.get('bg2')}')`;
                 }
             }
+            
+            // Riapplica le impostazioni di aspetto dopo l'aggiornamento del messaggio
+            loadAppearanceFromUrl();
         }
 
         function switchPhase() {
