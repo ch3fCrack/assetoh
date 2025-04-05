@@ -101,55 +101,34 @@ function saveState() {
 }
 
 function copyToOBS() {
-    const params = new URLSearchParams();
-
-    // Funzione di supporto per ottenere il valore in sicurezza
-    const safeGetValue = (elementId) => {
-        const element = document.getElementById(elementId);
-        return element ? element.value : null;
+    const state = {
+        minute: CONFIG.eventStartMinute,
+        second: CONFIG.eventStartSecond,
+        bg1: bgBanner1Input?.value,
+        text1: encodeURIComponent(textBanner1Input?.value || ''),
+        bg2: bgBanner2Input?.value,
+        text2: encodeURIComponent(textBanner2Input?.value || ''),
+        timerColor: CONFIG.timerColor,
+        messageColor: CONFIG.messageColor,
+        shadowColor: CONFIG.shadowColor,
+        shadowSize: CONFIG.shadowSize,
+        shadowBlur: CONFIG.shadowBlur,
+        timerSize: CONFIG.timerSize,
+        messageSize: CONFIG.messageSize,
+        phase,
+        transparent: true,
+        showSignature: true
     };
 
-    // Aggiungi i parametri del timer
-    const minute = safeGetValue('minuteInput') || CONFIG.eventStartMinute;
-    const second = safeGetValue('secondInput') || CONFIG.eventStartSecond;
-    params.append('minute', minute);
-    params.append('second', second);
+    const baseUrl = window.location.origin + '/lunar%20banners.html';
+    const queryString = Object.entries(state)
+        .filter(([_, value]) => value !== undefined && value !== '')
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
 
-    // Aggiungi i parametri dei banner in modo sicuro
-    const banner1Url = safeGetValue('banner1-url');
-    const banner1Text = safeGetValue('banner1-text');
-    const banner2Url = safeGetValue('banner2-url');
-    const banner2Text = safeGetValue('banner2-text');
-
-    if (banner1Url) params.append('bg1', banner1Url);
-    if (banner1Text) params.append('text1', encodeURIComponent(banner1Text));
-    if (banner2Url) params.append('bg2', banner2Url);
-    if (banner2Text) params.append('text2', encodeURIComponent(banner2Text));
-
-    // Aggiungi i parametri di stile usando i valori da CONFIG se gli elementi non esistono
-    params.append('timerColor', safeGetValue('timerColor') || CONFIG.timerColor);
-    params.append('messageColor', safeGetValue('messageColor') || CONFIG.messageColor);
-    params.append('shadowColor', safeGetValue('shadowColor') || CONFIG.shadowColor);
-    params.append('shadowSize', safeGetValue('shadowSize') || CONFIG.shadowSize);
-    params.append('shadowBlur', safeGetValue('shadowBlur') || CONFIG.shadowBlur);
-    params.append('timerSize', safeGetValue('timerSize') || CONFIG.timerSize);
-    params.append('messageSize', safeGetValue('messageSize') || CONFIG.messageSize);
-
-    // Modifica la costruzione dell'URL per usare un percorso relativo
-    const url = `lunar%20banners.html?${params.toString()}`;
-
-    // Copia l'URL negli appunti
-    navigator.clipboard.writeText(url).then(() => {
-        const copyMessage = document.getElementById('copyMessage');
-        if (copyMessage) {
-            copyMessage.textContent = translations[currentLanguage].urlCopied;
-            setTimeout(() => {
-                copyMessage.textContent = '';
-            }, 2000);
-        }
-    }).catch(error => {
-        console.error('Failed to copy URL:', error);
-    });
+    const obsUrl = `${baseUrl}?${queryString}`;
+    navigator.clipboard.writeText(obsUrl);
+    alert(`URL per OBS copiato!`);
 }
 
 function initializeTimer() {
