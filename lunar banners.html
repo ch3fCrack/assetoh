@@ -72,6 +72,7 @@
             font-weight: 900;
             margin-left: 50px;
             z-index: 2;
+            /* Rimuovi font-size predefinito */
         }
         .signature {
         position: absolute;
@@ -95,6 +96,7 @@
             margin-left: 50px;
             text-align: center;
             z-index: 2;
+            /* Rimuovi font-size predefinito */
         }
 
         /* Aggiungi un fallback font */
@@ -214,15 +216,17 @@
         function applyStylesFromURL() {
             const params = new URLSearchParams(window.location.search);
             
-            // Applica stili al timer
-            if (params.has('timerColor')) timerElement.style.color = params.get('timerColor');
-            if (params.has('timerSize')) timerElement.style.fontSize = `${params.get('timerSize')}px`;
+            // Applica stili al timer con valori predefiniti solo se non specificati
+            timerElement.style.color = params.get('timerColor') || '#ffffff';
+            timerElement.style.fontSize = params.has('timerSize') ? 
+                `${params.get('timerSize')}px` : '48px';
             
-            // Applica stili al messaggio
-            if (params.has('messageColor')) messageElement.style.color = params.get('messageColor');
-            if (params.has('messageSize')) messageElement.style.fontSize = `${params.get('messageSize')}px`;
+            // Applica stili al messaggio con valori predefiniti solo se non specificati
+            messageElement.style.color = params.get('messageColor') || '#ffffff';
+            messageElement.style.fontSize = params.has('messageSize') ? 
+                `${params.get('messageSize')}px` : '24px';
             
-            // Applica ombre al testo
+            // Applica ombre al testo solo se tutti i parametri sono presenti
             if (params.has('shadowColor') && params.has('shadowSize') && params.has('shadowBlur')) {
                 const shadowStyle = `${params.get('shadowSize')}px ${params.get('shadowSize')}px ${params.get('shadowBlur')}px ${params.get('shadowColor')}`;
                 timerElement.style.textShadow = shadowStyle;
@@ -279,10 +283,10 @@
             updateTimerDisplay();
         }
 
-        // Aggiungi questo script alla fine del file
+        // Modifica l'inizializzazione per applicare gli stili prima
         document.fonts.ready.then(function() {
-            // Inizializza il timer solo dopo che i font sono pronti
-            initializeTimer();
+            applyStylesFromURL();  // Applica prima gli stili
+            initializeTimer();     // Poi inizializza il timer
             rotateSignatures();
             setInterval(timerTick, 1000);
         });
