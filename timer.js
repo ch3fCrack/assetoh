@@ -139,50 +139,34 @@ function copyToOBS() {
 function initializeTimer() {
     const params = new URLSearchParams(window.location.search);
     
-    const urlReferenceTime = params.get('ref');
-    if (urlReferenceTime) {
-        const referenceTime = parseInt(urlReferenceTime);
-        const now = Date.now();
-        const elapsedMinutes = Math.floor((now - referenceTime) / (1000 * 60));
-        
-        if (elapsedMinutes < 45) {
-            phase = "main";
-            secondsRemaining = (45 * 60) - (elapsedMinutes * 60);
-        } else {
-            phase = "short";
-            const cycleMinutes = elapsedMinutes % 15;
-            secondsRemaining = (15 * 60) - (cycleMinutes * 60);
-        }
-        
-        updateMessage();
-        updateTimerDisplay();
-        return;
-    }
-
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
     const currentSecond = now.getSeconds();
-    const currentMs = now.getMilliseconds();
-
-    // Calcola il tempo preciso dall'inizio dell'ora corrente
-    const currentTimeFromHourStart = (currentMinute * 60 + currentSecond) * 1000 + currentMs;
-    const targetTimeFromHourStart = (CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond) * 1000;
-
+    
+    // Calcola il tempo totale in secondi dall'inizio dell'ora
+    const currentTimeInSeconds = (currentMinute * 60) + currentSecond;
+    const targetTimeInSeconds = (CONFIG.eventStartMinute * 60) + CONFIG.eventStartSecond;
+    
     // Reset accumulatori
     accumulatedTime = 0;
     lastTickTime = performance.now();
 
-    if (currentTimeFromHourStart < targetTimeFromHourStart) {
-        // Siamo prima del target in questa ora
+    // Se il tempo corrente è prima del target time nell'ora corrente
+    if (currentTimeInSeconds < targetTimeInSeconds) {
         phase = "main";
-        secondsRemaining = Math.ceil((targetTimeFromHourStart - currentTimeFromHourStart) / 1000);
+        secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
     } else {
-        // Siamo dopo il target
+        // Siamo dopo il target time, quindi dobbiamo essere nella fase "short"
         phase = "short";
-        const timePassedMs = currentTimeFromHourStart - targetTimeFromHourStart;
-        const shortTimerMs = 15 * 60 * 1000;
-        secondsRemaining = Math.ceil((shortTimerMs - (timePassedMs % shortTimerMs)) / 1000);
+        const timePassedSeconds = currentTimeInSeconds - targetTimeInSeconds;
+        const shortTimerSeconds = 15 * 60; // 15 minuti in secondi
+        
+        // Calcola quanto tempo è passato nel ciclo corrente di 15 minuti
+        const currentCycleSeconds = timePassedSeconds % shortTimerSeconds;
+        
+        // Calcola i secondi rimanenti nel ciclo corrente di 15 minuti
+        secondsRemaining = shortTimerSeconds - currentCycleSeconds;
     }
 
     timerMinutes = phase === "main" ? 45 : 15;
