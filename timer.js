@@ -103,51 +103,52 @@ function saveState() {
 function copyToOBS() {
     const params = new URLSearchParams();
 
+    // Funzione di supporto per ottenere il valore in sicurezza
+    const safeGetValue = (elementId) => {
+        const element = document.getElementById(elementId);
+        return element ? element.value : null;
+    };
+
     // Aggiungi i parametri del timer
-    params.append('minute', document.getElementById('minute').value);
-    params.append('second', document.getElementById('second').value);
+    const minute = safeGetValue('minuteInput') || CONFIG.eventStartMinute;
+    const second = safeGetValue('secondInput') || CONFIG.eventStartSecond;
+    params.append('minute', minute);
+    params.append('second', second);
 
-    // Aggiungi i parametri dei banner
-    if (document.getElementById('banner1-url').value) {
-        params.append('bg1', document.getElementById('banner1-url').value);
-    }
-    if (document.getElementById('banner1-text').value) {
-        params.append('text1', encodeURIComponent(document.getElementById('banner1-text').value));
-    }
-    if (document.getElementById('banner2-url').value) {
-        params.append('bg2', document.getElementById('banner2-url').value);
-    }
-    if (document.getElementById('banner2-text').value) {
-        params.append('text2', encodeURIComponent(document.getElementById('banner2-text').value));
-    }
+    // Aggiungi i parametri dei banner in modo sicuro
+    const banner1Url = safeGetValue('banner1-url');
+    const banner1Text = safeGetValue('banner1-text');
+    const banner2Url = safeGetValue('banner2-url');
+    const banner2Text = safeGetValue('banner2-text');
 
-    // Aggiungi i parametri di stile
-    const timerColor = document.getElementById('timerColor').value;
-    const messageColor = document.getElementById('messageColor').value;
-    const shadowColor = document.getElementById('shadowColor').value;
-    const shadowSize = document.getElementById('shadowSize').value;
-    const shadowBlur = document.getElementById('shadowBlur').value;
-    const timerSize = document.getElementById('timerSize').value;
-    const messageSize = document.getElementById('messageSize').value;
+    if (banner1Url) params.append('bg1', banner1Url);
+    if (banner1Text) params.append('text1', encodeURIComponent(banner1Text));
+    if (banner2Url) params.append('bg2', banner2Url);
+    if (banner2Text) params.append('text2', encodeURIComponent(banner2Text));
 
-    // Aggiungi tutti i parametri di stile all'URL
-    params.append('timerColor', timerColor);
-    params.append('messageColor', messageColor);
-    params.append('shadowColor', shadowColor);
-    params.append('shadowSize', shadowSize);
-    params.append('shadowBlur', shadowBlur);
-    params.append('timerSize', timerSize);
-    params.append('messageSize', messageSize);
+    // Aggiungi i parametri di stile usando i valori da CONFIG se gli elementi non esistono
+    params.append('timerColor', safeGetValue('timerColor') || CONFIG.timerColor);
+    params.append('messageColor', safeGetValue('messageColor') || CONFIG.messageColor);
+    params.append('shadowColor', safeGetValue('shadowColor') || CONFIG.shadowColor);
+    params.append('shadowSize', safeGetValue('shadowSize') || CONFIG.shadowSize);
+    params.append('shadowBlur', safeGetValue('shadowBlur') || CONFIG.shadowBlur);
+    params.append('timerSize', safeGetValue('timerSize') || CONFIG.timerSize);
+    params.append('messageSize', safeGetValue('messageSize') || CONFIG.messageSize);
 
-    // Costruisci l'URL completo
-    const url = `${window.location.origin}${window.location.pathname.replace('timer.html', 'lunar%20banners.html')}?${params.toString()}`;
+    // Modifica la costruzione dell'URL per usare un percorso relativo
+    const url = `lunar%20banners.html?${params.toString()}`;
 
     // Copia l'URL negli appunti
     navigator.clipboard.writeText(url).then(() => {
-        document.getElementById('copyMessage').textContent = translations[currentLanguage].urlCopied;
-        setTimeout(() => {
-            document.getElementById('copyMessage').textContent = '';
-        }, 2000);
+        const copyMessage = document.getElementById('copyMessage');
+        if (copyMessage) {
+            copyMessage.textContent = translations[currentLanguage].urlCopied;
+            setTimeout(() => {
+                copyMessage.textContent = '';
+            }, 2000);
+        }
+    }).catch(error => {
+        console.error('Failed to copy URL:', error);
     });
 }
 
