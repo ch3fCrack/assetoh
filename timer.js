@@ -284,11 +284,37 @@ document.addEventListener('DOMContentLoaded', function() {
             initializeTimer();
         });
 
-        document.getElementById('applyCustomizationsBtn')?.addEventListener('click', function() {
+        document.getElementById('applyCustomizationsBtn').addEventListener('click', function() {
             updateMessage();
             saveState();
             alert('Customizations applied!');
             saveAppearanceSettings();
+            
+            // Aggiungi le impostazioni di aspetto all'URL
+            const appearanceSettings = {
+                timerColor: document.getElementById('timerColor').value,
+                messageColor: document.getElementById('messageColor').value,
+                shadowColor: document.getElementById('shadowColor').value,
+                shadowSize: document.getElementById('shadowSize').value,
+                shadowBlur: document.getElementById('shadowBlur').value
+            };
+
+            // Aggiungi i parametri all'URL
+            let url = 'lunar banners.html?';
+            if (banner1Url) url += `bg1=${encodeURIComponent(banner1Url)}&`;
+            if (banner1Text) url += `text1=${encodeURIComponent(banner1Text)}&`;
+            if (banner2Url) url += `bg2=${encodeURIComponent(banner2Url)}&`;
+            if (banner2Text) url += `text2=${encodeURIComponent(banner2Text)}&`;
+            if (minuteInput.value) url += `minute=${minuteInput.value}&`;
+            if (secondInput.value) url += `second=${secondInput.value}&`;
+            
+            // Aggiungi le impostazioni di aspetto
+            url += `appearance=${encodeURIComponent(JSON.stringify(appearanceSettings))}`;
+
+            // Copia l'URL negli appunti
+            navigator.clipboard.writeText(url).then(() => {
+                showNotification('urlCopied');
+            });
         });
 
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
