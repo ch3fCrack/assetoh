@@ -12,24 +12,10 @@ let accumulatedTime = 0;
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
 const timerContainer = document.getElementById('timerContainer');
-const bgBanner1Input = document.getElementById('banner1Url'); // cambiato da 'bgBanner1'
-const textBanner1Input = document.getElementById('banner1Text'); // cambiato da 'textBanner1'
-const bgBanner2Input = document.getElementById('banner2Url'); // cambiato da 'bgBanner2'
-const textBanner2Input = document.getElementById('banner2Text'); // cambiato da 'textBanner2'
-
-// Get appearance input elements
-const timerColor = document.getElementById('timerColor');
-const messageColor = document.getElementById('messageColor');
-const shadowColor = document.getElementById('shadowColor');
-const shadowSize = document.getElementById('shadowSize');
-const shadowBlur = document.getElementById('shadowBlur');
-
-function getReferenceTime() {
-    const now = new Date();
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-    return now.getTime();
-}
+const bgBanner1Input = document.getElementById('bgBanner1');
+const textBanner1Input = document.getElementById('textBanner1');
+const bgBanner2Input = document.getElementById('bgBanner2');
+const textBanner2Input = document.getElementById('textBanner2');
 
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
@@ -38,37 +24,17 @@ function updateTimerDisplay() {
 }
 
 function updateMessage() {
-    const params = new URLSearchParams(window.location.search);
-    
     if (phase === "main") {
-        const text = textBanner1Input?.value || 
-                    params.get('text1') || 
-                    sessionStorage.getItem('text1') || 
-                    "Timer Text 45 min";
-        messageElement.textContent = decodeURIComponent(text);
+        messageElement.textContent = textBanner1Input?.value || "Timer Text 45 min";
         timerContainer.className = "container main";
-        
-        const bgUrl = bgBanner1Input?.value || 
-                     params.get('bg1') || 
-                     sessionStorage.getItem('bg1');
-        if (bgUrl) {
-            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
-            sessionStorage.setItem('bg1', bgUrl);
+        if (bgBanner1Input?.value) {
+            timerContainer.style.backgroundImage = `url('${bgBanner1Input.value}')`;
         }
     } else {
-        const text = textBanner2Input?.value || 
-                    params.get('text2') || 
-                    sessionStorage.getItem('text2') || 
-                    "Timer Text 15 min";
-        messageElement.textContent = decodeURIComponent(text);
+        messageElement.textContent = textBanner2Input?.value || "Timer Text 15 min";
         timerContainer.className = "container short";
-        
-        const bgUrl = bgBanner2Input?.value || 
-                     params.get('bg2') || 
-                     sessionStorage.getItem('bg2');
-        if (bgUrl) {
-            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
-            sessionStorage.setItem('bg2', bgUrl);
+        if (bgBanner2Input?.value) {
+            timerContainer.style.backgroundImage = `url('${bgBanner2Input.value}')`;
         }
     }
 }
@@ -91,82 +57,67 @@ function saveState() {
         phase,
         secondsRemaining,
         timerMinutes,
-        referenceTime: getReferenceTime(),
+        startTime: Date.now(),
+        bg1: bgBanner1Input?.value,
+        text1: textBanner1Input?.value,
+        bg2: bgBanner2Input?.value,
+        text2: textBanner2Input?.value,
         eventStartMinute: CONFIG.eventStartMinute,
         eventStartSecond: CONFIG.eventStartSecond
     };
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
 
-// Modifica la funzione copyToOBS
 function copyToOBS() {
-    const referenceTime = getReferenceTime();
-    
-    // Usa i valori correnti dei campi di input
-    const banner1Url = bgBanner1Input?.value || sessionStorage.getItem('bg1') || '';
-    const banner1Text = textBanner1Input?.value || sessionStorage.getItem('text1') || '';
-    const banner2Url = bgBanner2Input?.value || sessionStorage.getItem('bg2') || '';
-    const banner2Text = textBanner2Input?.value || sessionStorage.getItem('text2') || '';
+    const state = {
+        minute: CONFIG.eventStartMinute,
+        second: CONFIG.eventStartSecond,
+        bg1: bgBanner1Input?.value,
+        text1: encodeURIComponent(textBanner1Input?.value || ''),
+        bg2: bgBanner2Input?.value,
+        text2: encodeURIComponent(textBanner2Input?.value || ''),
+        phase,
+        transparent: true,
+        startTime: Date.now(),
+        showSignature: true
+    };
 
-    // Costruisci l'URL base
-    let url = `${window.location.origin}/lunar%20banners.html?ref=${referenceTime}`;
+    const baseUrl = window.location.origin + '/lunar%20banners.html';
+    const queryString = Object.entries(state)
+        .filter(([_, value]) => value !== undefined && value !== '')
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
 
-    // Aggiungi i parametri dei banner se presenti
-    if (banner1Url) url += `&bg1=${encodeURIComponent(banner1Url)}`;
-    if (banner1Text) url += `&text1=${encodeURIComponent(banner1Text)}`;
-    if (banner2Url) url += `&bg2=${encodeURIComponent(banner2Url)}`;
-    if (banner2Text) url += `&text2=${encodeURIComponent(banner2Text)}`;
-
-    // Aggiungi le impostazioni di aspetto
-    const appearanceSettings = getAppearanceSettings();
-    url += `&appearance=${encodeURIComponent(JSON.stringify(appearanceSettings))}`;
-
-    // Salva le impostazioni nel sessionStorage
-    saveBannerSettings();
-
-    // Copia l'URL negli appunti
-    navigator.clipboard.writeText(url)
-        .then(() => {
-            showNotification('urlCopied');
-            console.log('URL copiato:', url); // Per debug
-        })
-        .catch(err => {
-            console.error('Errore durante la copia:', err);
-            alert('Errore durante la copia dell\'URL');
-        });
+    const obsUrl = `${baseUrl}?${queryString}`;
+    navigator.clipboard.writeText(obsUrl);
+    alert(`URL per OBS copiato!`);
 }
 
 function initializeTimer() {
-    const params = new URLSearchParams(window.location.search);
-    
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
     const currentSecond = now.getSeconds();
-    
-    // Calcola il tempo totale in secondi dall'inizio dell'ora
-    const currentTimeInSeconds = (currentMinute * 60) + currentSecond;
-    const targetTimeInSeconds = (CONFIG.eventStartMinute * 60) + CONFIG.eventStartSecond;
-    
+    const currentMs = now.getMilliseconds();
+
+    // Calcola il tempo preciso dall'inizio dell'ora corrente
+    const currentTimeFromHourStart = (currentMinute * 60 + currentSecond) * 1000 + currentMs;
+    const targetTimeFromHourStart = (CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond) * 1000;
+
     // Reset accumulatori
     accumulatedTime = 0;
     lastTickTime = performance.now();
 
-    // Se il tempo corrente è prima del target time nell'ora corrente
-    if (currentTimeInSeconds < targetTimeInSeconds) {
+    if (currentTimeFromHourStart < targetTimeFromHourStart) {
+        // Siamo prima del target in questa ora
         phase = "main";
-        secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+        secondsRemaining = Math.ceil((targetTimeFromHourStart - currentTimeFromHourStart) / 1000);
     } else {
-        // Siamo dopo il target time, quindi dobbiamo essere nella fase "short"
+        // Siamo dopo il target
         phase = "short";
-        const timePassedSeconds = currentTimeInSeconds - targetTimeInSeconds;
-        const shortTimerSeconds = 15 * 60; // 15 minuti in secondi
-        
-        // Calcola quanto tempo è passato nel ciclo corrente di 15 minuti
-        const currentCycleSeconds = timePassedSeconds % shortTimerSeconds;
-        
-        // Calcola i secondi rimanenti nel ciclo corrente di 15 minuti
-        secondsRemaining = shortTimerSeconds - currentCycleSeconds;
+        const timePassedMs = currentTimeFromHourStart - targetTimeFromHourStart;
+        const shortTimerMs = 15 * 60 * 1000;
+        secondsRemaining = Math.ceil((shortTimerMs - (timePassedMs % shortTimerMs)) / 1000);
     }
 
     timerMinutes = phase === "main" ? 45 : 15;
@@ -215,52 +166,6 @@ function initializeFromURL() {
     updateMessage();
     updateTimerDisplay();
 }
-
-// Function to update text appearance
-function updateTextAppearance() {
-    const timer = document.getElementById('timer');
-    const message = document.getElementById('message');
-    const shadowStyle = `${shadowSize.value}px ${shadowSize.value}px ${shadowBlur.value}px ${shadowColor.value}`;
-    
-    timer.style.color = timerColor.value;
-    timer.style.textShadow = shadowStyle;
-    
-    message.style.color = messageColor.value;
-    message.style.textShadow = shadowStyle;
-}
-
-// Add event listeners for appearance inputs
-timerColor.addEventListener('input', updateTextAppearance);
-messageColor.addEventListener('input', updateTextAppearance);
-shadowColor.addEventListener('input', updateTextAppearance);
-shadowSize.addEventListener('input', updateTextAppearance);
-shadowBlur.addEventListener('input', updateTextAppearance);
-
-// Save appearance settings in localStorage
-function saveAppearanceSettings() {
-    const settings = {
-        timerColor: timerColor.value,
-        messageColor: messageColor.value,
-        shadowColor: shadowColor.value,
-        shadowSize: shadowSize.value,
-        shadowBlur: shadowBlur.value
-    };
-    localStorage.setItem('appearanceSettings', JSON.stringify(settings));
-}
-
-// Load appearance settings from localStorage
-function loadAppearanceSettings() {
-    const settings = JSON.parse(localStorage.getItem('appearanceSettings'));
-    if (settings) {
-        timerColor.value = settings.timerColor;
-        messageColor.value = settings.messageColor;
-        shadowColor.value = settings.shadowColor;
-        shadowSize.value = settings.shadowSize;
-        shadowBlur.value = settings.shadowBlur;
-        updateTextAppearance();
-    }
-}
-
 function rotateSignatures() {
     const signatures = [
         "Created by Ch3f_nerd_art",
@@ -326,83 +231,18 @@ document.addEventListener('DOMContentLoaded', function() {
             initializeTimer();
         });
 
-        document.getElementById('applyCustomizationsBtn').addEventListener('click', function() {
-            saveBannerSettings();
+        document.getElementById('applyCustomizationsBtn')?.addEventListener('click', function() {
             updateMessage();
             saveState();
-            saveAppearanceSettings();
-            
-            const appearanceSettings = getAppearanceSettings();
-            // ...resto del codice
+            alert('Customizations applied!');
         });
 
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
     }
 
-    // Carica i valori salvati nei campi di input
-    const savedText1 = sessionStorage.getItem('text1');
-    const savedBg1 = sessionStorage.getItem('bg1');
-    const savedText2 = sessionStorage.getItem('text2');
-    const savedBg2 = sessionStorage.getItem('bg2');
-
-    if (savedText1 && textBanner1Input) textBanner1Input.value = savedText1;
-    if (savedBg1 && bgBanner1Input) bgBanner1Input.value = savedBg1;
-    if (savedText2 && textBanner2Input) textBanner2Input.value = savedText2;
-    if (savedBg2 && bgBanner2Input) bgBanner2Input.value = savedBg2;
-
     initializeFromURL();
     rotateSignatures();
-    setInterval(timerTick, 100); // Mettere qui l'intervallo
 });
 
-// Combinare i listeners di load in uno solo
-window.addEventListener('load', () => {
-    loadAppearanceSettings();
-    loadSettingsFromUrl();
-});
-
-// Funzione per caricare le impostazioni dall'URL quando la pagina si carica
-function loadSettingsFromUrl() {
-    const url = new URL(window.location.href);
-    const appearanceParam = url.searchParams.get('appearance');
-    
-    if (appearanceParam) {
-        try {
-            const settings = JSON.parse(appearanceParam);
-            timerColor.value = settings.timerColor;
-            messageColor.value = settings.messageColor;
-            shadowColor.value = settings.shadowColor;
-            shadowSize.value = settings.shadowSize;
-            shadowBlur.value = settings.shadowBlur;
-            updateTextAppearance();
-        } catch (e) {
-            console.error('Error loading appearance settings from URL:', e);
-        }
-    }
-}
-
-// Creare una funzione helper per le impostazioni di aspetto
-function getAppearanceSettings() {
-    return {
-        timerColor: document.getElementById('timerColor')?.value,
-        messageColor: document.getElementById('messageColor')?.value,
-        shadowColor: document.getElementById('shadowColor')?.value,
-        shadowSize: document.getElementById('shadowSize')?.value,
-        shadowBlur: document.getElementById('shadowBlur')?.value
-    };
-}
-
-// Modifica la funzione saveBannerSettings
-function saveBannerSettings() {
-    const text1 = textBanner1Input?.value;
-    const bg1 = bgBanner1Input?.value;
-    const text2 = textBanner2Input?.value;
-    const bg2 = bgBanner2Input?.value;
-
-    if (text1) sessionStorage.setItem('text1', text1);
-    if (bg1) sessionStorage.setItem('bg1', bg1);
-    if (text2) sessionStorage.setItem('text2', text2);
-    if (bg2) sessionStorage.setItem('bg2', bg2);
-
-    console.log('Saved banner settings:', { text1, bg1, text2, bg2 }); // Per debug
-}
+// Avvia il timer con maggiore precisione
+setInterval(timerTick, 100);
