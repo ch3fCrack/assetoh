@@ -38,17 +38,37 @@ function updateTimerDisplay() {
 }
 
 function updateMessage() {
+    const params = new URLSearchParams(window.location.search);
+    
     if (phase === "main") {
-        messageElement.textContent = textBanner1Input?.value || "Timer Text 45 min";
+        const text = textBanner1Input?.value || 
+                    params.get('text1') || 
+                    sessionStorage.getItem('text1') || 
+                    "Timer Text 45 min";
+        messageElement.textContent = decodeURIComponent(text);
         timerContainer.className = "container main";
-        if (bgBanner1Input?.value) {
-            timerContainer.style.backgroundImage = `url('${bgBanner1Input.value}')`;
+        
+        const bgUrl = bgBanner1Input?.value || 
+                     params.get('bg1') || 
+                     sessionStorage.getItem('bg1');
+        if (bgUrl) {
+            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
+            sessionStorage.setItem('bg1', bgUrl);
         }
     } else {
-        messageElement.textContent = textBanner2Input?.value || "Timer Text 15 min";
+        const text = textBanner2Input?.value || 
+                    params.get('text2') || 
+                    sessionStorage.getItem('text2') || 
+                    "Timer Text 15 min";
+        messageElement.textContent = decodeURIComponent(text);
         timerContainer.className = "container short";
-        if (bgBanner2Input?.value) {
-            timerContainer.style.backgroundImage = `url('${bgBanner2Input.value}')`;
+        
+        const bgUrl = bgBanner2Input?.value || 
+                     params.get('bg2') || 
+                     sessionStorage.getItem('bg2');
+        if (bgUrl) {
+            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
+            sessionStorage.setItem('bg2', bgUrl);
         }
     }
 }
@@ -95,13 +115,7 @@ function copyToOBS() {
     if (banner2Text) url += `&text2=${encodeURIComponent(banner2Text)}`;
 
     // Aggiungi le impostazioni di aspetto
-    const appearanceSettings = {
-        timerColor: document.getElementById('timerColor')?.value,
-        messageColor: document.getElementById('messageColor')?.value,
-        shadowColor: document.getElementById('shadowColor')?.value,
-        shadowSize: document.getElementById('shadowSize')?.value,
-        shadowBlur: document.getElementById('shadowBlur')?.value
-    };
+    const appearanceSettings = getAppearanceSettings();
     url += `&appearance=${encodeURIComponent(JSON.stringify(appearanceSettings))}`;
 
     // Copia l'URL negli appunti
@@ -320,36 +334,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         document.getElementById('applyCustomizationsBtn').addEventListener('click', function() {
+            saveBannerSettings();
             updateMessage();
             saveState();
-            alert('Customizations applied!');
             saveAppearanceSettings();
             
-            // Aggiungi le impostazioni di aspetto all'URL
-            const appearanceSettings = {
-                timerColor: document.getElementById('timerColor').value,
-                messageColor: document.getElementById('messageColor').value,
-                shadowColor: document.getElementById('shadowColor').value,
-                shadowSize: document.getElementById('shadowSize').value,
-                shadowBlur: document.getElementById('shadowBlur').value
-            };
-
-            // Aggiungi i parametri all'URL
-            let url = 'lunar banners.html?';
-            if (banner1Url) url += `bg1=${encodeURIComponent(banner1Url)}&`;
-            if (banner1Text) url += `text1=${encodeURIComponent(banner1Text)}&`;
-            if (banner2Url) url += `bg2=${encodeURIComponent(banner2Url)}&`;
-            if (banner2Text) url += `text2=${encodeURIComponent(banner2Text)}&`;
-            if (minuteInput.value) url += `minute=${minuteInput.value}&`;
-            if (secondInput.value) url += `second=${secondInput.value}&`;
-            
-            // Aggiungi le impostazioni di aspetto
-            url += `appearance=${encodeURIComponent(JSON.stringify(appearanceSettings))}`;
-
-            // Copia l'URL negli appunti
-            navigator.clipboard.writeText(url).then(() => {
-                showNotification('urlCopied');
-            });
+            const appearanceSettings = getAppearanceSettings();
+            // ...resto del codice
         });
 
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
@@ -357,13 +348,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initializeFromURL();
     rotateSignatures();
+    setInterval(timerTick, 100); // Mettere qui l'intervallo
 });
 
-// Load settings when page loads
-window.addEventListener('load', loadAppearanceSettings);
-
-// Avvia il timer con maggiore precisione
-setInterval(timerTick, 100);
+// Combinare i listeners di load in uno solo
+window.addEventListener('load', () => {
+    loadAppearanceSettings();
+    loadSettingsFromUrl();
+});
 
 // Funzione per caricare le impostazioni dall'URL quando la pagina si carica
 function loadSettingsFromUrl() {
@@ -385,5 +377,21 @@ function loadSettingsFromUrl() {
     }
 }
 
-// Carica le impostazioni quando la pagina si apre
-window.addEventListener('load', loadSettingsFromUrl);
+// Creare una funzione helper per le impostazioni di aspetto
+function getAppearanceSettings() {
+    return {
+        timerColor: document.getElementById('timerColor')?.value,
+        messageColor: document.getElementById('messageColor')?.value,
+        shadowColor: document.getElementById('shadowColor')?.value,
+        shadowSize: document.getElementById('shadowSize')?.value,
+        shadowBlur: document.getElementById('shadowBlur')?.value
+    };
+}
+
+// Aggiungi questa funzione per salvare i testi e gli URL dei banner
+function saveBannerSettings() {
+    if (textBanner1Input?.value) sessionStorage.setItem('text1', textBanner1Input.value);
+    if (bgBanner1Input?.value) sessionStorage.setItem('bg1', bgBanner1Input.value);
+    if (textBanner2Input?.value) sessionStorage.setItem('text2', textBanner2Input.value);
+    if (bgBanner2Input?.value) sessionStorage.setItem('bg2', bgBanner2Input.value);
+}
