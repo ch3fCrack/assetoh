@@ -76,6 +76,15 @@ function saveState() {
 }
 
 function copyToOBS() {
+    // Raccogli le impostazioni di aspetto
+    const appearanceSettings = {
+        timerColor: timerColor.value,
+        messageColor: messageColor.value,
+        shadowColor: shadowColor.value,
+        shadowSize: shadowSize.value,
+        shadowBlur: shadowBlur.value
+    };
+
     const state = {
         minute: CONFIG.eventStartMinute,
         second: CONFIG.eventStartSecond,
@@ -86,7 +95,8 @@ function copyToOBS() {
         phase,
         transparent: true,
         startTime: Date.now(),
-        showSignature: true
+        showSignature: true,
+        appearance: encodeURIComponent(JSON.stringify(appearanceSettings)) // Aggiungi le impostazioni di aspetto
     };
 
     const baseUrl = window.location.origin + '/lunar%20banners.html';
