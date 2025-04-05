@@ -80,18 +80,21 @@ function saveState() {
 
 function copyToOBS() {
     const referenceTime = getReferenceTime();
-    const banner1Url = document.getElementById('banner1Url').value;
-    const banner1Text = document.getElementById('banner1Text').value;
-    const banner2Url = document.getElementById('banner2Url').value;
-    const banner2Text = document.getElementById('banner2Text').value;
+    const banner1Url = document.getElementById('banner1Url')?.value || '';
+    const banner1Text = document.getElementById('banner1Text')?.value || '';
+    const banner2Url = document.getElementById('banner2Url')?.value || '';
+    const banner2Text = document.getElementById('banner2Text')?.value || '';
 
+    // Costruisci l'URL base
     let url = `${window.location.origin}/lunar%20banners.html?ref=${referenceTime}`;
+
+    // Aggiungi i parametri dei banner se presenti
     if (banner1Url) url += `&bg1=${encodeURIComponent(banner1Url)}`;
     if (banner1Text) url += `&text1=${encodeURIComponent(banner1Text)}`;
     if (banner2Url) url += `&bg2=${encodeURIComponent(banner2Url)}`;
     if (banner2Text) url += `&text2=${encodeURIComponent(banner2Text)}`;
 
-    // Aggiungi anche le impostazioni di aspetto se presenti
+    // Aggiungi le impostazioni di aspetto
     const appearanceSettings = {
         timerColor: document.getElementById('timerColor')?.value,
         messageColor: document.getElementById('messageColor')?.value,
@@ -101,8 +104,13 @@ function copyToOBS() {
     };
     url += `&appearance=${encodeURIComponent(JSON.stringify(appearanceSettings))}`;
 
-    navigator.clipboard.writeText(url);
-    showNotification('urlCopied');
+    // Copia l'URL negli appunti
+    navigator.clipboard.writeText(url).then(() => {
+        alert('URL copiato per OBS!');
+    }).catch(err => {
+        console.error('Errore durante la copia:', err);
+        alert('Errore durante la copia dell\'URL');
+    });
 }
 
 function initializeTimer() {
@@ -356,26 +364,6 @@ window.addEventListener('load', loadAppearanceSettings);
 
 // Avvia il timer con maggiore precisione
 setInterval(timerTick, 100);
-
-document.getElementById('copyToOBSBtn').addEventListener('click', function() {
-    // Salva le impostazioni correnti
-    const appearanceSettings = {
-        timerColor: timerColor.value,
-        messageColor: messageColor.value,
-        shadowColor: shadowColor.value,
-        shadowSize: shadowSize.value,
-        shadowBlur: shadowBlur.value
-    };
-
-    // Aggiungi i parametri delle personalizzazioni all'URL
-    const url = new URL(window.location.href);
-    url.searchParams.set('appearance', JSON.stringify(appearanceSettings));
-    
-    // Copia l'URL negli appunti
-    navigator.clipboard.writeText(url.toString()).then(() => {
-        showNotification('urlCopied');
-    });
-});
 
 // Funzione per caricare le impostazioni dall'URL quando la pagina si carica
 function loadSettingsFromUrl() {
