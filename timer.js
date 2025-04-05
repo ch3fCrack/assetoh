@@ -101,38 +101,54 @@ function saveState() {
 }
 
 function copyToOBS() {
-    const state = {
-        minute: CONFIG.eventStartMinute,
-        second: CONFIG.eventStartSecond,
-        bg1: bgBanner1Input?.value,
-        text1: encodeURIComponent(textBanner1Input?.value || ''),
-        bg2: bgBanner2Input?.value,
-        text2: encodeURIComponent(textBanner2Input?.value || ''),
-        phase,
-        transparent: true,
-        startTime: Date.now(),
-        showSignature: true,
-        // Add style parameters
-        timerColor: CONFIG.timerColor,
-        messageColor: CONFIG.messageColor,
-        shadowColor: CONFIG.shadowColor,
-        shadowSize: CONFIG.shadowSize,
-        shadowBlur: CONFIG.shadowBlur,
-        timerSize: CONFIG.timerSize,
-        messageSize: CONFIG.messageSize
-    };
+    const params = new URLSearchParams();
 
-    const baseUrl = window.location.origin + '/lunar%20banners.html';
-    const queryString = Object.entries(state)
-        .filter(([_, value]) => value !== undefined && value !== '')
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
+    // Aggiungi i parametri del timer
+    params.append('minute', document.getElementById('minute').value);
+    params.append('second', document.getElementById('second').value);
 
-    const obsUrl = `${baseUrl}?${queryString}`;
-    navigator.clipboard.writeText(obsUrl);
-    
-    const currentLang = document.documentElement.lang || 'en';
-    alert(translations[currentLang].urlCopied);
+    // Aggiungi i parametri dei banner
+    if (document.getElementById('banner1-url').value) {
+        params.append('bg1', document.getElementById('banner1-url').value);
+    }
+    if (document.getElementById('banner1-text').value) {
+        params.append('text1', encodeURIComponent(document.getElementById('banner1-text').value));
+    }
+    if (document.getElementById('banner2-url').value) {
+        params.append('bg2', document.getElementById('banner2-url').value);
+    }
+    if (document.getElementById('banner2-text').value) {
+        params.append('text2', encodeURIComponent(document.getElementById('banner2-text').value));
+    }
+
+    // Aggiungi i parametri di stile
+    const timerColor = document.getElementById('timerColor').value;
+    const messageColor = document.getElementById('messageColor').value;
+    const shadowColor = document.getElementById('shadowColor').value;
+    const shadowSize = document.getElementById('shadowSize').value;
+    const shadowBlur = document.getElementById('shadowBlur').value;
+    const timerSize = document.getElementById('timerSize').value;
+    const messageSize = document.getElementById('messageSize').value;
+
+    // Aggiungi tutti i parametri di stile all'URL
+    params.append('timerColor', timerColor);
+    params.append('messageColor', messageColor);
+    params.append('shadowColor', shadowColor);
+    params.append('shadowSize', shadowSize);
+    params.append('shadowBlur', shadowBlur);
+    params.append('timerSize', timerSize);
+    params.append('messageSize', messageSize);
+
+    // Costruisci l'URL completo
+    const url = `${window.location.origin}${window.location.pathname.replace('timer.html', 'lunar%20banners.html')}?${params.toString()}`;
+
+    // Copia l'URL negli appunti
+    navigator.clipboard.writeText(url).then(() => {
+        document.getElementById('copyMessage').textContent = translations[currentLanguage].urlCopied;
+        setTimeout(() => {
+            document.getElementById('copyMessage').textContent = '';
+        }, 2000);
+    });
 }
 
 function initializeTimer() {

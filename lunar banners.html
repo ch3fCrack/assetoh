@@ -216,17 +216,18 @@
         function applyStylesFromURL() {
             const params = new URLSearchParams(window.location.search);
             
-            // Applica stili al timer con valori predefiniti solo se non specificati
-            timerElement.style.color = params.get('timerColor') || '#ffffff';
-            timerElement.style.fontSize = params.has('timerSize') ? 
-                `${params.get('timerSize')}px` : '48px';
-            
-            // Applica stili al messaggio con valori predefiniti solo se non specificati
-            messageElement.style.color = params.get('messageColor') || '#ffffff';
-            messageElement.style.fontSize = params.has('messageSize') ? 
-                `${params.get('messageSize')}px` : '24px';
-            
-            // Applica ombre al testo solo se tutti i parametri sono presenti
+            if (params.has('timerSize')) {
+                timerElement.style.fontSize = `${params.get('timerSize')}px`;
+            }
+            if (params.has('messageSize')) {
+                messageElement.style.fontSize = `${params.get('messageSize')}px`;
+            }
+            if (params.has('timerColor')) {
+                timerElement.style.color = params.get('timerColor');
+            }
+            if (params.has('messageColor')) {
+                messageElement.style.color = params.get('messageColor');
+            }
             if (params.has('shadowColor') && params.has('shadowSize') && params.has('shadowBlur')) {
                 const shadowStyle = `${params.get('shadowSize')}px ${params.get('shadowSize')}px ${params.get('shadowBlur')}px ${params.get('shadowColor')}`;
                 timerElement.style.textShadow = shadowStyle;
@@ -239,6 +240,7 @@
             
             if (loadState()) {
                 updateMessage();
+                applyStylesFromURL(); // Sposta qui l'applicazione degli stili
                 updateTimerDisplay();
                 return;
             }
@@ -268,9 +270,9 @@
             }
 
             updateMessage();
+            applyStylesFromURL(); // Aggiungi questa chiamata
             updateTimerDisplay();
             saveState();
-            applyStylesFromURL(); // Aggiungi questa chiamata
         }
 
         function timerTick() {
@@ -283,13 +285,24 @@
             updateTimerDisplay();
         }
 
-        // Modifica l'inizializzazione per applicare gli stili prima
-        document.fonts.ready.then(function() {
-            applyStylesFromURL();  // Applica prima gli stili
-            initializeTimer();     // Poi inizializza il timer
-            rotateSignatures();
-            setInterval(timerTick, 1000);
-        });
+        // Modifica l'inizializzazione
+        window.onload = function() {
+            document.fonts.ready.then(function() {
+                initializeTimer();
+                rotateSignatures();
+                setInterval(timerTick, 1000);
+                
+                // Riapplica gli stili dopo un breve ritardo per assicurarsi che tutto sia caricato
+                setTimeout(applyStylesFromURL, 100);
+            }).catch(function() {
+                // Fallback se il caricamento dei font fallisce
+                console.log('Font loading failed, continuing with fallback');
+                initializeTimer();
+                rotateSignatures();
+                setInterval(timerTick, 1000);
+                setTimeout(applyStylesFromURL, 100);
+            });
+        };
     </script>
 </body>
 </html>
