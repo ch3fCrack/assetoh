@@ -24,6 +24,13 @@ const shadowColor = document.getElementById('shadowColor');
 const shadowSize = document.getElementById('shadowSize');
 const shadowBlur = document.getElementById('shadowBlur');
 
+function getReferenceTime() {
+    const now = new Date();
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    return now.getTime();
+}
+
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
     let seconds = secondsRemaining % 60;
@@ -64,11 +71,7 @@ function saveState() {
         phase,
         secondsRemaining,
         timerMinutes,
-        startTime: Date.now(),
-        bg1: bgBanner1Input?.value,
-        text1: textBanner1Input?.value,
-        bg2: bgBanner2Input?.value,
-        text2: textBanner2Input?.value,
+        referenceTime: getReferenceTime(),
         eventStartMinute: CONFIG.eventStartMinute,
         eventStartSecond: CONFIG.eventStartSecond
     };
@@ -76,41 +79,55 @@ function saveState() {
 }
 
 function copyToOBS() {
-    // Raccogli le impostazioni di aspetto
+    const referenceTime = getReferenceTime();
+    const banner1Url = document.getElementById('banner1Url').value;
+    const banner1Text = document.getElementById('banner1Text').value;
+    const banner2Url = document.getElementById('banner2Url').value;
+    const banner2Text = document.getElementById('banner2Text').value;
+
+    let url = `${window.location.origin}/lunar%20banners.html?ref=${referenceTime}`;
+    if (banner1Url) url += `&bg1=${encodeURIComponent(banner1Url)}`;
+    if (banner1Text) url += `&text1=${encodeURIComponent(banner1Text)}`;
+    if (banner2Url) url += `&bg2=${encodeURIComponent(banner2Url)}`;
+    if (banner2Text) url += `&text2=${encodeURIComponent(banner2Text)}`;
+
+    // Aggiungi anche le impostazioni di aspetto se presenti
     const appearanceSettings = {
-        timerColor: timerColor.value,
-        messageColor: messageColor.value,
-        shadowColor: shadowColor.value,
-        shadowSize: shadowSize.value,
-        shadowBlur: shadowBlur.value
+        timerColor: document.getElementById('timerColor')?.value,
+        messageColor: document.getElementById('messageColor')?.value,
+        shadowColor: document.getElementById('shadowColor')?.value,
+        shadowSize: document.getElementById('shadowSize')?.value,
+        shadowBlur: document.getElementById('shadowBlur')?.value
     };
+    url += `&appearance=${encodeURIComponent(JSON.stringify(appearanceSettings))}`;
 
-    const state = {
-        minute: CONFIG.eventStartMinute,
-        second: CONFIG.eventStartSecond,
-        bg1: bgBanner1Input?.value,
-        text1: encodeURIComponent(textBanner1Input?.value || ''),
-        bg2: bgBanner2Input?.value,
-        text2: encodeURIComponent(textBanner2Input?.value || ''),
-        phase,
-        transparent: true,
-        startTime: Date.now(),
-        showSignature: true,
-        appearance: encodeURIComponent(JSON.stringify(appearanceSettings)) // Aggiungi le impostazioni di aspetto
-    };
-
-    const baseUrl = window.location.origin + '/lunar%20banners.html';
-    const queryString = Object.entries(state)
-        .filter(([_, value]) => value !== undefined && value !== '')
-        .map(([key, value]) => `${key}=${value}`)
-        .join('&');
-
-    const obsUrl = `${baseUrl}?${queryString}`;
-    navigator.clipboard.writeText(obsUrl);
-    alert(`URL per OBS copiato!`);
+    navigator.clipboard.writeText(url);
+    showNotification('urlCopied');
 }
 
 function initializeTimer() {
+    const params = new URLSearchParams(window.location.search);
+    
+    const urlReferenceTime = params.get('ref');
+    if (urlReferenceTime) {
+        const referenceTime = parseInt(urlReferenceTime);
+        const now = Date.now();
+        const elapsedMinutes = Math.floor((now - referenceTime) / (1000 * 60));
+        
+        if (elapsedMinutes < 45) {
+            phase = "main";
+            secondsRemaining = (45 * 60) - (elapsedMinutes * 60);
+        } else {
+            phase = "short";
+            const cycleMinutes = elapsedMinutes % 15;
+            secondsRemaining = (15 * 60) - (cycleMinutes * 60);
+        }
+        
+        updateMessage();
+        updateTimerDisplay();
+        return;
+    }
+
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();

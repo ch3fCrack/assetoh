@@ -145,7 +145,7 @@
                 phase,
                 secondsRemaining,
                 timerMinutes,
-                startTime: Date.now(),
+                referenceTime: getReferenceTime(),
                 eventStartMinute: CONFIG.eventStartMinute,
                 eventStartSecond: CONFIG.eventStartSecond
             };
@@ -156,9 +156,11 @@
             const savedState = sessionStorage.getItem('timerState');
             if (savedState) {
                 const state = JSON.parse(savedState);
-                const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+                const currentTime = getReferenceTime();
+                const elapsedMinutes = Math.floor((currentTime - state.referenceTime) / (1000 * 60));
+                
                 phase = state.phase;
-                secondsRemaining = Math.max(0, state.secondsRemaining - elapsedSeconds);
+                secondsRemaining = Math.max(0, state.secondsRemaining - (elapsedMinutes * 60));
                 timerMinutes = state.timerMinutes;
                 CONFIG.eventStartMinute = state.eventStartMinute;
                 CONFIG.eventStartSecond = state.eventStartSecond;
@@ -195,6 +197,27 @@
         function initializeTimer() {
             const params = new URLSearchParams(window.location.search);
             
+            // Controlla il timestamp di riferimento nell'URL
+            const urlReferenceTime = params.get('ref');
+            if (urlReferenceTime) {
+                const referenceTime = parseInt(urlReferenceTime);
+                const now = Date.now();
+                const elapsedMinutes = Math.floor((now - referenceTime) / (1000 * 60));
+                
+                if (elapsedMinutes < 45) {
+                    phase = "main";
+                    secondsRemaining = (45 * 60) - (elapsedMinutes * 60);
+                } else {
+                    phase = "short";
+                    const cycleMinutes = elapsedMinutes % 15;
+                    secondsRemaining = (15 * 60) - (cycleMinutes * 60);
+                }
+                
+                updateMessage();
+                updateTimerDisplay();
+                return;
+            }
+
             // Carica lo stato del timer
             if (loadState()) {
                 updateMessage();
@@ -295,6 +318,14 @@
                 switchPhase();
             }
             updateTimerDisplay();
+        }
+
+        // Aggiungi queste funzioni dopo la dichiarazione delle variabili globali
+        function getReferenceTime() {
+            const now = new Date();
+            now.setSeconds(0);
+            now.setMilliseconds(0);
+            return now.getTime();
         }
 
         initializeTimer();
