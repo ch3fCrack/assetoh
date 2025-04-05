@@ -63,11 +63,10 @@
         .timer {
             font-family: 'Lovelo', sans-serif;
             font-weight: 900;
-            font-size: 50px;
+            /* Rimuovi font-size fisso poiché sarà dinamico */
             margin-left: 50px;
             z-index: 2;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgb(0, 0, 0);
+            /* Rimuovi color e text-shadow fissi poiché saranno dinamici */
         }
         .signature {
         position: absolute;
@@ -89,11 +88,10 @@
             font-family: 'Lovelo', sans-serif;
             font-weight: 900;
             margin-left: 50px;
-            font-size: 30px;
+            /* Rimuovi font-size fisso poiché sarà dinamico */
             text-align: center;
             z-index: 2;
-            color: #f0f0f0;
-            text-shadow: 0 2px 4px rgb(0, 0, 0);
+            /* Rimuovi color e text-shadow fissi poiché saranno dinamici */
         }
     </style>
 </head>
@@ -205,6 +203,25 @@
             saveState();
         }
 
+        function applyStylesFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Applica stili al timer
+            if (params.has('timerColor')) timerElement.style.color = params.get('timerColor');
+            if (params.has('timerSize')) timerElement.style.fontSize = `${params.get('timerSize')}px`;
+            
+            // Applica stili al messaggio
+            if (params.has('messageColor')) messageElement.style.color = params.get('messageColor');
+            if (params.has('messageSize')) messageElement.style.fontSize = `${params.get('messageSize')}px`;
+            
+            // Applica ombre al testo
+            if (params.has('shadowColor') && params.has('shadowSize') && params.has('shadowBlur')) {
+                const shadowStyle = `${params.get('shadowSize')}px ${params.get('shadowSize')}px ${params.get('shadowBlur')}px ${params.get('shadowColor')}`;
+                timerElement.style.textShadow = shadowStyle;
+                messageElement.style.textShadow = shadowStyle;
+            }
+        }
+
         function initializeTimer() {
             const params = new URLSearchParams(window.location.search);
             
@@ -241,6 +258,7 @@
             updateMessage();
             updateTimerDisplay();
             saveState();
+            applyStylesFromURL(); // Aggiungi questa chiamata
         }
 
         function timerTick() {

@@ -139,3 +139,40 @@ input[type="number"] {
     color: white;
     text-align: center;  /* centra il testo nell'input */
 }
+
+.control-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 250px;
+}
+
+input[type="range"] {
+    width: 120px;
+    margin: 0 10px;
+}
+
+.control-group span {
+    min-width: 45px;
+    color: white;
+    font-size: 14px;
+}
+
+.style-controls {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 300px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.style-controls h3 {
+    color: white;
+    margin-bottom: 20px;
+}

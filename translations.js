@@ -52,6 +52,8 @@ const translations = {
         shadowColorLabel: "Shadow Color:",
         shadowSizeLabel: "Shadow Size:",
         shadowBlurLabel: "Shadow Blur:",
+        timerSizeLabel: "Timer Size:",
+        messageSizeLabel: "Message Size:",
 
         // Banners
         banner1URLLabel: "Banner 1 URL image (timer 45 min)",
@@ -149,6 +151,8 @@ const translations = {
         shadowColorLabel: "影の色：",
         shadowSizeLabel: "影のサイズ：",
         shadowBlurLabel: "影のぼかし：",
+        timerSizeLabel: "タイマーサイズ：",
+        messageSizeLabel: "メッセージサイズ：",
 
         // Banners
         banner1URLLabel: "バナー1 URL 画像（タイマー45分）",
@@ -247,6 +251,8 @@ const translations = {
         shadowColorLabel: "阴影颜色：",
         shadowSizeLabel: "阴影大小：",
         shadowBlurLabel: "阴影模糊：",
+        timerSizeLabel: "计时器大小：",
+        messageSizeLabel: "消息大小：",
 
         // Banners
         banner1URLLabel: "横幅1 URL图片（计时器45分钟）",
@@ -344,6 +350,8 @@ const translations = {
         shadowColorLabel: "Colore Ombra:",
         shadowSizeLabel: "Dimensione Ombra:",
         shadowBlurLabel: "Sfocatura Ombra:",
+        timerSizeLabel: "Dimensione Timer:",
+        messageSizeLabel: "Dimensione Messaggio:",
 
         // Banners
         banner1URLLabel: "URL immagine Banner 1 (timer 45 min)",
@@ -442,6 +450,8 @@ const translations = {
         shadowColorLabel: "Couleur de l'Ombre :",
         shadowSizeLabel: "Taille de l'Ombre :",
         shadowBlurLabel: "Flou de l'Ombre :",
+        timerSizeLabel: "Taille du Minuteur :",
+        messageSizeLabel: "Taille du Message :",
         translationCredits: "Crédits de Révision des Traductions",
         englishTranslation: "Révision Traduction Anglaise :",
         japaneseTranslation: "Révision Traduction Japonaise :",
@@ -506,6 +516,8 @@ const translations = {
         shadowColorLabel: "Color de la Sombra:",
         shadowSizeLabel: "Tamaño de la Sombra:",
         shadowBlurLabel: "Desenfoque de la Sombra:",
+        timerSizeLabel: "Tamaño del Temporizador:",
+        messageSizeLabel: "Tamaño del Mensaje:",
         translationCredits: "Créditos de Revisión de Traducciones",
         englishTranslation: "Revisión Traducción Inglés:",
         japaneseTranslation: "Revisión Traducción Japonés:",
@@ -570,6 +582,8 @@ const translations = {
         shadowColorLabel: "Schattenfarbe:",
         shadowSizeLabel: "Schattengröße:",
         shadowBlurLabel: "Schattenunschärfe:",
+        timerSizeLabel: "Timer-Größe:",
+        messageSizeLabel: "Nachrichtengröße:",
         translationCredits: "Übersetzungsprüfung Credits",
         englishTranslation: "Englische Übersetzungsprüfung:",
         japaneseTranslation: "Japanische Übersetzungsprüfung:",
@@ -635,6 +649,8 @@ const translations = {
         shadowColorLabel: "Cor da Sombra:",
         shadowSizeLabel: "Tamanho da Sombra:",
         shadowBlurLabel: "Desfoque da Sombra:",
+        timerSizeLabel: "Tamanho do Temporizador:",
+        messageSizeLabel: "Tamanho da Mensagem:",
         translationCredits: "Créditos de Revisão das Traduções",
         englishTranslation: "Revisão da Tradução Inglesa:",
         japaneseTranslation: "Revisão da Tradução Japonesa:",
