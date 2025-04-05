@@ -17,6 +17,13 @@ const textBanner1Input = document.getElementById('textBanner1');
 const bgBanner2Input = document.getElementById('bgBanner2');
 const textBanner2Input = document.getElementById('textBanner2');
 
+// Get appearance input elements
+const timerColor = document.getElementById('timerColor');
+const messageColor = document.getElementById('messageColor');
+const shadowColor = document.getElementById('shadowColor');
+const shadowSize = document.getElementById('shadowSize');
+const shadowBlur = document.getElementById('shadowBlur');
+
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
     let seconds = secondsRemaining % 60;
@@ -166,6 +173,52 @@ function initializeFromURL() {
     updateMessage();
     updateTimerDisplay();
 }
+
+// Function to update text appearance
+function updateTextAppearance() {
+    const timer = document.getElementById('timer');
+    const message = document.getElementById('message');
+    const shadowStyle = `${shadowSize.value}px ${shadowSize.value}px ${shadowBlur.value}px ${shadowColor.value}`;
+    
+    timer.style.color = timerColor.value;
+    timer.style.textShadow = shadowStyle;
+    
+    message.style.color = messageColor.value;
+    message.style.textShadow = shadowStyle;
+}
+
+// Add event listeners for appearance inputs
+timerColor.addEventListener('input', updateTextAppearance);
+messageColor.addEventListener('input', updateTextAppearance);
+shadowColor.addEventListener('input', updateTextAppearance);
+shadowSize.addEventListener('input', updateTextAppearance);
+shadowBlur.addEventListener('input', updateTextAppearance);
+
+// Save appearance settings in localStorage
+function saveAppearanceSettings() {
+    const settings = {
+        timerColor: timerColor.value,
+        messageColor: messageColor.value,
+        shadowColor: shadowColor.value,
+        shadowSize: shadowSize.value,
+        shadowBlur: shadowBlur.value
+    };
+    localStorage.setItem('appearanceSettings', JSON.stringify(settings));
+}
+
+// Load appearance settings from localStorage
+function loadAppearanceSettings() {
+    const settings = JSON.parse(localStorage.getItem('appearanceSettings'));
+    if (settings) {
+        timerColor.value = settings.timerColor;
+        messageColor.value = settings.messageColor;
+        shadowColor.value = settings.shadowColor;
+        shadowSize.value = settings.shadowSize;
+        shadowBlur.value = settings.shadowBlur;
+        updateTextAppearance();
+    }
+}
+
 function rotateSignatures() {
     const signatures = [
         "Created by Ch3f_nerd_art",
@@ -235,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateMessage();
             saveState();
             alert('Customizations applied!');
+            saveAppearanceSettings();
         });
 
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
@@ -244,5 +298,51 @@ document.addEventListener('DOMContentLoaded', function() {
     rotateSignatures();
 });
 
+// Load settings when page loads
+window.addEventListener('load', loadAppearanceSettings);
+
 // Avvia il timer con maggiore precisione
 setInterval(timerTick, 100);
+
+document.getElementById('copyToOBSBtn').addEventListener('click', function() {
+    // Salva le impostazioni correnti
+    const appearanceSettings = {
+        timerColor: timerColor.value,
+        messageColor: messageColor.value,
+        shadowColor: shadowColor.value,
+        shadowSize: shadowSize.value,
+        shadowBlur: shadowBlur.value
+    };
+
+    // Aggiungi i parametri delle personalizzazioni all'URL
+    const url = new URL(window.location.href);
+    url.searchParams.set('appearance', JSON.stringify(appearanceSettings));
+    
+    // Copia l'URL negli appunti
+    navigator.clipboard.writeText(url.toString()).then(() => {
+        showNotification('urlCopied');
+    });
+});
+
+// Funzione per caricare le impostazioni dall'URL quando la pagina si carica
+function loadSettingsFromUrl() {
+    const url = new URL(window.location.href);
+    const appearanceParam = url.searchParams.get('appearance');
+    
+    if (appearanceParam) {
+        try {
+            const settings = JSON.parse(appearanceParam);
+            timerColor.value = settings.timerColor;
+            messageColor.value = settings.messageColor;
+            shadowColor.value = settings.shadowColor;
+            shadowSize.value = settings.shadowSize;
+            shadowBlur.value = settings.shadowBlur;
+            updateTextAppearance();
+        } catch (e) {
+            console.error('Error loading appearance settings from URL:', e);
+        }
+    }
+}
+
+// Carica le impostazioni quando la pagina si apre
+window.addEventListener('load', loadSettingsFromUrl);
