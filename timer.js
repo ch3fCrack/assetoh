@@ -12,10 +12,10 @@ let accumulatedTime = 0;
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
 const timerContainer = document.getElementById('timerContainer');
-const bgBanner1Input = document.getElementById('bgBanner1');
-const textBanner1Input = document.getElementById('textBanner1');
-const bgBanner2Input = document.getElementById('bgBanner2');
-const textBanner2Input = document.getElementById('textBanner2');
+const bgBanner1Input = document.getElementById('banner1Url'); // cambiato da 'bgBanner1'
+const textBanner1Input = document.getElementById('banner1Text'); // cambiato da 'textBanner1'
+const bgBanner2Input = document.getElementById('banner2Url'); // cambiato da 'bgBanner2'
+const textBanner2Input = document.getElementById('banner2Text'); // cambiato da 'textBanner2'
 
 // Get appearance input elements
 const timerColor = document.getElementById('timerColor');
@@ -98,12 +98,15 @@ function saveState() {
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
 
+// Modifica la funzione copyToOBS
 function copyToOBS() {
     const referenceTime = getReferenceTime();
-    const banner1Url = document.getElementById('banner1Url')?.value || '';
-    const banner1Text = document.getElementById('banner1Text')?.value || '';
-    const banner2Url = document.getElementById('banner2Url')?.value || '';
-    const banner2Text = document.getElementById('banner2Text')?.value || '';
+    
+    // Usa i valori correnti dei campi di input
+    const banner1Url = bgBanner1Input?.value || sessionStorage.getItem('bg1') || '';
+    const banner1Text = textBanner1Input?.value || sessionStorage.getItem('text1') || '';
+    const banner2Url = bgBanner2Input?.value || sessionStorage.getItem('bg2') || '';
+    const banner2Text = textBanner2Input?.value || sessionStorage.getItem('text2') || '';
 
     // Costruisci l'URL base
     let url = `${window.location.origin}/lunar%20banners.html?ref=${referenceTime}`;
@@ -118,13 +121,19 @@ function copyToOBS() {
     const appearanceSettings = getAppearanceSettings();
     url += `&appearance=${encodeURIComponent(JSON.stringify(appearanceSettings))}`;
 
+    // Salva le impostazioni nel sessionStorage
+    saveBannerSettings();
+
     // Copia l'URL negli appunti
-    navigator.clipboard.writeText(url).then(() => {
-        alert('URL copiato per OBS!');
-    }).catch(err => {
-        console.error('Errore durante la copia:', err);
-        alert('Errore durante la copia dell\'URL');
-    });
+    navigator.clipboard.writeText(url)
+        .then(() => {
+            showNotification('urlCopied');
+            console.log('URL copiato:', url); // Per debug
+        })
+        .catch(err => {
+            console.error('Errore durante la copia:', err);
+            alert('Errore durante la copia dell\'URL');
+        });
 }
 
 function initializeTimer() {
@@ -346,6 +355,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
     }
 
+    // Carica i valori salvati nei campi di input
+    const savedText1 = sessionStorage.getItem('text1');
+    const savedBg1 = sessionStorage.getItem('bg1');
+    const savedText2 = sessionStorage.getItem('text2');
+    const savedBg2 = sessionStorage.getItem('bg2');
+
+    if (savedText1 && textBanner1Input) textBanner1Input.value = savedText1;
+    if (savedBg1 && bgBanner1Input) bgBanner1Input.value = savedBg1;
+    if (savedText2 && textBanner2Input) textBanner2Input.value = savedText2;
+    if (savedBg2 && bgBanner2Input) bgBanner2Input.value = savedBg2;
+
     initializeFromURL();
     rotateSignatures();
     setInterval(timerTick, 100); // Mettere qui l'intervallo
@@ -388,10 +408,17 @@ function getAppearanceSettings() {
     };
 }
 
-// Aggiungi questa funzione per salvare i testi e gli URL dei banner
+// Modifica la funzione saveBannerSettings
 function saveBannerSettings() {
-    if (textBanner1Input?.value) sessionStorage.setItem('text1', textBanner1Input.value);
-    if (bgBanner1Input?.value) sessionStorage.setItem('bg1', bgBanner1Input.value);
-    if (textBanner2Input?.value) sessionStorage.setItem('text2', textBanner2Input.value);
-    if (bgBanner2Input?.value) sessionStorage.setItem('bg2', bgBanner2Input.value);
+    const text1 = textBanner1Input?.value;
+    const bg1 = bgBanner1Input?.value;
+    const text2 = textBanner2Input?.value;
+    const bg2 = bgBanner2Input?.value;
+
+    if (text1) sessionStorage.setItem('text1', text1);
+    if (bg1) sessionStorage.setItem('bg1', bg1);
+    if (text2) sessionStorage.setItem('text2', text2);
+    if (bg2) sessionStorage.setItem('bg2', bg2);
+
+    console.log('Saved banner settings:', { text1, bg1, text2, bg2 }); // Per debug
 }
