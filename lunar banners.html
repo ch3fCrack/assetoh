@@ -117,6 +117,7 @@
         let timerMinutes = 45;
         let secondsRemaining = timerMinutes * 60;
         let phase = "main";
+        let timerInterval;
 
         const timerElement = document.getElementById('timer');
         const messageElement = document.getElementById('message');
@@ -262,39 +263,27 @@
         function switchPhase() {
             if (phase === "main") {
                 phase = "short";
-                timerMinutes = 15;
+                secondsRemaining = 15 * 60; // 15 minuti in secondi
             } else {
-                phase = "main";
-                timerMinutes = 45;
+                phase = "short";
+                secondsRemaining = 15 * 60; // Ricomincia il ciclo di 15 minuti
             }
-            secondsRemaining = timerMinutes * 60;
             updateMessage();
-            saveState();
         }
 
         function initializeTimer() {
             const params = new URLSearchParams(window.location.search);
             
-            if (loadState()) {
-                updateMessage();
-                updateTimerDisplay();
-                return;
-            }
-
-            if (params.has('minute')) {
-                CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
-            }
-            if (params.has('second')) {
-                CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
-            }
-
+            // Ottieni il timestamp dal server per sincronizzazione precisa
             const now = new Date();
-            const currentMinute = now.getMinutes();
             const currentSecond = now.getSeconds();
-
-            const currentTimeInSeconds = currentMinute * 60 + currentSecond;
-            const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
-
+            const currentMinute = now.getMinutes();
+            
+            // Calcola il tempo esatto
+            const currentTimeInSeconds = (currentMinute * 60) + currentSecond;
+            const targetTimeInSeconds = (CONFIG.eventStartMinute * 60) + CONFIG.eventStartSecond;
+            
+            // Calcola la fase e il tempo rimanente con precisione al secondo
             if (currentTimeInSeconds < targetTimeInSeconds) {
                 phase = "main";
                 secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
@@ -304,20 +293,34 @@
                 const shortTimerSec = 15 * 60;
                 secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
             }
-
+            
+            // Aggiorna immediatamente
             updateMessage();
             updateTimerDisplay();
-            saveState();
+            
+            // Avvia il timer con intervallo preciso
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (secondsRemaining > 0) {
+                    secondsRemaining--;
+                } else {
+                    switchPhase();
+                }
+                updateTimerDisplay();
+            }, 1000);
         }
 
+        // Modifica la funzione timerTick per una migliore precisione
         function timerTick() {
-            if (secondsRemaining > 0) {
-                secondsRemaining--;
-                saveState();
-            } else {
-                switchPhase();
+            const now = new Date();
+            if (now.getMilliseconds() < 100) { // Sincronizza solo all'inizio di ogni secondo
+                if (secondsRemaining > 0) {
+                    secondsRemaining--;
+                } else {
+                    switchPhase();
+                }
+                updateTimerDisplay();
             }
-            updateTimerDisplay();
         }
 
         // Aggiungi queste funzioni dopo la dichiarazione delle variabili globali
