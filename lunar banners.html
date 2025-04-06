@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banner OBS</title>
+    <!-- Aggiungi preconnect per ottimizzare il caricamento del font -->
+    <link rel="preconnect" href="https://fonts.cdnfonts.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Carica il font Lovelo -->
     <link href="https://fonts.cdnfonts.com/css/lovelo" rel="stylesheet">
     <style>
+        @import url('https://fonts.cdnfonts.com/css/lovelo');
+
         body {
             margin-top: 50px;
             margin-left: 50px;
             padding: 0;
             background-color: transparent !important;
             overflow: hidden;
+            font-family: 'Lovelo', sans-serif;
         }
 
         .container {
@@ -61,13 +68,11 @@
         }
 
         .timer {
-            font-family: 'Lovelo', sans-serif;
+            font-family: 'Lovelo', sans-serif !important;
             font-weight: 900;
-            font-size: 50px;
             margin-left: 50px;
             z-index: 2;
-            color: #ffffff;
-            text-shadow: 0 2px 4px rgb(0, 0, 0);
+            /* Rimuovi font-size predefinito */
         }
         .signature {
         position: absolute;
@@ -86,14 +91,17 @@
         transition: opacity 0.5s ease;
         }
         .message {
-            font-family: 'Lovelo', sans-serif;
+            font-family: 'Lovelo', sans-serif !important;
             font-weight: 900;
             margin-left: 50px;
-            font-size: 30px;
             text-align: center;
             z-index: 2;
-            color: #f0f0f0;
-            text-shadow: 0 2px 4px rgb(0, 0, 0);
+            /* Rimuovi font-size predefinito */
+        }
+
+        /* Aggiungi un fallback font */
+        * {
+            font-family: 'Lovelo', Arial, sans-serif;
         }
     </style>
 </head>
@@ -205,12 +213,35 @@
             saveState();
         }
 
+        function applyStylesFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            
+            if (params.has('timerSize')) {
+                timerElement.style.fontSize = `${params.get('timerSize')}px`;
+            }
+            if (params.has('messageSize')) {
+                messageElement.style.fontSize = `${params.get('messageSize')}px`;
+            }
+            if (params.has('timerColor')) {
+                timerElement.style.color = params.get('timerColor');
+            }
+            if (params.has('messageColor')) {
+                messageElement.style.color = params.get('messageColor');
+            }
+            if (params.has('shadowColor') && params.has('shadowSize') && params.has('shadowBlur')) {
+                const shadowStyle = `${params.get('shadowSize')}px ${params.get('shadowSize')}px ${params.get('shadowBlur')}px ${params.get('shadowColor')}`;
+                timerElement.style.textShadow = shadowStyle;
+                messageElement.style.textShadow = shadowStyle;
+            }
+        }
+
         function initializeTimer() {
             const params = new URLSearchParams(window.location.search);
             
             if (loadState()) {
-                updateMessage();
-                updateTimerDisplay();
+                applyStylesFromURL(); // Prima applica gli stili
+                updateMessage();      // Poi aggiorna il messaggio
+                updateTimerDisplay(); // Infine aggiorna il display
                 return;
             }
 
@@ -238,8 +269,9 @@
                 secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
             }
 
-            updateMessage();
-            updateTimerDisplay();
+            applyStylesFromURL(); // Prima applica gli stili
+            updateMessage();      // Poi aggiorna il messaggio
+            updateTimerDisplay(); // Infine aggiorna il display
             saveState();
         }
 
@@ -253,9 +285,20 @@
             updateTimerDisplay();
         }
 
-        initializeTimer();
-        rotateSignatures();
-        setInterval(timerTick, 1000);
+        // Rimuovi il setTimeout in window.onload
+        window.onload = function() {
+            document.fonts.ready.then(function() {
+                initializeTimer();
+                rotateSignatures();
+                setInterval(timerTick, 1000);
+            }).catch(function() {
+                // Fallback se il caricamento dei font fallisce
+                console.log('Font loading failed, continuing with fallback');
+                initializeTimer();
+                rotateSignatures();
+                setInterval(timerTick, 1000);
+            });
+        };
     </script>
 </body>
 </html>
