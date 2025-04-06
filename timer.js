@@ -36,10 +36,6 @@ let accumulatedTime = 0;
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
 const timerContainer = document.getElementById('timerContainer');
-const bgBanner1Input = document.getElementById('bgBanner1');
-const textBanner1Input = document.getElementById('textBanner1');
-const bgBanner2Input = document.getElementById('bgBanner2');
-const textBanner2Input = document.getElementById('textBanner2');
 
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
@@ -49,16 +45,28 @@ function updateTimerDisplay() {
 
 function updateMessage() {
     if (phase === "main") {
-        messageElement.textContent = textBanner1Input?.value || "Timer Text 45 min";
+        const text1 = document.getElementById('banner1Text')?.value || 
+                     sessionStorage.getItem('text1') || 
+                     "Timer Text 45 min";
+        const bg1 = document.getElementById('banner1Url')?.value || 
+                   sessionStorage.getItem('bg1');
+                   
+        messageElement.textContent = text1;
         timerContainer.className = "container main";
-        if (bgBanner1Input?.value) {
-            timerContainer.style.backgroundImage = `url('${bgBanner1Input.value}')`;
+        if (bg1) {
+            timerContainer.style.backgroundImage = `url('${bg1}')`;
         }
     } else {
-        messageElement.textContent = textBanner2Input?.value || "Timer Text 15 min";
+        const text2 = document.getElementById('banner2Text')?.value || 
+                     sessionStorage.getItem('text2') || 
+                     "Timer Text 15 min";
+        const bg2 = document.getElementById('banner2Url')?.value || 
+                   sessionStorage.getItem('bg2');
+                   
+        messageElement.textContent = text2;
         timerContainer.className = "container short";
-        if (bgBanner2Input?.value) {
-            timerContainer.style.backgroundImage = `url('${bgBanner2Input.value}')`;
+        if (bg2) {
+            timerContainer.style.backgroundImage = `url('${bg2}')`;
         }
     }
 }
@@ -82,12 +90,6 @@ function saveState() {
         secondsRemaining,
         timerMinutes,
         startTime: Date.now(),
-        bg1: bgBanner1Input?.value,
-        text1: textBanner1Input?.value,
-        bg2: bgBanner2Input?.value,
-        text2: textBanner2Input?.value,
-        eventStartMinute: CONFIG.eventStartMinute,
-        eventStartSecond: CONFIG.eventStartSecond,
         // Add style settings
         timerColor: CONFIG.timerColor,
         messageColor: CONFIG.messageColor,
