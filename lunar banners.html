@@ -127,12 +127,13 @@
             const timerColor = params.get('timerColor') || '#ffffff';
             const textShadowColor = params.get('textShadowColor') || '#000000';
             const timerShadowColor = params.get('timerShadowColor') || '#000000';
-            const shadowDistance = params.get('shadowDistance') || '2';
+            const shadowDistanceX = params.get('shadowDistanceX') || '2';
+            const shadowDistanceY = params.get('shadowDistanceY') || '2';
 
             messageElement.style.color = textColor;
-            messageElement.style.textShadow = `0 ${shadowDistance}px ${shadowDistance}px ${textShadowColor}`;
+            messageElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${textShadowColor}`;
             timerElement.style.color = timerColor;
-            timerElement.style.textShadow = `0 ${shadowDistance}px ${shadowDistance}px ${timerShadowColor}`;
+            timerElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${timerShadowColor}`;
         }
         function rotateSignatures() {
         const signatures = [

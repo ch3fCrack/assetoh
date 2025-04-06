@@ -21,7 +21,8 @@ const textColorInput = document.getElementById('textColor');
 const timerColorInput = document.getElementById('timerColor');
 const textShadowColorInput = document.getElementById('textShadowColor');
 const timerShadowColorInput = document.getElementById('timerShadowColor');
-const shadowDistanceInput = document.getElementById('shadowDistance');
+const shadowDistanceXInput = document.getElementById('shadowDistanceX');
+const shadowDistanceYInput = document.getElementById('shadowDistanceY');
 
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
@@ -63,12 +64,13 @@ function applyStyles() {
     const timerColor = timerColorInput.value;
     const textShadowColor = textShadowColorInput.value;
     const timerShadowColor = timerShadowColorInput.value;
-    const shadowDistance = shadowDistanceInput.value + 'px';
+    const shadowDistanceX = shadowDistanceXInput.value + 'px';
+    const shadowDistanceY = shadowDistanceYInput.value + 'px';
 
     messageElement.style.color = textColor;
-    messageElement.style.textShadow = `0 ${shadowDistance} ${shadowDistance} ${textShadowColor}`;
+    messageElement.style.textShadow = `${shadowDistanceX} ${shadowDistanceY} ${textShadowColor}`;
     timerElement.style.color = timerColor;
-    timerElement.style.textShadow = `0 ${shadowDistance} ${shadowDistance} ${timerShadowColor}`;
+    timerElement.style.textShadow = `${shadowDistanceX} ${shadowDistanceY} ${timerShadowColor}`;
 }
 
 function saveState() {
@@ -87,7 +89,8 @@ function saveState() {
         timerColor: timerColorInput.value,
         textShadowColor: textShadowColorInput.value,
         timerShadowColor: timerShadowColorInput.value,
-        shadowDistance: shadowDistanceInput.value
+        shadowDistanceX: shadowDistanceXInput.value,
+        shadowDistanceY: shadowDistanceYInput.value
     };
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
@@ -108,7 +111,8 @@ function copyToOBS() {
         timerColor: timerColorInput.value,
         textShadowColor: textShadowColorInput.value,
         timerShadowColor: timerShadowColorInput.value,
-        shadowDistance: shadowDistanceInput.value
+        shadowDistanceX: shadowDistanceXInput.value,
+        shadowDistanceY: shadowDistanceYInput.value
     };
 
     const baseUrl = window.location.origin + '/lunar%20banners.html';
@@ -174,7 +178,8 @@ function initializeFromURL() {
         timerColorInput.value = state.timerColor || '#ffffff';
         textShadowColorInput.value = state.textShadowColor || '#000000';
         timerShadowColorInput.value = state.timerShadowColor || '#000000';
-        shadowDistanceInput.value = state.shadowDistance || '2';
+        shadowDistanceXInput.value = state.shadowDistanceX || '2';
+        shadowDistanceYInput.value = state.shadowDistanceY || '2';
 
     } else {
         if (params.has('minute')) CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
@@ -277,7 +282,8 @@ document.addEventListener('DOMContentLoaded', function() {
         timerColorInput.addEventListener('input', applyStyles);
         textShadowColorInput.addEventListener('input', applyStyles);
         timerShadowColorInput.addEventListener('input', applyStyles);
-        shadowDistanceInput.addEventListener('input', applyStyles);
+        shadowDistanceXInput.addEventListener('input', applyStyles);
+        shadowDistanceYInput.addEventListener('input', applyStyles);
     }
 
     initializeFromURL();
