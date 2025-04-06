@@ -17,6 +17,12 @@ const textBanner1Input = document.getElementById('textBanner1');
 const bgBanner2Input = document.getElementById('bgBanner2');
 const textBanner2Input = document.getElementById('textBanner2');
 
+const textColorInput = document.getElementById('textColor');
+const timerColorInput = document.getElementById('timerColor');
+const textShadowColorInput = document.getElementById('textShadowColor');
+const timerShadowColorInput = document.getElementById('timerShadowColor');
+const shadowDistanceInput = document.getElementById('shadowDistance');
+
 function updateTimerDisplay() {
     let minutes = Math.floor(secondsRemaining / 60);
     let seconds = secondsRemaining % 60;
@@ -52,6 +58,19 @@ function switchPhase() {
     saveState();
 }
 
+function applyStyles() {
+    const textColor = textColorInput.value;
+    const timerColor = timerColorInput.value;
+    const textShadowColor = textShadowColorInput.value;
+    const timerShadowColor = timerShadowColorInput.value;
+    const shadowDistance = shadowDistanceInput.value + 'px';
+
+    messageElement.style.color = textColor;
+    messageElement.style.textShadow = `0 ${shadowDistance} ${shadowDistance} ${textShadowColor}`;
+    timerElement.style.color = timerColor;
+    timerElement.style.textShadow = `0 ${shadowDistance} ${shadowDistance} ${timerShadowColor}`;
+}
+
 function saveState() {
     const state = {
         phase,
@@ -63,7 +82,12 @@ function saveState() {
         bg2: bgBanner2Input?.value,
         text2: textBanner2Input?.value,
         eventStartMinute: CONFIG.eventStartMinute,
-        eventStartSecond: CONFIG.eventStartSecond
+        eventStartSecond: CONFIG.eventStartSecond,
+        textColor: textColorInput.value,
+        timerColor: timerColorInput.value,
+        textShadowColor: textShadowColorInput.value,
+        timerShadowColor: timerShadowColorInput.value,
+        shadowDistance: shadowDistanceInput.value
     };
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
@@ -79,13 +103,18 @@ function copyToOBS() {
         phase,
         transparent: true,
         startTime: Date.now(),
-        showSignature: true
+        showSignature: true,
+        textColor: textColorInput.value,
+        timerColor: timerColorInput.value,
+        textShadowColor: textShadowColorInput.value,
+        timerShadowColor: timerShadowColorInput.value,
+        shadowDistance: shadowDistanceInput.value
     };
 
     const baseUrl = window.location.origin + '/lunar%20banners.html';
     const queryString = Object.entries(state)
         .filter(([_, value]) => value !== undefined && value !== '')
-        .map(([key, value]) => `${key}=${value}`)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
         .join('&');
 
     const obsUrl = `${baseUrl}?${queryString}`;
@@ -100,20 +129,16 @@ function initializeTimer() {
     const currentSecond = now.getSeconds();
     const currentMs = now.getMilliseconds();
 
-    // Calcola il tempo preciso dall'inizio dell'ora corrente
     const currentTimeFromHourStart = (currentMinute * 60 + currentSecond) * 1000 + currentMs;
     const targetTimeFromHourStart = (CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond) * 1000;
 
-    // Reset accumulatori
     accumulatedTime = 0;
     lastTickTime = performance.now();
 
     if (currentTimeFromHourStart < targetTimeFromHourStart) {
-        // Siamo prima del target in questa ora
         phase = "main";
         secondsRemaining = Math.ceil((targetTimeFromHourStart - currentTimeFromHourStart) / 1000);
     } else {
-        // Siamo dopo il target
         phase = "short";
         const timePassedMs = currentTimeFromHourStart - targetTimeFromHourStart;
         const shortTimerMs = 15 * 60 * 1000;
@@ -129,11 +154,11 @@ function initializeTimer() {
 function initializeFromURL() {
     const params = new URLSearchParams(window.location.search);
     const savedState = sessionStorage.getItem('timerState');
-    
+
     if (savedState) {
         const state = JSON.parse(savedState);
         const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
-        
+
         phase = state.phase;
         secondsRemaining = Math.max(0, state.secondsRemaining - elapsedSeconds);
         timerMinutes = state.timerMinutes;
@@ -144,6 +169,13 @@ function initializeFromURL() {
         if (textBanner1Input && state.text1) textBanner1Input.value = state.text1;
         if (bgBanner2Input && state.bg2) bgBanner2Input.value = state.bg2;
         if (textBanner2Input && state.text2) textBanner2Input.value = state.text2;
+
+        textColorInput.value = state.textColor || '#f0f0f0';
+        timerColorInput.value = state.timerColor || '#ffffff';
+        textShadowColorInput.value = state.textShadowColor || '#000000';
+        timerShadowColorInput.value = state.timerShadowColor || '#000000';
+        shadowDistanceInput.value = state.shadowDistance || '2';
+
     } else {
         if (params.has('minute')) CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
         if (params.has('second')) CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
@@ -154,7 +186,7 @@ function initializeFromURL() {
     if (params.has('text1') && textBanner1Input) textBanner1Input.value = decodeURIComponent(params.get('text1'));
     if (params.has('bg2') && bgBanner2Input) bgBanner2Input.value = params.get('bg2');
     if (params.has('text2') && textBanner2Input) textBanner2Input.value = decodeURIComponent(params.get('text2'));
-    
+
     if (params.has('transparent')) {
         document.body.style.backgroundColor = 'transparent';
         timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
@@ -165,6 +197,7 @@ function initializeFromURL() {
     }
     updateMessage();
     updateTimerDisplay();
+    applyStyles();
 }
 function rotateSignatures() {
     const signatures = [
@@ -189,9 +222,9 @@ function timerTick() {
     const currentTime = performance.now();
     const deltaTime = currentTime - lastTickTime;
     lastTickTime = currentTime;
-    
+
     accumulatedTime += deltaTime;
-    
+
     while (accumulatedTime >= 1000) {
         if (secondsRemaining > 0) {
             secondsRemaining--;
@@ -201,7 +234,7 @@ function timerTick() {
         }
         accumulatedTime -= 1000;
     }
-    
+
     updateTimerDisplay();
 }
 
@@ -212,12 +245,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('setTimeBtn')?.addEventListener('click', function() {
             const minute = parseInt(document.getElementById('minuteInput').value, 10);
             const second = parseInt(document.getElementById('secondInput').value, 10);
-            
+
             if (minute < 0 || minute > 59 || second < 0 || second > 59) {
                 alert('Inserisci valori validi (0-59) per minuti e secondi.');
                 return;
             }
-            
+
             CONFIG.eventStartMinute = minute;
             CONFIG.eventStartSecond = second;
             initializeTimer();
@@ -233,11 +266,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('applyCustomizationsBtn')?.addEventListener('click', function() {
             updateMessage();
+            applyStyles();
             saveState();
             alert('Customizations applied!');
         });
 
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
+
+        textColorInput.addEventListener('input', applyStyles);
+        timerColorInput.addEventListener('input', applyStyles);
+        textShadowColorInput.addEventListener('input', applyStyles);
+        timerShadowColorInput.addEventListener('input', applyStyles);
+        shadowDistanceInput.addEventListener('input', applyStyles);
     }
 
     initializeFromURL();

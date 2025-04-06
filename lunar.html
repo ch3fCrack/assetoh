@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="timer.css">
     <link href="https://fonts.cdnfonts.com/css/lovelo" rel="stylesheet">
     <link rel="icon" href="images/icon.png" type="image/x-icon">
-    
+
     <!-- Add translation system scripts -->
     <script src="translations.js"></script>
     <script src="loadCommon.js"></script>
     <script src="languageManager.js"></script>
-    
+
     <!-- Existing scripts -->
     <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
@@ -53,7 +53,7 @@
             <strong>NOTE:</strong> The images can be GIFs or static but must be in 800x200 format.
             <strong>P.S.:</strong> It's in beta, so if there are any issues or errors, contact me on Discord (ch3ftv).
         </p>
-        
+
         <div class="banner-inputs">
             <div>
                 <label data-translate="banner1UrlLabel">Banner 1 URL image (timer 45 min):</label>
@@ -68,10 +68,38 @@
                 <input type="text" id="bgBanner2" data-translate="enterImageUrl" placeholder="Enter image URL">
             </div>
             <div>
-                <label data-translate="banner2TextLabel">Banner 2 Text (timer 15 min):</label>
+                <label data-translate="banner2TextLabel">Banner 2 Text (15 min):</label>
                 <input type="text" id="textBanner2" data-translate="enterText" placeholder="Enter text">
             </div>
             <button id="applyCustomizationsBtn" data-translate="applyCustomizations">Apply Customizations</button>
+        </div>
+
+        <div class="color-settings">
+            <h3 data-translate="colorSettings">Color Settings</h3>
+            <div>
+                <label for="textColor" data-translate="textColor">Text Color:</label>
+                <input type="color" id="textColor" value="#f0f0f0">
+            </div>
+            <div>
+                <label for="timerColor" data-translate="timerColor">Timer Color:</label>
+                <input type="color" id="timerColor" value="#ffffff">
+            </div>
+        </div>
+
+        <div class="shadow-settings">
+            <h3 data-translate="shadowSettings">Shadow Settings</h3>
+            <div>
+                <label for="textShadowColor" data-translate="textShadowColor">Text Shadow Color:</label>
+                <input type="color" id="textShadowColor" value="#000000">
+            </div>
+            <div>
+                <label for="timerShadowColor" data-translate="timerShadowColor">Timer Shadow Color:</label>
+                <input type="color" id="timerShadowColor" value="#000000">
+            </div>
+            <div>
+                <label for="shadowDistance" data-translate="shadowDistance">Shadow Distance:</label>
+                <input type="number" id="shadowDistance" value="2" min="0" max="10">
+            </div>
         </div>
     </div>
 
