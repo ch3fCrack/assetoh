@@ -47,7 +47,7 @@
             background-repeat: no-repeat;
         }
 
-        
+
 
         .fixed-gif {
             position: relative;
@@ -57,7 +57,7 @@
             height: 200px;
             z-index: 1;
             pointer-events: none;
-            
+
         }
 
         .timer {
@@ -121,6 +121,19 @@
         const timerElement = document.getElementById('timer');
         const messageElement = document.getElementById('message');
         const timerContainer = document.getElementById('timerContainer');
+
+        function applyStyles(params) {
+            const textColor = params.get('textColor') || '#f0f0f0';
+            const timerColor = params.get('timerColor') || '#ffffff';
+            const textShadowColor = params.get('textShadowColor') || '#000000';
+            const timerShadowColor = params.get('timerShadowColor') || '#000000';
+            const shadowDistance = params.get('shadowDistance') || '2';
+
+            messageElement.style.color = textColor;
+            messageElement.style.textShadow = `0 ${shadowDistance}px ${shadowDistance}px ${textShadowColor}`;
+            timerElement.style.color = timerColor;
+            timerElement.style.textShadow = `0 ${shadowDistance}px ${shadowDistance}px ${timerShadowColor}`;
+        }
         function rotateSignatures() {
         const signatures = [
             "Created by Ch3f_nerd_art",
@@ -207,7 +220,7 @@
 
         function initializeTimer() {
             const params = new URLSearchParams(window.location.search);
-            
+
             if (loadState()) {
                 updateMessage();
                 updateTimerDisplay();
@@ -253,6 +266,9 @@
             updateTimerDisplay();
         }
 
+        // Inizializzazione e Stili
+        const params = new URLSearchParams(window.location.search);
+        applyStyles(params);
         initializeTimer();
         rotateSignatures();
         setInterval(timerTick, 1000);
