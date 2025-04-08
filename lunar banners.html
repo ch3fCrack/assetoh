@@ -242,10 +242,23 @@
             const currentTimeInSeconds = currentMinute * 60 + currentSecond;
             const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
 
+            // Se siamo nei primi minuti dell'ora (es. 05:00)
             if (currentTimeInSeconds < targetTimeInSeconds) {
-                phase = "main";
-                secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+                // Verifica se dovremmo essere nella fase "short" dall'ora precedente
+                const timeFromPreviousTarget = (60 * 60) - (targetTimeInSeconds - currentTimeInSeconds);
+                const shortTimerSec = 15 * 60;
+
+                if (timeFromPreviousTarget < shortTimerSec) {
+                    // Siamo ancora nel ciclo di 15 minuti dall'ora precedente
+                    phase = "short";
+                    secondsRemaining = shortTimerSec - timeFromPreviousTarget;
+                } else {
+                    // Siamo nel periodo principale in attesa del prossimo target
+                    phase = "main";
+                    secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+                }
             } else {
+                // Dopo il target time nell'ora corrente
                 phase = "short";
                 const timePassedSinceTarget = currentTimeInSeconds - targetTimeInSeconds;
                 const shortTimerSec = 15 * 60;
