@@ -137,7 +137,7 @@ function copyToOBS() {
         }
     });
 
-    const url = `lunar%20banners.html?${params.toString()}`;
+    const url = `https://ch3f-nerd-art-asset.netlify.app/lunar%20banners.html?${params.toString()}`;
     console.log('URL generato:', url);
     
     // Copia negli appunti
