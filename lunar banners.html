@@ -259,8 +259,7 @@
             }
             secondsRemaining = timerMinutes * 60;
             updateMessage();
-            // Aggiungi questa chiamata per assicurarti che gli stili vengano applicati
-            applyStyles();
+            applyStyles(); // Riapplica gli stili quando cambia fase
             saveState();
         }
 
@@ -328,6 +327,20 @@
         initializeTimer();
         rotateSignatures();
         setInterval(timerTick, 1000);
+
+        // Nella parte di inizializzazione di lunar banners.html
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inizializzazione degli elementi
+            timerElement = document.getElementById('timer');
+            messageElement = document.getElementById('message');
+            timerContainer = document.getElementById('timerContainer');
+            
+            // Applica stili e inizializza timer
+            applyStyles();
+            initializeTimer();
+            rotateSignatures();
+            setInterval(timerTick, 1000);
+        });
     </script>
 </body>
 </html>
