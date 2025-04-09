@@ -122,7 +122,10 @@
         const messageElement = document.getElementById('message');
         const timerContainer = document.getElementById('timerContainer');
 
-        function applyStyles(params) {
+        // Modifica la funzione applyStyles per non richiedere parametri
+        function applyStyles() {
+            const params = new URLSearchParams(window.location.search);
+            
             // Ottieni valori dai parametri URL o dal sessionStorage o usa valori predefiniti
             const textColor = params.get('textColor') || sessionStorage.getItem('textColor') || '#f0f0f0';
             const timerColor = params.get('timerColor') || sessionStorage.getItem('timerColor') || '#ffffff';
@@ -155,6 +158,8 @@
             // Salva le dimensioni
             sessionStorage.setItem('timerSize', timerSize);
             sessionStorage.setItem('messageSize', messageSize);
+        
+            console.log("Stili applicati:", { textColor, timerColor, textShadowColor, timerShadowColor });
         }
 
         function rotateSignatures() {
@@ -251,6 +256,8 @@
             }
             secondsRemaining = timerMinutes * 60;
             updateMessage();
+            // Aggiungi questa chiamata per assicurarti che gli stili vengano applicati
+            applyStyles();
             saveState();
         }
 
@@ -313,7 +320,8 @@
 
         // Inizializzazione e Stili
         const params = new URLSearchParams(window.location.search);
-        applyStyles(params);
+        // Rimuovi il parametro dalla chiamata
+        applyStyles();
         initializeTimer();
         rotateSignatures();
         setInterval(timerTick, 1000);
