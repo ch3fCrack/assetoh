@@ -122,44 +122,47 @@
         const messageElement = document.getElementById('message');
         const timerContainer = document.getElementById('timerContainer');
 
-        // Modifica la funzione applyStyles per non richiedere parametri
+        // Modifica questa funzione
         function applyStyles() {
             const params = new URLSearchParams(window.location.search);
             
-            // Ottieni valori dai parametri URL o dal sessionStorage o usa valori predefiniti
-            const textColor = params.get('textColor') || sessionStorage.getItem('textColor') || '#f0f0f0';
-            const timerColor = params.get('timerColor') || sessionStorage.getItem('timerColor') || '#ffffff';
-            const textShadowColor = params.get('textShadowColor') || sessionStorage.getItem('textShadowColor') || '#000000';
-            const timerShadowColor = params.get('timerShadowColor') || sessionStorage.getItem('timerShadowColor') || '#000000';
-            const shadowDistanceX = params.get('shadowDistanceX') || sessionStorage.getItem('shadowDistanceX') || '2';
-            const shadowDistanceY = params.get('shadowDistanceY') || sessionStorage.getItem('shadowDistanceY') || '2';
+            // Debug per vedere quali parametri sono presenti nell'URL
+            console.log("Parametri URL:", {
+                textColor: params.get('textColor'),
+                timerColor: params.get('timerColor'),
+                textShadowColor: params.get('textShadowColor'),
+                timerShadowColor: params.get('timerShadowColor'),
+                shadowDistanceX: params.get('shadowDistanceX'),
+                shadowDistanceY: params.get('shadowDistanceY')
+            });
             
-            // Salva i valori nel sessionStorage per uso futuro
-            sessionStorage.setItem('textColor', textColor);
-            sessionStorage.setItem('timerColor', timerColor);
-            sessionStorage.setItem('textShadowColor', textShadowColor);
-            sessionStorage.setItem('timerShadowColor', timerShadowColor);
-            sessionStorage.setItem('shadowDistanceX', shadowDistanceX);
-            sessionStorage.setItem('shadowDistanceY', shadowDistanceY);
-        
-            // Applica gli stili
-            messageElement.style.color = textColor;
-            messageElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${textShadowColor}`;
-            timerElement.style.color = timerColor;
-            timerElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${timerShadowColor}`;
+            // Ottieni valori dai parametri URL o dal sessionStorage o usa valori predefiniti
+            const textColor = params.get('textColor') || '#f0f0f0';
+            const timerColor = params.get('timerColor') || '#ffffff';
+            const textShadowColor = params.get('textShadowColor') || '#000000';
+            const timerShadowColor = params.get('timerShadowColor') || '#000000';
+            const shadowDistanceX = params.get('shadowDistanceX') || '2';
+            const shadowDistanceY = params.get('shadowDistanceY') || '2';
+            
+            // Applica gli stili direttamente
+            if (messageElement) {
+                messageElement.style.color = textColor;
+                messageElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${textShadowColor}`;
+                console.log("Stili applicati al messaggio:", textColor, textShadowColor);
+            }
+            
+            if (timerElement) {
+                timerElement.style.color = timerColor;
+                timerElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${timerShadowColor}`;
+                console.log("Stili applicati al timer:", timerColor, timerShadowColor);
+            }
             
             // Applica dimensioni font se disponibili
-            const timerSize = params.get('timerSize') || sessionStorage.getItem('timerSize') || '50';
-            const messageSize = params.get('messageSize') || sessionStorage.getItem('messageSize') || '30';
+            const timerSize = params.get('timerSize') || '50';
+            const messageSize = params.get('messageSize') || '30';
             
-            timerElement.style.fontSize = `${timerSize}px`;
-            messageElement.style.fontSize = `${messageSize}px`;
-            
-            // Salva le dimensioni
-            sessionStorage.setItem('timerSize', timerSize);
-            sessionStorage.setItem('messageSize', messageSize);
-        
-            console.log("Stili applicati:", { textColor, timerColor, textShadowColor, timerShadowColor });
+            if (timerElement) timerElement.style.fontSize = `${timerSize}px`;
+            if (messageElement) messageElement.style.fontSize = `${messageSize}px`;
         }
 
         function rotateSignatures() {

@@ -119,7 +119,7 @@ function copyToOBS() {
         text1: document.getElementById('banner1Text')?.value || sessionStorage.getItem('text1') || '',
         bg2: document.getElementById('banner2Url')?.value || sessionStorage.getItem('bg2') || '',
         text2: document.getElementById('banner2Text')?.value || sessionStorage.getItem('text2') || '',
-        // Usa esattamente questi nomi di parametri
+        // Assicurati che questi nomi siano esattamente gli stessi di lunar banners.html
         textColor: textColorInput?.value || '#f0f0f0',
         timerColor: timerColorInput?.value || '#ffffff',
         textShadowColor: textShadowColorInput?.value || '#000000',
@@ -132,17 +132,20 @@ function copyToOBS() {
         showSignature: true
     };
 
-    // Aggiungi TUTTI i parametri all'URL
+    // Debug per vedere quali valori vengono generati
+    console.log("Valori per URL:", currentValues);
+
+    // Costruisci l'URL
     const params = new URLSearchParams();
     Object.entries(currentValues).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-            params.set(key, key.includes('text') && typeof value === 'string' ? encodeURIComponent(value) : value);
-        }
+        params.set(key, key.includes('text') && typeof value === 'string' ? encodeURIComponent(value) : value);
     });
 
+    // Debug per vedere l'URL completo
     const url = `https://ch3f-nerd-art-asset.netlify.app/lunar%20banners.html?${params.toString()}`;
     console.log('URL generato:', url);
     
+    // Copia negli appunti
     navigator.clipboard.writeText(url)
         .then(() => alert('URL per OBS copiato!'))
         .catch(err => {
