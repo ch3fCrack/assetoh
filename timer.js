@@ -119,22 +119,25 @@ function copyToOBS() {
         text1: document.getElementById('banner1Text')?.value || sessionStorage.getItem('text1') || '',
         bg2: document.getElementById('banner2Url')?.value || sessionStorage.getItem('bg2') || '',
         text2: document.getElementById('banner2Text')?.value || sessionStorage.getItem('text2') || '',
-        timerColor: timerColorInput.value,
-        messageColor: textColorInput.value,
-        textShadowColor: textShadowColorInput.value,
-        timerShadowColor: timerShadowColorInput.value,
-        shadowDistanceX: shadowDistanceXInput.value,
-        shadowDistanceY: shadowDistanceYInput.value,
+        // Correzione dei nomi dei parametri per farli corrispondere con lunar banners.html
+        textColor: textColorInput?.value,          // Corretto da messageColor a textColor
+        timerColor: timerColorInput?.value,
+        textShadowColor: textShadowColorInput?.value,
+        timerShadowColor: timerShadowColorInput?.value,
+        shadowDistanceX: shadowDistanceXInput?.value,
+        shadowDistanceY: shadowDistanceYInput?.value,
+        // Aggiungi dimensioni del testo se disponibili
+        timerSize: document.getElementById('timerSize')?.value || '48',
+        messageSize: document.getElementById('messageSize')?.value || '32',
         transparent: true,
         showSignature: true
     };
 
-    // Costruisci l'URL
+    // Costruisci l'URL, assicurandoti che TUTTI i parametri vengano inclusi
     const params = new URLSearchParams();
     Object.entries(currentValues).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-            params.set(key, key.includes('text') ? encodeURIComponent(value) : value);
-        }
+        // Non filtrare i valori, assicurati che tutti vengano inclusi
+        params.set(key, key.includes('text') && typeof value === 'string' ? encodeURIComponent(value) : value);
     });
 
     const url = `https://ch3f-nerd-art-asset.netlify.app/lunar%20banners.html?${params.toString()}`;
