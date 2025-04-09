@@ -119,31 +119,30 @@ function copyToOBS() {
         text1: document.getElementById('banner1Text')?.value || sessionStorage.getItem('text1') || '',
         bg2: document.getElementById('banner2Url')?.value || sessionStorage.getItem('bg2') || '',
         text2: document.getElementById('banner2Text')?.value || sessionStorage.getItem('text2') || '',
-        // Correzione dei nomi dei parametri per farli corrispondere con lunar banners.html
-        textColor: textColorInput?.value,          // Corretto da messageColor a textColor
-        timerColor: timerColorInput?.value,
-        textShadowColor: textShadowColorInput?.value,
-        timerShadowColor: timerShadowColorInput?.value,
-        shadowDistanceX: shadowDistanceXInput?.value,
-        shadowDistanceY: shadowDistanceYInput?.value,
-        // Aggiungi dimensioni del testo se disponibili
-        timerSize: document.getElementById('timerSize')?.value || '48',
-        messageSize: document.getElementById('messageSize')?.value || '32',
+        // Usa esattamente questi nomi di parametri
+        textColor: textColorInput?.value || '#f0f0f0',
+        timerColor: timerColorInput?.value || '#ffffff',
+        textShadowColor: textShadowColorInput?.value || '#000000',
+        timerShadowColor: timerShadowColorInput?.value || '#000000',
+        shadowDistanceX: shadowDistanceXInput?.value || '2',
+        shadowDistanceY: shadowDistanceYInput?.value || '2',
+        timerSize: document.getElementById('timerSize')?.value || '50',
+        messageSize: document.getElementById('messageSize')?.value || '30',
         transparent: true,
         showSignature: true
     };
 
-    // Costruisci l'URL, assicurandoti che TUTTI i parametri vengano inclusi
+    // Aggiungi TUTTI i parametri all'URL
     const params = new URLSearchParams();
     Object.entries(currentValues).forEach(([key, value]) => {
-        // Non filtrare i valori, assicurati che tutti vengano inclusi
-        params.set(key, key.includes('text') && typeof value === 'string' ? encodeURIComponent(value) : value);
+        if (value !== undefined && value !== null) {
+            params.set(key, key.includes('text') && typeof value === 'string' ? encodeURIComponent(value) : value);
+        }
     });
 
     const url = `https://ch3f-nerd-art-asset.netlify.app/lunar%20banners.html?${params.toString()}`;
     console.log('URL generato:', url);
     
-    // Copia negli appunti
     navigator.clipboard.writeText(url)
         .then(() => alert('URL per OBS copiato!'))
         .catch(err => {
