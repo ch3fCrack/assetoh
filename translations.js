@@ -3,6 +3,8 @@ const translations = {
         // Navigation
         home: "Home",
         siteTitle: "Ch3f Nerd Art Asset for Creator",
+        creditWarning: "Note: If you use these assets, be honest and sincere: do not take credit for this work and always leave credit to the original author. Thank you!",
+
         mainTitle: "Ch3f Nerd Art Asset Hub for Creator",
         welcomeTitle: "Welcome to Ch3f Nerd Art Asset Hub for Creators",
         welcomeText: "We share free resources for Once Human content creators!",
@@ -108,6 +110,8 @@ const translations = {
         // Navigation
         home: "ホーム",
         siteTitle: "Ch3f Nerd Art クリエイターアセット",
+        creditWarning: "注意: これらのアセットを使用する場合は、正直かつ誠実でいてください。この作品のクレジットを自分のものにしないで、必ず元の作者にクレジットを残してください。ありがとう！",
+
         mainTitle: "Ch3f Nerd Art クリエイターアセットハブ",
         welcomeTitle: "Ch3f Nerd Art クリエイターアセットハブへようこそ",
         welcomeText: "Once Human コンテンツクリエイター向けの無料リソースを共有しています！",
@@ -213,6 +217,8 @@ const translations = {
         home: "主页",
         siteTitle: "Ch3f Nerd Art 创作者资源",
         mainTitle: "Ch3f Nerd Art 创作者资源中心",
+        creditWarning: "注意：如果您使用这些素材，请诚实守信：不要将这些作品据为己有，请务必保留原作者的署名。谢谢！",
+
         welcomeTitle: "欢迎来到 Ch3f Nerd Art 创作者资源中心",
         welcomeText: "我们为 Once Human 内容创作者分享免费资源！",
         gifSectionNote: "英文GIF区域！",
@@ -315,6 +321,7 @@ const translations = {
         // Navigation
         home: "Home",
         siteTitle: "Ch3f Nerd Art Asset per Creatori",
+        creditWarning: "Nota: Se usi questi asset, sii onesto e sincero: non prendere i crediti per questi lavori e lascia sempre i crediti all’autore originale. Grazie!",
         mainTitle: "Ch3f Nerd Art Hub Asset per Creatori",
         welcomeTitle: "Benvenuti nel Ch3f Nerd Art Hub Asset per Creatori",
         welcomeText: "Condividiamo risorse gratuite per i creatori di contenuti Once Human!",
@@ -417,6 +424,8 @@ const translations = {
         home: "Accueil",
         copyForOBS: "Copier pour OBS",
         timerShadowColor: "Couleur de l’ombre du minuteur",
+        creditWarning: "Note : Si vous utilisez ces assets, soyez honnête et sincère : ne vous appropriez pas le crédit de ce travail et laissez toujours le crédit à l’auteur original. Merci！",
+
         textShadowColor: "Couleur de l’ombre du texte",
         shadowDistanceX: "Distance de l’ombre sur l’axe X",
         shadowDistanceY: "Distance de l’ombre sur l’axe Y",
@@ -486,6 +495,8 @@ const translations = {
         home: "Inicio",
         passwordNote: "Escríbeme por MD en Discord (ch3ftv) y te enviaré la contraseña.... Aqua la adivinará inmediatamente",
         copyForOBS: "Copiar para OBS",
+        creditWarning: "Nota: Si usas estos assets, sé honesto y sincero: no te atribuyas el crédito de estos trabajos y deja siempre el crédito al autor original. ¡Gracias!",
+
         siteTitle: "Ch3f Nerd Art Asset para Creadores",
         mainTitle: "Ch3f Nerd Art Asset Hub para Creadores",
         welcomeTitle: "Bienvenido a Ch3f Nerd Art Asset Hub para Creadores",
@@ -554,6 +565,8 @@ const translations = {
     },
     de: {
         home: "Startseite",
+        creditWarning: "Hinweis: Wenn du diese Assets verwendest, sei ehrlich und aufrichtig: Beanspruche nicht die Anerkennung für diese Arbeiten und lasse immer den ursprünglichen Autor genannt. Danke!",
+
         bannerNote: "HINWEIS: Die Bilder können GIFs oder statisch sein, müssen aber im Format 800x200 sein. P.S.: Es ist noch in der Beta-Phase, bei Problemen oder Fehlern kontaktiere mich bitte auf Discord (ch3ftv).",
         passwordNote: "Schreib mir eine DM auf Discord (ch3ftv) und ich sende dir das Passwort.... Aqua wird es sofort erraten",
         copyForOBS: "Kopieren für OBS",
@@ -624,6 +637,7 @@ const translations = {
     },
     pt: {
         home: "Início",
+        creditWarning: "Nota: Se você usar estes assets, seja honesto e sincero: não reivindique o crédito por este trabalho e sempre deixe o crédito para o autor original. Obrigado!",
         bannerNote:"Nota: As imagens podem ser animadas (GIFs) ou estáticas, mas precisam estar no formato 800x200. P.S.: Ele está na versão BETA, então se houver algum problema ou erro, entre em contato comigo no Discord (CH3FTV).",
         passwordNote:"Me envie uma mensagem no Discord (CH3TV) e eu vou te mandar a senha.",
         copyForOBS: "Copiar para OBS",

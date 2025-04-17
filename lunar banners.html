@@ -122,49 +122,19 @@
         const messageElement = document.getElementById('message');
         const timerContainer = document.getElementById('timerContainer');
 
-        // Modifica questa funzione
-        function applyStyles() {
-            const params = new URLSearchParams(window.location.search);
-            
-            // Debug per vedere quali parametri sono presenti nell'URL
-            console.log("Parametri URL:", {
-                textColor: params.get('textColor'),
-                timerColor: params.get('timerColor'),
-                textShadowColor: params.get('textShadowColor'),
-                timerShadowColor: params.get('timerShadowColor'),
-                shadowDistanceX: params.get('shadowDistanceX'),
-                shadowDistanceY: params.get('shadowDistanceY')
-            });
-            
-            // Ottieni valori dai parametri URL o dal sessionStorage o usa valori predefiniti
+        function applyStyles(params) {
             const textColor = params.get('textColor') || '#f0f0f0';
             const timerColor = params.get('timerColor') || '#ffffff';
             const textShadowColor = params.get('textShadowColor') || '#000000';
             const timerShadowColor = params.get('timerShadowColor') || '#000000';
             const shadowDistanceX = params.get('shadowDistanceX') || '2';
             const shadowDistanceY = params.get('shadowDistanceY') || '2';
-            
-            // Applica gli stili direttamente
-            if (messageElement) {
-                messageElement.style.color = textColor;
-                messageElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${textShadowColor}`;
-                console.log("Stili applicati al messaggio:", textColor, textShadowColor);
-            }
-            
-            if (timerElement) {
-                timerElement.style.color = timerColor;
-                timerElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${timerShadowColor}`;
-                console.log("Stili applicati al timer:", timerColor, timerShadowColor);
-            }
-            
-            // Applica dimensioni font se disponibili
-            const timerSize = params.get('timerSize') || '50';
-            const messageSize = params.get('messageSize') || '30';
-            
-            if (timerElement) timerElement.style.fontSize = `${timerSize}px`;
-            if (messageElement) messageElement.style.fontSize = `${messageSize}px`;
-        }
 
+            messageElement.style.color = textColor;
+            messageElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${textShadowColor}`;
+            timerElement.style.color = timerColor;
+            timerElement.style.textShadow = `${shadowDistanceX}px ${shadowDistanceY}px ${timerShadowColor}`;
+        }
         function rotateSignatures() {
         const signatures = [
             "Created by Ch3f_nerd_art",
@@ -219,32 +189,19 @@
 
         function updateMessage() {
             const params = new URLSearchParams(window.location.search);
-            
             if (phase === "main") {
-                const text1 = params.get('text1') || 
-                            sessionStorage.getItem('text1') || 
-                            "Timer Text 45 min";
-                messageElement.textContent = decodeURIComponent(text1);
+                messageElement.textContent = params.has('text1') ? 
+                    decodeURIComponent(params.get('text1')) : "Timer Text 45 min";
                 timerContainer.className = "container main";
-                
-                const bg1 = params.get('bg1') || sessionStorage.getItem('bg1');
-                if (bg1) {
-                    timerContainer.style.backgroundImage = `url('${bg1}')`;
-                } else {
-                    timerContainer.style.backgroundImage = 'none';
+                if (params.has('bg1')) {
+                    timerContainer.style.backgroundImage = `url('${params.get('bg1')}')`;
                 }
             } else {
-                const text2 = params.get('text2') || 
-                            sessionStorage.getItem('text2') || 
-                            "Timer Text 15 min";
-                messageElement.textContent = decodeURIComponent(text2);
+                messageElement.textContent = params.has('text2') ? 
+                    decodeURIComponent(params.get('text2')) : "Timer Text 15 min";
                 timerContainer.className = "container short";
-                
-                const bg2 = params.get('bg2') || sessionStorage.getItem('bg2');
-                if (bg2) {
-                    timerContainer.style.backgroundImage = `url('${bg2}')`;
-                } else {
-                    timerContainer.style.backgroundImage = 'none';
+                if (params.has('bg2')) {
+                    timerContainer.style.backgroundImage = `url('${params.get('bg2')}')`;
                 }
             }
         }
@@ -259,14 +216,18 @@
             }
             secondsRemaining = timerMinutes * 60;
             updateMessage();
-            applyStyles(); // Riapplica gli stili quando cambia fase
             saveState();
         }
 
         function initializeTimer() {
             const params = new URLSearchParams(window.location.search);
 
-            // Carica i valori dai parametri
+            if (loadState()) {
+                updateMessage();
+                updateTimerDisplay();
+                return;
+            }
+
             if (params.has('minute')) {
                 CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
             }
@@ -274,20 +235,19 @@
                 CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
             }
 
-            // Calcola il tempo corrente
             const now = new Date();
-            const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
             const currentSecond = now.getSeconds();
 
             const currentTimeInSeconds = currentMinute * 60 + currentSecond;
             const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
 
-            // Calcola se siamo prima del target time
+            // Se siamo nei primi minuti dell'ora (es. 05:00)
             if (currentTimeInSeconds < targetTimeInSeconds) {
+                // Verifica se dovremmo essere nella fase "short" dall'ora precedente
                 const timeFromPreviousTarget = (60 * 60) - (targetTimeInSeconds - currentTimeInSeconds);
-                const shortTimerSec = 15 * 60; // 15 minuti in secondi
-                
+                const shortTimerSec = 15 * 60;
+
                 if (timeFromPreviousTarget < shortTimerSec) {
                     // Siamo ancora nel ciclo di 15 minuti dall'ora precedente
                     phase = "short";
@@ -322,25 +282,10 @@
 
         // Inizializzazione e Stili
         const params = new URLSearchParams(window.location.search);
-        // Rimuovi il parametro dalla chiamata
-        applyStyles();
+        applyStyles(params);
         initializeTimer();
         rotateSignatures();
         setInterval(timerTick, 1000);
-
-        // Nella parte di inizializzazione di lunar banners.html
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inizializzazione degli elementi
-            timerElement = document.getElementById('timer');
-            messageElement = document.getElementById('message');
-            timerContainer = document.getElementById('timerContainer');
-            
-            // Applica stili e inizializza timer
-            applyStyles();
-            initializeTimer();
-            rotateSignatures();
-            setInterval(timerTick, 1000);
-        });
     </script>
 </body>
 </html>

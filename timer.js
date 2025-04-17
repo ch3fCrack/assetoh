@@ -12,6 +12,10 @@ let accumulatedTime = 0;
 const timerElement = document.getElementById('timer');
 const messageElement = document.getElementById('message');
 const timerContainer = document.getElementById('timerContainer');
+const bgBanner1Input = document.getElementById('bgBanner1');
+const textBanner1Input = document.getElementById('textBanner1');
+const bgBanner2Input = document.getElementById('bgBanner2');
+const textBanner2Input = document.getElementById('textBanner2');
 
 const textColorInput = document.getElementById('textColor');
 const timerColorInput = document.getElementById('timerColor');
@@ -28,34 +32,16 @@ function updateTimerDisplay() {
 
 function updateMessage() {
     if (phase === "main") {
-        const banner1Text = document.getElementById('banner1Text')?.value || 
-                          sessionStorage.getItem('text1') || 
-                          "Timer Text 45 min";
-        const banner1Url = document.getElementById('banner1Url')?.value || 
-                         sessionStorage.getItem('bg1');
-                         
-        messageElement.textContent = banner1Text;
+        messageElement.textContent = textBanner1Input?.value || "Timer Text 45 min";
         timerContainer.className = "container main";
-        
-        if (banner1Url) {
-            timerContainer.style.backgroundImage = `url('${banner1Url}')`;
-        } else {
-            timerContainer.style.backgroundImage = 'none';
+        if (bgBanner1Input?.value) {
+            timerContainer.style.backgroundImage = `url('${bgBanner1Input.value}')`;
         }
     } else {
-        const banner2Text = document.getElementById('banner2Text')?.value || 
-                          sessionStorage.getItem('text2') || 
-                          "Timer Text 15 min";
-        const banner2Url = document.getElementById('banner2Url')?.value || 
-                         sessionStorage.getItem('bg2');
-                         
-        messageElement.textContent = banner2Text;
+        messageElement.textContent = textBanner2Input?.value || "Timer Text 15 min";
         timerContainer.className = "container short";
-        
-        if (banner2Url) {
-            timerContainer.style.backgroundImage = `url('${banner2Url}')`;
-        } else {
-            timerContainer.style.backgroundImage = 'none';
+        if (bgBanner2Input?.value) {
+            timerContainer.style.backgroundImage = `url('${bgBanner2Input.value}')`;
         }
     }
 }
@@ -93,10 +79,10 @@ function saveState() {
         secondsRemaining,
         timerMinutes,
         startTime: Date.now(),
-        bg1: document.getElementById('banner1Url')?.value || sessionStorage.getItem('bg1') || '',
-        text1: document.getElementById('banner1Text')?.value || sessionStorage.getItem('text1') || '',
-        bg2: document.getElementById('banner2Url')?.value || sessionStorage.getItem('bg2') || '',
-        text2: document.getElementById('banner2Text')?.value || sessionStorage.getItem('text2') || '',
+        bg1: bgBanner1Input?.value,
+        text1: textBanner1Input?.value,
+        bg2: bgBanner2Input?.value,
+        text2: textBanner2Input?.value,
         eventStartMinute: CONFIG.eventStartMinute,
         eventStartSecond: CONFIG.eventStartSecond,
         textColor: textColorInput.value,
@@ -106,52 +92,38 @@ function saveState() {
         shadowDistanceX: shadowDistanceXInput.value,
         shadowDistanceY: shadowDistanceYInput.value
     };
-    
     sessionStorage.setItem('timerState', JSON.stringify(state));
 }
 
 function copyToOBS() {
-    // Ottieni valori attuali
-    const currentValues = {
+    const state = {
         minute: CONFIG.eventStartMinute,
         second: CONFIG.eventStartSecond,
-        bg1: document.getElementById('banner1Url')?.value || sessionStorage.getItem('bg1') || '',
-        text1: document.getElementById('banner1Text')?.value || sessionStorage.getItem('text1') || '',
-        bg2: document.getElementById('banner2Url')?.value || sessionStorage.getItem('bg2') || '',
-        text2: document.getElementById('banner2Text')?.value || sessionStorage.getItem('text2') || '',
-        // Assicurati che questi nomi siano esattamente gli stessi di lunar banners.html
-        textColor: textColorInput?.value || '#f0f0f0',
-        timerColor: timerColorInput?.value || '#ffffff',
-        textShadowColor: textShadowColorInput?.value || '#000000',
-        timerShadowColor: timerShadowColorInput?.value || '#000000',
-        shadowDistanceX: shadowDistanceXInput?.value || '2',
-        shadowDistanceY: shadowDistanceYInput?.value || '2',
-        timerSize: document.getElementById('timerSize')?.value || '50',
-        messageSize: document.getElementById('messageSize')?.value || '30',
+        bg1: bgBanner1Input?.value,
+        text1: encodeURIComponent(textBanner1Input?.value || ''),
+        bg2: bgBanner2Input?.value,
+        text2: encodeURIComponent(textBanner2Input?.value || ''),
+        phase,
         transparent: true,
-        showSignature: true
+        startTime: Date.now(),
+        showSignature: true,
+        textColor: textColorInput.value,
+        timerColor: timerColorInput.value,
+        textShadowColor: textShadowColorInput.value,
+        timerShadowColor: timerShadowColorInput.value,
+        shadowDistanceX: shadowDistanceXInput.value,
+        shadowDistanceY: shadowDistanceYInput.value
     };
 
-    // Debug per vedere quali valori vengono generati
-    console.log("Valori per URL:", currentValues);
+    const baseUrl = window.location.origin + '/lunar%20banners.html';
+    const queryString = Object.entries(state)
+        .filter(([_, value]) => value !== undefined && value !== '')
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join('&');
 
-    // Costruisci l'URL
-    const params = new URLSearchParams();
-    Object.entries(currentValues).forEach(([key, value]) => {
-        params.set(key, key.includes('text') && typeof value === 'string' ? encodeURIComponent(value) : value);
-    });
-
-    // Debug per vedere l'URL completo
-    const url = `https://ch3f-nerd-art-asset.netlify.app/lunar%20banners.html?${params.toString()}`;
-    console.log('URL generato:', url);
-    
-    // Copia negli appunti
-    navigator.clipboard.writeText(url)
-        .then(() => alert('URL per OBS copiato!'))
-        .catch(err => {
-            console.error('Errore copia URL:', err);
-            alert('Errore durante la copia dell\'URL');
-        });
+    const obsUrl = `${baseUrl}?${queryString}`;
+    navigator.clipboard.writeText(obsUrl);
+    alert(`URL per OBS copiato!`);
 }
 
 function initializeTimer() {
@@ -186,85 +158,52 @@ function initializeTimer() {
 function initializeFromURL() {
     const params = new URLSearchParams(window.location.search);
     const savedState = sessionStorage.getItem('timerState');
-    
+
     if (savedState) {
         const state = JSON.parse(savedState);
         const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
-        
+
         phase = state.phase;
         secondsRemaining = Math.max(0, state.secondsRemaining - elapsedSeconds);
         timerMinutes = state.timerMinutes;
         CONFIG.eventStartMinute = state.eventStartMinute;
         CONFIG.eventStartSecond = state.eventStartSecond;
 
-        // Salva negli elementi DOM usando ID corretti
-        try {
-            if (state.bg1) {
-                const banner1Url = document.getElementById('banner1Url');
-                if (banner1Url) banner1Url.value = state.bg1;
-                sessionStorage.setItem('bg1', state.bg1);
-            }
-            if (state.text1) {
-                const banner1Text = document.getElementById('banner1Text');
-                if (banner1Text) banner1Text.value = state.text1;
-                sessionStorage.setItem('text1', state.text1);
-            }
-            if (state.bg2) {
-                const banner2Url = document.getElementById('banner2Url');
-                if (banner2Url) banner2Url.value = state.bg2;
-                sessionStorage.setItem('bg2', state.bg2);
-            }
-            if (state.text2) {
-                const banner2Text = document.getElementById('banner2Text');
-                if (banner2Text) banner2Text.value = state.text2;
-                sessionStorage.setItem('text2', state.text2);
-            }
-        } catch (e) {
-            console.error("Errore caricamento stato:", e);
-        }
+        if (bgBanner1Input && state.bg1) bgBanner1Input.value = state.bg1;
+        if (textBanner1Input && state.text1) textBanner1Input.value = state.text1;
+        if (bgBanner2Input && state.bg2) bgBanner2Input.value = state.bg2;
+        if (textBanner2Input && state.text2) textBanner2Input.value = state.text2;
+
+        textColorInput.value = state.textColor || '#f0f0f0';
+        timerColorInput.value = state.timerColor || '#ffffff';
+        textShadowColorInput.value = state.textShadowColor || '#000000';
+        timerShadowColorInput.value = state.timerShadowColor || '#000000';
+        shadowDistanceXInput.value = state.shadowDistanceX || '2';
+        shadowDistanceYInput.value = state.shadowDistanceY || '2';
+
     } else {
         if (params.has('minute')) CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
         if (params.has('second')) CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
         initializeTimer();
     }
 
-    // Carica parametri URL usando ID corretti
-    try {
-        if (params.has('bg1')) {
-            const banner1Url = document.getElementById('banner1Url');
-            if (banner1Url) banner1Url.value = params.get('bg1');
-            sessionStorage.setItem('bg1', params.get('bg1'));
-        }
-        if (params.has('text1')) {
-            const banner1Text = document.getElementById('banner1Text');
-            if (banner1Text) banner1Text.value = decodeURIComponent(params.get('text1'));
-            sessionStorage.setItem('text1', decodeURIComponent(params.get('text1')));
-        }
-        if (params.has('bg2')) {
-            const banner2Url = document.getElementById('banner2Url');
-            if (banner2Url) banner2Url.value = params.get('bg2');
-            sessionStorage.setItem('bg2', params.get('bg2'));
-        }
-        if (params.has('text2')) {
-            const banner2Text = document.getElementById('banner2Text');
-            if (banner2Text) banner2Text.value = decodeURIComponent(params.get('text2'));
-            sessionStorage.setItem('text2', decodeURIComponent(params.get('text2')));
-        }
-    } catch (e) {
-        console.error("Errore caricamento parametri URL:", e);
-    }
-    
-    // Resto del codice esistente
+    if (params.has('bg1') && bgBanner1Input) bgBanner1Input.value = params.get('bg1');
+    if (params.has('text1') && textBanner1Input) textBanner1Input.value = decodeURIComponent(params.get('text1'));
+    if (params.has('bg2') && bgBanner2Input) bgBanner2Input.value = params.get('bg2');
+    if (params.has('text2') && textBanner2Input) textBanner2Input.value = decodeURIComponent(params.get('text2'));
+
     if (params.has('transparent')) {
         document.body.style.backgroundColor = 'transparent';
         timerContainer.style.backgroundColor = 'rgba(36, 36, 36, 0.7)';
     }
-    
-    applyStyles();
+    const signature = document.querySelector('.signature');
+    if (signature) {
+        signature.style.display = params.get('showSignature') === 'true' ? 'block' : 'none';
+    }
     updateMessage();
     updateTimerDisplay();
+    applyStyles();
 }
-
 function rotateSignatures() {
     const signatures = [
         "Created by Ch3f_nerd_art",
@@ -284,23 +223,23 @@ function rotateSignatures() {
         }, 500);
     }, 30000);
 }
-
 function timerTick() {
     const currentTime = performance.now();
-    const elapsedTime = currentTime - lastTickTime;
+    const deltaTime = currentTime - lastTickTime;
     lastTickTime = currentTime;
-    
-    accumulatedTime += elapsedTime;
-    
+
+    accumulatedTime += deltaTime;
+
     while (accumulatedTime >= 1000) {
-        accumulatedTime -= 1000;
         if (secondsRemaining > 0) {
             secondsRemaining--;
+            saveState();
         } else {
             switchPhase();
         }
+        accumulatedTime -= 1000;
     }
-    
+
     updateTimerDisplay();
 }
 
@@ -331,28 +270,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         document.getElementById('applyCustomizationsBtn')?.addEventListener('click', function() {
-            try {
-                // Ottieni valori correnti
-                const banner1Text = document.getElementById('banner1Text')?.value;
-                const banner1Url = document.getElementById('banner1Url')?.value;
-                const banner2Text = document.getElementById('banner2Text')?.value;
-                const banner2Url = document.getElementById('banner2Url')?.value;
-                
-                // Salva nel sessionStorage
-                if (banner1Text) sessionStorage.setItem('text1', banner1Text);
-                if (banner1Url) sessionStorage.setItem('bg1', banner1Url);
-                if (banner2Text) sessionStorage.setItem('text2', banner2Text);
-                if (banner2Url) sessionStorage.setItem('bg2', banner2Url);
-                
-                // Aggiorna interfaccia e stato
-                updateMessage();
-                applyStyles();
-                saveState();
-                alert('Modifiche applicate con successo!');
-            } catch (e) {
-                console.error("Errore applicazione modifiche:", e);
-                alert('Errore durante l\'applicazione delle modifiche');
-            }
+            updateMessage();
+            applyStyles();
+            saveState();
+            alert('Customizations applied!');
         });
 
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);

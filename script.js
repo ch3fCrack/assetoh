@@ -131,21 +131,26 @@ const presentations = [
         containerId: "presentation12",
         images: ["banners/banner58.png", "banners/banner59.png", "banners/banner60.png"]
     },
+    
     {
-        containerId: "presentation13",
-        images: ["banners/private/private-banner1.png", "banners/private/private-banner1.png"]
-    },
-    {
-        containerId: "presentation16",
-        images: ["banners/private/private-banner1.png", "banners/private/private-banner1.png"]
-    },
-     {
         containerId: "presentation14",
         images: ["banners/banner61.png", "banners/banner62.png", "banners/banner63.png"]
     },
     {
         containerId: "presentation15",
         images: ["banners/banner64.png", "banners/banner65.png", "banners/banner66.png"]
+    },
+    {
+        containerId: "presentation16",
+        images: [ "banners/banner67.png", "banners/banner68.png","banners/banner69.png","banners/banner70.png"]
+    },
+    {
+        containerId: "presentation17",
+        images: ["banners/banner71.png","banners/banner72.png", "banners/banner73.png", "banners/banner74.png"]
+    },
+    {
+        containerId: "presentation13",
+        images: ["banners/private/private-banner1.png", "banners/private/private-banner1.png"]
     }
 ];
 
