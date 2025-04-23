@@ -12,7 +12,7 @@ body {
 .imgbg {
     width: 100%;
     height: auto;
-    max-width: 800px; /* Imposta la larghezza massima desiderata */
+    max-width: 1100px; /* Imposta la larghezza massima desiderata */
     border-bottom: 2px solid #ff0044; /* Bordo neon rosso */
 }
 
@@ -34,11 +34,15 @@ nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* AGGIUNGI QUESTA RIGA */
 }
 
 nav ul li {
-    display: inline;
+    display: inline-block; /* CAMBIA DA 'inline' a 'inline-block' */
     margin: 0 15px;
+    position: relative;
 }
 
 nav ul li a {
@@ -106,7 +110,48 @@ nav ul li a:hover {
     height: auto;
     border-bottom: 2px solid #ff0044; /* Bordo neon rosso */
 }
-/* ...existing code... */
+/* Dropleft menu styles */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* AGGIUNGI QUESTA RIGA */
+}
+
+nav ul li {
+    position: relative;
+    display: inline-block; /* CAMBIA DA 'inline' a 'inline-block' */
+}
+
+nav ul li.dropleft {
+    position: relative;
+}
+
+nav ul li ul.dropleft-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #222;
+    padding: 0;
+    z-index: 10;
+    border-radius: 0 0 8px 8px;
+    white-space: nowrap;
+    flex-direction: row;      /* Menu orizzontale */
+}
+
+nav ul li.dropleft:hover ul.dropleft-menu,
+nav ul li.dropleft:focus-within ul.dropleft-menu {
+    display: flex;            /* Flex per orizzontale */
+}
+
+nav ul li ul.dropleft-menu li {
+    display: inline-block;    /* Affianca gli elementi */
+    width: auto;
+    padding: 8px 16px;
+}
 
 .language-selector {
     position: fixed;

@@ -31,21 +31,6 @@ const asianGifList = [
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/jap4.gif",
         obsUrl: "https://streamelements.com/overlay/67d99e1786f2e1e0efe5dddc/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    },{
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/cina5.gif",
-        obsUrl: "https://streamelements.com/overlay/67ed69eb6e081fdaaa098473/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/jap5.gif",
-        obsUrl: "https://streamelements.com/overlay/67ed6a8ba5b4aa599156fc6d/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/cina6.gif",
-        obsUrl: "https://streamelements.com/overlay/67ed6af50ff579f9215b63dd/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/asian%20gif/jap6.gif",
-        obsUrl: "https://streamelements.com/overlay/67ed6cebdfe4c0e1f0410264/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     }
 ];
 
@@ -70,14 +55,6 @@ const gifList = [
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif5.gif",
         obsUrl: "https://streamelements.com/overlay/67c4e22c586aed6967b99e08/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif10.gif",
-        obsUrl: "https://streamelements.com/overlay/67ec28b3132e23fff9898b3f/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    },
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif11.gif",
-        obsUrl: "https://streamelements.com/overlay/67ec294f16fc1ab077b999dc/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     }
 ];
 

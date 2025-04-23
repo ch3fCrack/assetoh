@@ -1,0 +1,350 @@
+/* Sfondo pagina con l'immagine imgbg */
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Lovelo', Arial, sans-serif;
+    background: url('images/immaginesocial.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+}
+
+/* Header e menu principale */
+header {
+    background: rgba(20, 20, 20, 0.85);
+    padding: 1.5em 0 1em 0;
+    text-align: center;
+    border-bottom: 2px solid #00aaff;
+}
+
+header h1 {
+    margin: 0 0 0.5em 0;
+    font-size: 2.2em;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+
+header nav ul li {
+    display: inline-block;
+}
+
+header nav ul li a {
+    color: #00aaff;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 1.1em;
+    transition: color 0.2s;
+}
+
+header nav ul li a:hover {
+    color: #ffd700;
+}
+
+/* Intro box */
+.intro-ch3f {
+    background: rgba(30,30,30,0.85);
+    color: #fff;
+    padding: 2em 1em;
+    border-radius: 16px;
+    font-weight: 900;
+    margin: 2em auto 2em auto;
+    max-width: 900px;
+    box-shadow: 0 4px 24px #0004;
+}
+
+.intro-ch3f h2 {
+    font-size: 2em;
+    font-weight: 900;
+    margin-bottom: 0.5em;
+}
+
+.intro-ch3f blockquote {
+    font-style: italic;
+    color: #ffd700;
+    margin-top: 1.5em;
+    border-left: 4px solid #ffd700;
+    padding-left: 1em;
+}
+
+/* Menu dropleft dei crediti */
+main nav {
+    margin: 2em auto 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+main nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+main nav ul li.dropleft {
+    position: relative;
+}
+
+main nav ul li.dropleft > a {
+    background: #00aaff;
+    color: #fff;
+    padding: 0.7em 1.5em;
+    border-radius: 8px 8px 0 0;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 1.1em;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+main nav ul li.dropleft > a:hover {
+    background: #ffd700;
+    color: #222;
+}
+
+main nav ul li ul.dropleft-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: rgba(34,34,34,0.98);
+    padding: 0.5em 0;
+    z-index: 10;
+    border-radius: 0 0 12px 12px;
+    white-space: nowrap;
+    flex-direction: row;
+    box-shadow: 0 8px 32px #0008;
+    min-width: 400px;
+}
+
+main nav ul li.dropleft:hover ul.dropleft-menu,
+main nav ul li.dropleft:focus-within ul.dropleft-menu {
+    display: flex;
+}
+
+main nav ul li ul.dropleft-menu li {
+    display: inline-block;
+    width: auto;
+    padding: 8px 18px;
+}
+
+main nav ul li ul.dropleft-menu span {
+    color: #fff;
+    font-size: 0.98em;
+}
+
+main nav ul li ul.dropleft-menu a {
+    color: #00aaff;
+    text-decoration: underline;
+    margin-left: 6px;
+    font-size: 1em;
+}
+
+main nav ul li ul.dropleft-menu a:hover {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+/* Box centrale per i servizi */
+.services {
+    background: rgba(30,30,30,0.92);
+    color: #fff;
+    padding: 2.5em 1.5em;
+    border-radius: 18px;
+    margin: 3em auto;
+    max-width: 900px;
+    box-shadow: 0 6px 32px #0007;
+    font-weight: 900;
+    text-align: left;
+}
+
+/* Font-weight 900 per titoli e paragrafi */
+.services h2,
+.services h3,
+.services h4,
+.services h5,
+.services h6,
+.services p,h3 {
+    font-weight: 900;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .intro-ch3f {
+        padding: 1em 0.5em;
+        font-size: 1em;
+    }
+    main nav ul li ul.dropleft-menu {
+        min-width: 200px;
+        flex-direction: column;
+        left: 0;
+        right: auto;
+    }
+    main nav ul li ul.dropleft-menu li {
+        display: block;
+        padding: 10px 12px;
+    }
+}
+.language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease;
+}
+
+.language-selector:not(:hover) .lang-btn:not(.active) {
+    display: none;
+}
+
+.lang-btn {
+    background: none;
+    border: 2px solid #00aaff;
+    border-radius: 100px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    overflow: hidden;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    opacity: 0.7;
+}
+
+/* Flag images for each language */
+.lang-btn[data-lang="en"] { 
+    background-image: url('images/flag/gbflag.png');
+}
+.lang-btn[data-lang="jp"] { 
+    background-image: url('images/flag/jpflag.png');
+}
+.lang-btn[data-lang="cn"] { 
+    background-image: url('images/flag/cnflag.png');
+}
+.lang-btn[data-lang="it"] { 
+    background-image: url('images/flag/itflag.png');
+}
+.lang-btn[data-lang="fr"] { 
+    background-image: url('images/flag/frflag.png');
+}
+.lang-btn[data-lang="de"] { 
+    background-image: url('images/flag/deflag.png');
+}
+.lang-btn[data-lang="es"] { 
+    background-image: url('images/flag/esflag.png');
+}
+.lang-btn[data-lang="pt"] { 
+    background-image: url('images/flag/ptflag.png');
+}
+
+.lang-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    border-color: #ff0044;
+    box-shadow: 0 0 10px rgba(255, 0, 68, 0.5);
+}
+
+.lang-btn.active {
+    opacity: 1;
+    order: -1;
+    border-color: #ff0044;
+    box-shadow: 0 0 15px #ff0044;
+}
+
+/* Add dropdown arrow indicator */
+.lang-btn.active::before {
+    content: '▼';
+    position: absolute;
+    left: -20px;
+    color: #ff0044;
+    text-shadow: 0 0 5px #ff0044;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when menu is open */
+.language-selector:hover .lang-btn.active::before {
+    transform: rotate(180deg);
+}
+
+/* Glow effect for active language */
+.lang-btn.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 0, 68, 0.2);
+    pointer-events: none;
+    border-radius: 100px;
+}
+
+/* Contact form styles */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    max-width: 400px;
+    margin: 2em auto 0 auto;
+    background: #222;
+    padding: 2em;
+    border-radius: 12px;
+}
+.contact-form label {
+    font-weight: 900;
+}
+.contact-form input,
+.contact-form textarea {
+    border-radius: 6px;
+    border: none;
+    padding: 0.7em;
+    font-size: 1em;
+}
+.contact-form button {
+    font-weight: 900;
+    background: #ff5a36;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.contact-form button:hover {
+    background: #f80202;
+}
+
+.contact-box {
+    background: rgba(30,30,30,0.97);
+    color: #fff;
+    padding: 2.5em 1.5em;
+    border-radius: 18px;
+    margin: 3em auto 3em auto;
+    max-width: 500px;
+    box-shadow: 0 6px 32px #0007;
+    font-weight: 900;
+    text-align: left;
+}
