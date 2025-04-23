@@ -55,6 +55,22 @@ const gifList = [
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif5.gif",
         obsUrl: "https://streamelements.com/overlay/67c4e22c586aed6967b99e08/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif12.gif",
+        obsUrl: "https://streamelements.com/overlay/6809370b9774c3054f6d67a1/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    }, 
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif13.gif",
+        obsUrl: "https://streamelements.com/overlay/680938b4adecf7dce8b71a2a/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    }, 
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif14.gif",
+        obsUrl: "https://streamelements.com/overlay/680939039774c3054f6e46ec/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    }, 
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif15.gif",
+        obsUrl: "https://streamelements.com/overlay/6809395d9774c3054f6e7845/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     }
 ];
 
@@ -124,6 +140,14 @@ const presentations = [
     {
         containerId: "presentation17",
         images: ["banners/banner71.png","banners/banner72.png", "banners/banner73.png", "banners/banner74.png"]
+    },
+    {
+        containerId: "presentation18",
+        images: ["banners/banner75.png","banners/banner76.png", "banners/banner77.png", "banners/banner78.png"]
+    },
+    {
+        containerId: "presentation19",
+        images: ["banners/banner79.png","banners/banner80.png", "banners/banner81.png", "banners/banner82.png"]
     },
     {
         containerId: "presentation13",
