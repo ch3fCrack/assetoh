@@ -413,7 +413,14 @@ main nav ul li ul.dropleft-menu a:hover {
     color: #ffd700;
     font-weight: 900;
 }
-
+.testimonial-text h3 a {
+    color: #FFD600; /* giallo */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.testimonial-text h3 a:hover {
+    color: #00BFFF; /* azzurro */
+}
 .testimonial-text p {
     font-size: 1.1em;
     margin-top: 0.5em;
