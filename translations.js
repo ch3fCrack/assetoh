@@ -4,7 +4,8 @@ const translations = {
         home: "Home",
         homeAssetHub: "Home Asset Hub",
         testimonial3: `Even though I’m not great at putting compliments into structured sentences, I want to say that Ch3f is a funny, engaging, helpful, friendly, welcoming, and caring person. Someone who constantly strives to better himself through knowledge. These are the words that best represent him.`,
-
+        testimonial4: "Working with Ch3f has always been a pleasure. He is an incredibly kind and professional creator. He took one of my ideas, which I thought would be difficult to realize, and turned it into something much bigger and of higher quality than I expected. One aspect I really appreciate is his commitment to supporting multiple languages, which allows me to use his creations in my native language, even though I have no technical skills. I am truly grateful for his work and I hope to see more and more amazing projects on his site!",
+        
         testimonialsTitle: "What people say about me",
         testimonial1: `Ch3f is an amazing artist, a kind and welcoming friend, and an excellent content creator. He is consistently trying to improve and widen the appeal and accessibility of his channel to everyone, no matter where they may come from, even outside his own country. With active translation both for his own speech to viewers, as well as options for chatters to communicate back in both their own native language, as well as his native Italian, I have never hesitated to say hello, or recommend his stream to everyone I know.
         These traits also extend to Ch3f's offline presence, where he is ready and willing to accept commissions for artwork and stream graphics/overlays/etc, to simply creating assets for other creators to use freely, with easy to use graphics and multiple options to reduce lag and CPU load.
@@ -167,12 +168,13 @@ const translations = {
         creditWarning: "注意: これらのアセットを使用する場合は、正直かつ誠実でいてください。この作品のクレジットを自分のものにしないで、必ず元の作者にクレジットを残してください。ありがとう！",
         introtitle: "👨‍🍳 CH3F – デジタルアーティスト、クリエイティブなオタク、そして騒がしい友達",
         introwelcome: "私の世界へようこそ。私の名前はCH3Fで、ここは私のクリエイティブな空間です。私はデジタルアート、コンテンツクリエイター向けのグラフィック、そしてオタクの世界への情熱を組み合わせて、私のストーリーと他の人々の物語を紡ぎ出しています。",
-      introassets: "私はカスタムグラフィックアセットを作成します：バナー、ロゴ、アニメーションGIF、イベントやコミュニティ向けのビジュアル。すべての作品は明確な意図を持って作られます：使う人々の個性を反映し、役立つコンテンツを提供すること。デザインにとって、私はそれが美学を超えて、アイデンティティそのものであると考えています。",
+        introassets: "私はカスタムグラフィックアセットを作成します：バナー、ロゴ、アニメーションGIF、イベントやコミュニティ向けのビジュアル。すべての作品は明確な意図を持って作られます：使う人々の個性を反映し、役立つコンテンツを提供すること。デザインにとって、私はそれが美学を超えて、アイデンティティそのものであると考えています。",
         introtwitch: "🎮 でも私の空間はグラフィックだけではありません。それはTwitchでもあります。毎晩が共有する瞬間に変わります。私のライブ配信は単なるストリームではありません それは友達の家での集まりのようなものです。フィルターもスクリプトもなく、そして何よりも真剣に考えすぎません。私のTwitchでの旅は、GTA Vのロールプレイで出会ったIlariaとTiaによって始まりました。Ilariaは伝説的な「ドクター・チャン」を演じ、60代の中国人のおばあさんのキャラクターを作り上げ、彼女の特徴的な挨拶「えっへっへ、しっさよ〜！」で全員を魅了しました。Tiaはドクター・チャンの数えきれない娘の一人で、鋭いジョークと友達同士の愛情あふれる侮辱でいつも混乱を引き起こしていました。他の人々も時々私たちに加わり、しばらく滞在しますが、結局、この混乱の中心は「Chang Gang」 私、Ilaria、そしてTiaです。これが私たちの本当のチーム、私たちの創造的な家族です。一緒に、私たちは野生のクリエイティブな仲間たちで、遊び、笑い、無邪気に過ごしています。",
         introvision: "このサイトは私のクリエイティブハブであり、私の創造性のビジョンがデザインを超えてどのように存在するかを示す場所でもあります。それは情熱、自由、そして本物であることの混合です まるで私たちの一緒に過ごす夜のように。だって、アセットと笑いの間で、本当に大切なのは自分自身に忠実でいることだからです。",
         introquote: "🎨 ただのグラフィックでも、ただのストリーミングでもありません。これがCH3Fです：アート、友情、情熱が一緒になって、何か印象的なものを作り出します。",
         testimonial3: `褒め言葉をうまく文章にするのは得意ではありませんが、Ch3fは面白くて、親しみやすく、助けてくれて、フレンドリーで、歓迎してくれて、思いやりのある人です。知識を通じて常に自分を高めようと努力している人です。これらの言葉が彼を最もよく表しています。`,
-
+        testimonial4: "Ch3fと一緒に仕事をするのはいつも楽しいです。彼はとても親切でプロフェッショナルなクリエイターです。実現が難しいと思っていた私のアイデアを、期待以上の素晴らしいクオリティと規模で形にしてくれました。特に感謝しているのは、多言語対応に力を入れてくれている点です。技術的な知識がなくても、母国語で彼の作品を使えるのは本当にありがたいです。彼の仕事に心から感謝しており、これからも素晴らしいプロジェクトがサイトに増えていくのを楽しみにしています！",
+        
         mainTitleohsezzion: "Once Humanクリエイターのためのアセットハブ",
         welcomeTitle: "Ch3f Nerd Art クリエイターアセットハブへようこそ",
         welcomeText: "Once Human コンテンツクリエイター向けの無料リソースを共有しています！",
@@ -310,6 +312,7 @@ const translations = {
         // Navigation
         home: "主页",
         testimonial3: `虽然我不太擅长把夸奖组织成句子，但我想说Ch3f是一个有趣、热情、乐于助人、友好、包容和关心他人的人。一个总是通过学习不断提升自我的人。这些词最能代表他。`,
+        testimonial4: "与Ch3f合作一直是一种享受。他是一位非常友善且专业的创作者。他把我以为很难实现的想法，变成了远超我预期的高质量作品。我非常欣赏他对多语言支持的投入，这让我即使没有技术背景，也能用母语体验他的创作。我真的很感激他的工作，希望在他的网站上看到越来越多精彩的项目！",
 
         homeAssetHub: "主页资源中心",
         testimonialsTitle: "大家对我的评价",
@@ -477,6 +480,8 @@ const translations = {
         creatorGroup: "Banner Missioni Gruppo Creatori",
         twitchChannel: "Il Mio Canale Twitch",
         lunarTimer: "Timer Lunare Versione Beta",
+        testimonial4: "Lavorare con Ch3f è sempre stato un piacere. È un creatore incredibilmente gentile e professionale. Ha preso una mia idea, che pensavo fosse difficile realizzare, e l'ha trasformata in qualcosa di molto più grande e di qualità superiore rispetto alle mie aspettative. Un aspetto che apprezzo moltissimo è il suo impegno nel supportare molteplici lingue, il che mi permette di utilizzare le sue creazioni nella mia lingua madre, nonostante io non abbia competenze tecniche. Sono davvero grato per il suo lavoro e spero di vedere sempre più progetti fantastici sul suo sito!",
+       
         lunarTimerChaulTV: "Timer Lunare di ChaulTV",
         introtitle: "👨‍🍳 CH3F – Artista Digitale, Nerd Creativo e Amico Rumoroso",
         introwelcome: "Benvenuto nel mio mondo.Mi chiamo CH3F e questo è il mio spazio creativo, dove unisco arte digitale, grafica per content creator e la mia passione per il mondo nerd, creando un mix che racconta la mia storia e quella degli altri.",
@@ -598,7 +603,8 @@ const translations = {
         copyForOBS: "Copier pour OBS",
         testimonialsTitle: "Ce qu’on dit de moi",
         testimonial3: `Même si je ne suis pas doué pour formuler des compliments, je veux dire que Ch3f est une personne drôle, engageante, serviable, amicale, accueillante et attentionnée. Quelqu’un qui cherche constamment à s’améliorer grâce au savoir. Ce sont les mots qui le représentent le mieux.`,
-
+        testimonial4: "Travailler avec Ch3f a toujours été un plaisir. C'est un créateur incroyablement gentil et professionnel. Il a pris une de mes idées, que je pensais difficile à réaliser, et l'a transformée en quelque chose de bien plus grand et de meilleure qualité que ce à quoi je m'attendais. Un aspect que j'apprécie énormément est son engagement à supporter plusieurs langues, ce qui me permet d'utiliser ses créations dans ma langue maternelle, même sans compétences techniques. Je suis vraiment reconnaissant pour son travail et j'espère voir de plus en plus de projets fantastiques sur son site !",
+        
         testimonial1: `Ch3f est un artiste incroyable, un ami gentil et accueillant, et un excellent créateur de contenu. Il cherche constamment à améliorer et à rendre sa chaîne accessible à tous, où qu'ils soient, même en dehors de son pays. Avec la traduction active de ses paroles et des options pour que le chat communique dans leur langue natale ou en italien, je n'ai jamais hésité à le saluer ou à recommander son stream à tous mes amis.
         Ces qualités se retrouvent aussi hors ligne, où il accepte volontiers des commandes graphiques ou crée des assets gratuits pour d'autres créateurs, avec des graphismes faciles à utiliser et optimisés pour réduire la charge CPU et le lag.
         Ch3f est vraiment quelqu’un de bien et je suis honoré de l’appeler mon ami. Je ferai toujours tout mon possible pour l’aider à atteindre ses objectifs.`,
@@ -707,7 +713,8 @@ const translations = {
         homeAssetHub: "Inicio Asset Hub",
         testimonialsTitle: "Lo que dicen de mí",
         testimonial3: `Aunque no soy muy bueno poniendo cumplidos en frases estructuradas, quiero decir que Ch3f es una persona divertida, participativa, servicial, amigable, acogedora y atenta. Alguien que siempre busca mejorar a través del conocimiento. Estas son las palabras que mejor lo representan.`,
-
+        testimonial4: "Trabajar con Ch3f siempre ha sido un placer. Es un creador increíblemente amable y profesional. Tomó una de mis ideas, que pensé que sería difícil de realizar, y la convirtió en algo mucho más grande y de mayor calidad de lo que esperaba. Un aspecto que valoro mucho es su compromiso con el soporte de múltiples idiomas, lo que me permite usar sus creaciones en mi idioma nativo, aunque no tenga conocimientos técnicos. Estoy realmente agradecido por su trabajo y espero ver cada vez más proyectos increíbles en su sitio web.",
+        
         testimonial1: `Ch3f es un artista increíble, un amigo amable y acogedor, y un excelente creador de contenido. Siempre busca mejorar y hacer su canal accesible para todos, sin importar de dónde sean, incluso fuera de su país. Con traducción activa tanto para su propio discurso como para el chat, nunca he dudado en saludarlo o recomendar su stream a todos mis conocidos.
         Estas cualidades también se ven fuera de línea, donde está dispuesto a aceptar encargos de arte y gráficos, o simplemente crear assets gratuitos para otros creadores, con gráficos fáciles de usar y optimizados para reducir el lag y el uso de CPU.
         Ch3f es una gran persona y me honra poder llamarlo amigo. Siempre haré lo posible por ayudarlo a alcanzar sus metas.`,
@@ -821,7 +828,8 @@ const translations = {
         home: "Startseite",
         homeAssetHub: "Startseite Asset Hub",
         testimonial3: `Auch wenn ich nicht gut darin bin, Komplimente in strukturierte Sätze zu packen, möchte ich sagen, dass Ch3f eine lustige, engagierte, hilfsbereite, freundliche, einladende und fürsorgliche Person ist. Jemand, der ständig bestrebt ist, sich durch Wissen zu verbessern. Das sind die Worte, die ihn am besten beschreiben.`,
-
+        testimonial4: "Mit Ch3f zu arbeiten war immer ein Vergnügen. Er ist ein unglaublich freundlicher und professioneller Creator. Er hat eine meiner Ideen, von der ich dachte, dass sie schwer umzusetzen wäre, in etwas viel Größeres und Hochwertigeres verwandelt, als ich erwartet hatte. Ein Aspekt, den ich sehr schätze, ist sein Engagement für die Unterstützung mehrerer Sprachen, was es mir ermöglicht, seine Kreationen in meiner Muttersprache zu nutzen, obwohl ich keine technischen Kenntnisse habe. Ich bin wirklich dankbar für seine Arbeit und hoffe, immer mehr großartige Projekte auf seiner Website zu sehen!",
+        
         testimonialsTitle: "Was man über mich sagt",
         testimonial1: `Ch3f ist ein großartiger Künstler, ein freundlicher und einladender Freund und ein ausgezeichneter Content Creator. Er versucht ständig, seinen Kanal zu verbessern und für alle zugänglich zu machen, egal woher sie kommen, auch außerhalb seines Landes. Mit aktiver Übersetzung sowohl für seine eigene Sprache als auch für den Chat habe ich nie gezögert, Hallo zu sagen oder seinen Stream jedem zu empfehlen, den ich kenne.
         Diese Eigenschaften zeigen sich auch offline, wo er bereit ist, Aufträge für Artwork und Stream-Grafiken anzunehmen oder einfach kostenlose Assets für andere Creator zu erstellen, mit einfach zu verwendenden Grafiken und mehreren Optionen zur Reduzierung von Lag und CPU-Auslastung.
@@ -937,6 +945,7 @@ const translations = {
         homeAssetHub: "Início Asset Hub",
         testimonialsTitle: "O que dizem sobre mim",
         testimonial3: `Mesmo não sendo bom em colocar elogios em frases estruturadas, quero dizer que Ch3f é uma pessoa divertida, envolvente, prestativa, amigável, acolhedora e atenciosa. Alguém que está sempre buscando se aprimorar através do conhecimento. Essas são as palavras que melhor o representam.`,
+        testimonial4: "Trabalhar com o Ch3f sempre foi um prazer. Ele é um criador incrivelmente gentil e profissional. Ele pegou uma ideia minha, que eu achava difícil de realizar, e transformou em algo muito maior e de qualidade superior ao que eu esperava. Um aspecto que aprecio muito é o seu compromisso em suportar vários idiomas, o que me permite usar suas criações no meu idioma nativo, mesmo sem ter conhecimentos técnicos. Sou realmente grato pelo seu trabalho e espero ver cada vez mais projetos incríveis em seu site!",
 
         testimonial1: `Ch3f é um artista incrível, um amigo gentil e acolhedor, e um excelente criador de conteúdo. Ele está sempre tentando melhorar e tornar seu canal acessível a todos, não importa de onde venham, até mesmo fora do seu país. Com tradução ativa tanto para sua fala quanto para o chat, nunca hesitei em cumprimentá-lo ou recomendar sua stream para todos que conheço.
         Essas qualidades também se estendem ao offline, onde ele está pronto para aceitar encomendas de arte e gráficos, ou simplesmente criar assets gratuitos para outros criadores, com gráficos fáceis de usar e várias opções para reduzir lag e uso de CPU.

@@ -428,13 +428,12 @@ main nav ul li ul.dropleft-menu a:hover {
     font-weight: 900;
 }
 
-/* Responsive testimonials */
-@media (max-width: 768px) {
-    .testimonial-card {
-        flex-direction: column !important;
-        text-align: center;
-    }
-    .testimonial-text {
-        max-width: 100%;
-    }
+.testimonial-card.right .testimonial-text {
+    text-align: right;
+}
+
+.testimonial-card.right .testimonial-text h3,
+.testimonial-card.right .testimonial-text p {
+    direction: rtl;
+    unicode-bidi: embed;
 }
