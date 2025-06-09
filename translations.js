@@ -2,6 +2,14 @@ const translations = {
     en: {
         // Navigation
         home: "Home",
+        duneGifs: "Dune Awakening GIF's",
+        duneGifSectionNote: "Section with Dune Awakening Drops GIFs!",
+        duneDonate: "Dune Donate",
+        duneDonateTitle: "Support My Dune Work",
+        supportDuneWork: "Support My Dune Work",
+        thanksDuneSupport: "Thank You for Supporting My Dune Work!",
+        duneDonateIntro: "Hello everyone! If you are a Dune Awakening player or content creator, you probably know me for my Dune banners and GIFs. This page is for those who would like to buy me a coffee or simply say thank you for the Dune Awakening assets I create.",
+        duneDonateDisclaimer: "IMPORTANT: What I do is out of passion, not for profit. Everything I create for Dune Awakening, I am happy to share with the community. So please, do not feel obligated to donate. Your appreciation is enough! 😊",
         homeAssetHub: "Home Asset Hub",
         testimonial3: `Even though I’m not great at putting compliments into structured sentences, I want to say that Ch3f is a funny, engaging, helpful, friendly, welcoming, and caring person. Someone who constantly strives to better himself through knowledge. These are the words that best represent him.`,
         testimonial4: "Working with Ch3f has always been a pleasure. He is an incredibly kind and professional creator. He took one of my ideas, which I thought would be difficult to realize, and turned it into something much bigger and of higher quality than I expected. One aspect I really appreciate is his commitment to supporting multiple languages, which allows me to use his creations in my native language, even though I have no technical skills. I am truly grateful for his work and I hope to see more and more amazing projects on his site!",
@@ -158,6 +166,14 @@ const translations = {
     jp: {
         // Navigation
         home: "ホーム",
+        duneGifs: "Dune Awakening GIF",
+        duneGifSectionNote: "Dune Awakening ドロップのGIFセクション！",
+        duneDonate: "Duneへの寄付",
+        duneDonateTitle: "Dune作品へのサポート",
+        supportDuneWork: "Dune作品へのサポート",
+        thanksDuneSupport: "Dune作品へのサポートありがとうございます！",
+        duneDonateIntro: "みなさん、こんにちは！Dune Awakeningのプレイヤーやコンテンツクリエイターであれば、私のDuneバナーやGIFをご存知かもしれません。このページは、コーヒー一杯分をサポートしていただけるか、私が作成するDune Awakeningのアセットに感謝を伝えたい方のためのものです。",
+        duneDonateDisclaimer: "重要：私がすることは情熱からであり、利益のためではありません。Dune Awakeningのために作成したものはすべて、コミュニティと喜んで共有します。ですから、寄付する義務を感じないでください。あなたの感謝の気持ちだけで十分です！😊",
         homeAssetHub: "ホームアセットハブ",
         testimonialsTitle: "私についての声",
         testimonial1: `Ch3fは素晴らしいアーティストであり、親切で温かい友人、そして優れたコンテンツクリエイターです。彼は常に自分のチャンネルを改善し、どこに住んでいても誰でもアクセスできるように努力しています。自身の発言やチャットのためのアクティブな翻訳機能により、私はいつでも気軽に挨拶したり、彼の配信を友人に勧めたりしています。
@@ -313,7 +329,14 @@ const translations = {
         home: "主页",
         testimonial3: `虽然我不太擅长把夸奖组织成句子，但我想说Ch3f是一个有趣、热情、乐于助人、友好、包容和关心他人的人。一个总是通过学习不断提升自我的人。这些词最能代表他。`,
         testimonial4: "与Ch3f合作一直是一种享受。他是一位非常友善且专业的创作者。他把我以为很难实现的想法，变成了远超我预期的高质量作品。我非常欣赏他对多语言支持的投入，这让我即使没有技术背景，也能用母语体验他的创作。我真的很感激他的工作，希望在他的网站上看到越来越多精彩的项目！",
-
+        duneGifs: "沙丘觉醒 GIF",
+        duneGifSectionNote: "沙丘觉醒掉落GIF区域！",
+        duneDonate: "沙丘捐赠",
+        duneDonateTitle: "支持我的沙丘觉醒作品",
+        supportDuneWork: "支持我的沙丘觉醒作品",
+        thanksDuneSupport: "感谢支持我的沙丘觉醒作品！",
+        duneDonateIntro: "大家好！如果您是沙丘觉醒的玩家或内容创作者，您可能认识我的沙丘横幅和GIF。这个页面是为那些想要请我喝杯咖啡或只是想对我创建的沙丘觉醒资源说声谢谢的人准备的。",
+        duneDonateDisclaimer: "重要提示：我所做的一切都是出于热情，而非为了利润。我很乐意与社区分享我为沙丘觉醒创建的所有内容。所以请不要觉得有义务捐款。你的赞赏就足够了！😊",
         homeAssetHub: "主页资源中心",
         testimonialsTitle: "大家对我的评价",
         testimonial1: `Ch3f是一位出色的艺术家、善良友好的朋友，也是优秀的内容创作者。他一直努力提升自己的频道，让所有人都能轻松参与，无论他们来自哪里，甚至在国外。无论是对自己发言的实时翻译，还是为观众和聊天提供多语言选项，我从未犹豫过向他打招呼或向朋友推荐他的直播。
@@ -455,7 +478,15 @@ const translations = {
         homeAssetHub: "Home Asset Hub",
         testimonialsTitle: "Cosa dicono di me",
         testimonial3: `Anche se non sono bravo a mettere i complimenti in frasi strutturate, voglio dire che Ch3f è una persona divertente, coinvolgente, disponibile, amichevole, accogliente e premurosa. Qualcuno che cerca costantemente di migliorarsi attraverso la conoscenza. Queste sono le parole che lo rappresentano meglio.`,
-
+        // Aggiungi in IT
+        duneGifs: "GIF Dune Awakening",
+        duneGifSectionNote: "Sezione con GIF dei drop di Dune Awakening!",
+        duneDonate: "Dona per Dune",
+        duneDonateTitle: "Supporta il Mio Lavoro per Dune",
+        supportDuneWork: "Supporta il Mio Lavoro per Dune",
+        thanksDuneSupport: "Grazie per il Supporto al Mio Lavoro su Dune!",
+        duneDonateIntro: "Ciao a tutti! Se sei un giocatore o creatore di contenuti di Dune Awakening, probabilmente mi conosci per i miei banner e GIF di Dune. Questa pagina è per chi vorrebbe offrirmi un caffè o semplicemente dire grazie per gli asset di Dune Awakening che creo.",
+        duneDonateDisclaimer: "IMPORTANTE: Quello che faccio è per passione, non per profitto. Sono felice di condividere tutto ciò che creo per Dune Awakening con la community. Quindi per favore, non sentirti obbligato a donare. Il tuo apprezzamento è più che sufficiente! 😊",
         testimonial1: `Ch3f è un artista straordinario, un amico gentile e accogliente, e un eccellente content creator. Cerca costantemente di migliorare e rendere il suo canale accessibile a tutti, ovunque si trovino, anche fuori dall’Italia. Con traduzioni attive sia per il suo parlato che per la chat, non ho mai esitato a salutare o a raccomandare il suo stream a chiunque conosca.
         Queste qualità si riflettono anche offline, dove è sempre pronto ad accettare commissioni per artwork e grafiche, oppure a creare asset gratuiti per altri creator, con grafiche facili da usare e ottimizzate per ridurre il carico su CPU e lag.
         Ch3f è davvero una bella persona e sono onorato di poterlo chiamare amico. Farò sempre il possibile per aiutarlo a raggiungere i suoi obiettivi.`,
@@ -604,7 +635,15 @@ const translations = {
         testimonialsTitle: "Ce qu’on dit de moi",
         testimonial3: `Même si je ne suis pas doué pour formuler des compliments, je veux dire que Ch3f est une personne drôle, engageante, serviable, amicale, accueillante et attentionnée. Quelqu’un qui cherche constamment à s’améliorer grâce au savoir. Ce sont les mots qui le représentent le mieux.`,
         testimonial4: "Travailler avec Ch3f a toujours été un plaisir. C'est un créateur incroyablement gentil et professionnel. Il a pris une de mes idées, que je pensais difficile à réaliser, et l'a transformée en quelque chose de bien plus grand et de meilleure qualité que ce à quoi je m'attendais. Un aspect que j'apprécie énormément est son engagement à supporter plusieurs langues, ce qui me permet d'utiliser ses créations dans ma langue maternelle, même sans compétences techniques. Je suis vraiment reconnaissant pour son travail et j'espère voir de plus en plus de projets fantastiques sur son site !",
-        
+        // Aggiungi in FR
+        duneGifs: "GIF de Dune Awakening",
+        duneGifSectionNote: "Section avec les GIF des drops de Dune Awakening !",
+        duneDonate: "Don pour Dune",
+        duneDonateTitle: "Soutenez Mon Travail sur Dune",
+        supportDuneWork: "Soutenez Mon Travail sur Dune",
+        thanksDuneSupport: "Merci de Soutenir Mon Travail sur Dune !",
+        duneDonateIntro: "Bonjour à tous ! Si vous êtes un joueur ou créateur de contenu Dune Awakening, vous me connaissez probablement pour mes bannières et GIFs de Dune. Cette page est destinée à ceux qui souhaiteraient m'offrir un café ou simplement me remercier pour les ressources de Dune Awakening que je crée.",
+        duneDonateDisclaimer: "IMPORTANT : Ce que je fais est par passion, pas pour le profit. Tout ce que je crée pour Dune Awakening, je suis heureux de le partager avec la communauté. Donc s'il vous plaît, ne vous sentez pas obligé de faire un don. Votre appréciation suffit ! 😊", 
         testimonial1: `Ch3f est un artiste incroyable, un ami gentil et accueillant, et un excellent créateur de contenu. Il cherche constamment à améliorer et à rendre sa chaîne accessible à tous, où qu'ils soient, même en dehors de son pays. Avec la traduction active de ses paroles et des options pour que le chat communique dans leur langue natale ou en italien, je n'ai jamais hésité à le saluer ou à recommander son stream à tous mes amis.
         Ces qualités se retrouvent aussi hors ligne, où il accepte volontiers des commandes graphiques ou crée des assets gratuits pour d'autres créateurs, avec des graphismes faciles à utiliser et optimisés pour réduire la charge CPU et le lag.
         Ch3f est vraiment quelqu’un de bien et je suis honoré de l’appeler mon ami. Je ferai toujours tout mon possible pour l’aider à atteindre ses objectifs.`,
@@ -714,7 +753,15 @@ const translations = {
         testimonialsTitle: "Lo que dicen de mí",
         testimonial3: `Aunque no soy muy bueno poniendo cumplidos en frases estructuradas, quiero decir que Ch3f es una persona divertida, participativa, servicial, amigable, acogedora y atenta. Alguien que siempre busca mejorar a través del conocimiento. Estas son las palabras que mejor lo representan.`,
         testimonial4: "Trabajar con Ch3f siempre ha sido un placer. Es un creador increíblemente amable y profesional. Tomó una de mis ideas, que pensé que sería difícil de realizar, y la convirtió en algo mucho más grande y de mayor calidad de lo que esperaba. Un aspecto que valoro mucho es su compromiso con el soporte de múltiples idiomas, lo que me permite usar sus creaciones en mi idioma nativo, aunque no tenga conocimientos técnicos. Estoy realmente agradecido por su trabajo y espero ver cada vez más proyectos increíbles en su sitio web.",
-        
+        // Aggiungi in ES
+        duneGifs: "GIF's de Dune Awakening",
+        duneGifSectionNote: "¡Sección con GIF's de drops de Dune Awakening!",
+        duneDonate: "Donar para Dune",
+        duneDonateTitle: "Apoya Mi Trabajo de Dune",
+        supportDuneWork: "Apoya Mi Trabajo de Dune",
+        thanksDuneSupport: "¡Gracias por Apoyar Mi Trabajo en Dune!",
+        duneDonateIntro: "¡Hola a todos! Si eres un jugador o creador de contenido de Dune Awakening, probablemente me conozcas por mis banners y GIFs de Dune. Esta página es para aquellos que deseen invitarme a un café o simplemente agradecer por los recursos de Dune Awakening que creo.",
+        duneDonateDisclaimer: "IMPORTANTE: Lo que hago es por pasión, no por lucro. Todo lo que creo para Dune Awakening, estoy feliz de compartirlo con la comunidad. Así que por favor, no te sientas obligado a donar. ¡Tu aprecio es suficiente! 😊",
         testimonial1: `Ch3f es un artista increíble, un amigo amable y acogedor, y un excelente creador de contenido. Siempre busca mejorar y hacer su canal accesible para todos, sin importar de dónde sean, incluso fuera de su país. Con traducción activa tanto para su propio discurso como para el chat, nunca he dudado en saludarlo o recomendar su stream a todos mis conocidos.
         Estas cualidades también se ven fuera de línea, donde está dispuesto a aceptar encargos de arte y gráficos, o simplemente crear assets gratuitos para otros creadores, con gráficos fáciles de usar y optimizados para reducir el lag y el uso de CPU.
         Ch3f es una gran persona y me honra poder llamarlo amigo. Siempre haré lo posible por ayudarlo a alcanzar sus metas.`,
@@ -829,7 +876,15 @@ const translations = {
         homeAssetHub: "Startseite Asset Hub",
         testimonial3: `Auch wenn ich nicht gut darin bin, Komplimente in strukturierte Sätze zu packen, möchte ich sagen, dass Ch3f eine lustige, engagierte, hilfsbereite, freundliche, einladende und fürsorgliche Person ist. Jemand, der ständig bestrebt ist, sich durch Wissen zu verbessern. Das sind die Worte, die ihn am besten beschreiben.`,
         testimonial4: "Mit Ch3f zu arbeiten war immer ein Vergnügen. Er ist ein unglaublich freundlicher und professioneller Creator. Er hat eine meiner Ideen, von der ich dachte, dass sie schwer umzusetzen wäre, in etwas viel Größeres und Hochwertigeres verwandelt, als ich erwartet hatte. Ein Aspekt, den ich sehr schätze, ist sein Engagement für die Unterstützung mehrerer Sprachen, was es mir ermöglicht, seine Kreationen in meiner Muttersprache zu nutzen, obwohl ich keine technischen Kenntnisse habe. Ich bin wirklich dankbar für seine Arbeit und hoffe, immer mehr großartige Projekte auf seiner Website zu sehen!",
-        
+        // Aggiungi in DE
+        duneGifs: "Dune Awakening GIF's",
+        duneGifSectionNote: "Bereich mit Dune Awakening Drops GIF's!",
+        duneDonate: "Für Dune spenden",
+        duneDonateTitle: "Unterstütze Meine Dune-Arbeit",
+        supportDuneWork: "Unterstütze Meine Dune-Arbeit",
+        thanksDuneSupport: "Danke für die Unterstützung Meiner Dune-Arbeit!",
+        duneDonateIntro: "Hallo zusammen! Wenn du ein Dune Awakening-Spieler oder Content Creator bist, kennst du mich wahrscheinlich für meine Dune-Banner und GIFs. Diese Seite ist für alle, die mir einen Kaffee ausgeben oder einfach Danke sagen möchten für die Dune Awakening-Assets, die ich erstelle.",
+        duneDonateDisclaimer: "WICHTIG: Was ich mache, ist aus Leidenschaft, nicht für Profit. Alles, was ich für Dune Awakening erstelle, teile ich gerne mit der Community. Also bitte fühle dich nicht verpflichtet zu spenden. Deine Wertschätzung ist genug! 😊",
         testimonialsTitle: "Was man über mich sagt",
         testimonial1: `Ch3f ist ein großartiger Künstler, ein freundlicher und einladender Freund und ein ausgezeichneter Content Creator. Er versucht ständig, seinen Kanal zu verbessern und für alle zugänglich zu machen, egal woher sie kommen, auch außerhalb seines Landes. Mit aktiver Übersetzung sowohl für seine eigene Sprache als auch für den Chat habe ich nie gezögert, Hallo zu sagen oder seinen Stream jedem zu empfehlen, den ich kenne.
         Diese Eigenschaften zeigen sich auch offline, wo er bereit ist, Aufträge für Artwork und Stream-Grafiken anzunehmen oder einfach kostenlose Assets für andere Creator zu erstellen, mit einfach zu verwendenden Grafiken und mehreren Optionen zur Reduzierung von Lag und CPU-Auslastung.
@@ -946,7 +1001,14 @@ const translations = {
         testimonialsTitle: "O que dizem sobre mim",
         testimonial3: `Mesmo não sendo bom em colocar elogios em frases estruturadas, quero dizer que Ch3f é uma pessoa divertida, envolvente, prestativa, amigável, acolhedora e atenciosa. Alguém que está sempre buscando se aprimorar através do conhecimento. Essas são as palavras que melhor o representam.`,
         testimonial4: "Trabalhar com o Ch3f sempre foi um prazer. Ele é um criador incrivelmente gentil e profissional. Ele pegou uma ideia minha, que eu achava difícil de realizar, e transformou em algo muito maior e de qualidade superior ao que eu esperava. Um aspecto que aprecio muito é o seu compromisso em suportar vários idiomas, o que me permite usar suas criações no meu idioma nativo, mesmo sem ter conhecimentos técnicos. Sou realmente grato pelo seu trabalho e espero ver cada vez mais projetos incríveis em seu site!",
-
+        duneGifs: "GIF's do Dune Awakening",
+        duneGifSectionNote: "Seção com GIF's de drops do Dune Awakening!",
+        duneDonate: "Doar para Dune",
+        duneDonateTitle: "Apoie Meu Trabalho de Dune",
+        supportDuneWork: "Apoie Meu Trabalho de Dune",
+        thanksDuneSupport: "Obrigado por Apoiar Meu Trabalho em Dune!",
+        duneDonateIntro: "Olá a todos! Se você é um jogador ou criador de conteúdo de Dune Awakening, provavelmente me conhece pelos meus banners e GIFs de Dune. Esta página é para aqueles que gostariam de me pagar um café ou simplesmente dizer obrigado pelos recursos de Dune Awakening que eu crio.",
+        duneDonateDisclaimer: "IMPORTANTE: O que faço é por paixão, não por lucro. Tudo o que crio para Dune Awakening, fico feliz em compartilhar com a comunidade. Então, por favor, não se sinta obrigado a doar. Seu apreço já é o suficiente! 😊",
         testimonial1: `Ch3f é um artista incrível, um amigo gentil e acolhedor, e um excelente criador de conteúdo. Ele está sempre tentando melhorar e tornar seu canal acessível a todos, não importa de onde venham, até mesmo fora do seu país. Com tradução ativa tanto para sua fala quanto para o chat, nunca hesitei em cumprimentá-lo ou recomendar sua stream para todos que conheço.
         Essas qualidades também se estendem ao offline, onde ele está pronto para aceitar encomendas de arte e gráficos, ou simplesmente criar assets gratuitos para outros criadores, com gráficos fáceis de usar e várias opções para reduzir lag e uso de CPU.
         Ch3f é uma pessoa muito legal e tenho orgulho de chamá-lo de amigo. Sempre farei o possível para ajudá-lo a alcançar seus objetivos.`,

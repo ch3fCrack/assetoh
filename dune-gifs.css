@@ -1,0 +1,175 @@
+@import url('https://fonts.cdnfonts.com/css/lovelo');
+@import url('https://fonts.cdnfonts.com/css/dune-rise');
+
+body.dune-theme {
+    background-color: #1a1512; /* Sfondo sabbioso scuro */
+    color: #e6d2b5; /* Testo color sabbia chiaro */
+    background: linear-gradient(135deg, #1a1512, #352510, #1a1512);
+    background-attachment: fixed;
+}
+
+.dune-theme h1, 
+.dune-theme h2, 
+.dune-theme h3 {
+    font-family: 'Dune Rise', 'Lovelo', sans-serif;
+    color: #e6d2b5;
+    text-shadow: 0 0 10px #c47d40, 0 0 20px #7e3b00; /* Effetto sabbia dorata */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.dune-theme header {
+    background-color: rgba(26, 21, 18, 0.8);
+    border-bottom: 2px solid #c47d40;
+    backdrop-filter: blur(8px);
+}
+
+.dune-theme nav ul li a {
+    color: #e6d2b5; /* Sabbia chiaro */
+    text-shadow: 0 0 5px #c47d40;
+    font-family: 'Dune Rise', 'Lovelo', sans-serif;
+}
+
+.dune-theme nav ul li a:hover {
+    background-color: #7e3b00;
+    color: #e6d2b5;
+    text-shadow: 0 0 10px #fcd18f;
+}
+
+.dune-theme .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.dune-theme .asset {
+    margin: 15px;
+    position: relative;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.dune-theme .asset:hover {
+    transform: translateY(-5px);
+}
+
+.dune-theme .asset img {
+    width: 250px;
+    height: auto;
+    border: 2px solid #c47d40; /* Bordo color ambra/sabbia */
+    border-radius: 3px;
+    box-shadow: 0 0 15px rgba(196, 125, 64, 0.6); /* Glow sabbia */
+    background-color: rgba(20, 16, 12, 0.6);
+    transition: all 0.3s ease;
+}
+
+.dune-theme .asset img:hover {
+    border-color: #8f69c9; /* Colore della spezia al passaggio del mouse */
+    box-shadow: 0 0 20px rgba(143, 105, 201, 0.7); /* Glow spezia */
+}
+
+.dune-theme button {
+    background-color: #7e3b00; /* Marrone desertico */
+    font-family: 'Dune Rise', 'Lovelo', sans-serif;
+    border: 1px solid #c47d40;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: #e6d2b5;
+    border-radius: 0; /* Angoli squadrati per look sci-fi */
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.dune-theme button:hover {
+    background-color: #8f69c9; /* Viola spezia */
+    color: #1a1512;
+    border-color: #8f69c9;
+}
+
+.dune-theme button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(230, 210, 181, 0.2), 
+        transparent
+    );
+    transition: all 0.6s ease;
+}
+
+.dune-theme button:hover:before {
+    left: 100%;
+}
+
+.dune-theme p {
+    font-family: 'Dune Rise', 'Lovelo', sans-serif;
+    color: #e6d2b5;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+    line-height: 1.6;
+    font-weight: normal;
+}
+
+.dune-theme strong {
+    color: #c47d40; /* Evidenziazione in ambra */
+    font-weight: bold;
+}
+
+/* Personalizzazione scrollbar */
+.dune-theme::-webkit-scrollbar {
+    width: 10px;
+}
+
+.dune-theme::-webkit-scrollbar-track {
+    background: #1a1512;
+}
+
+.dune-theme::-webkit-scrollbar-thumb {
+    background: #7e3b00;
+    border-radius: 0;
+}
+
+.dune-theme::-webkit-scrollbar-thumb:hover {
+    background: #c47d40;
+}
+
+/* Effetto sabbia danzante nel background */
+.dune-theme:after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: repeating-radial-gradient(
+        circle at 20% 20%,
+        rgba(196, 125, 64, 0.03) 0%,
+        transparent 10%,
+        rgba(196, 125, 64, 0.03) 20%
+    );
+    z-index: -1;
+    animation: sandShift 120s linear infinite;
+}
+
+@keyframes sandShift {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}

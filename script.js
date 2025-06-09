@@ -212,6 +212,27 @@ function loadPrivateBanners() {
     setupBannerPresentations();
 }
 
+// ===== CONFIGURAZIONE GIF DUNE AWAKENING =====
+const duneGifList = [
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/refs/heads/main/gifs/dune/gif1.gif",
+        obsUrl: "https://streamelements.com/overlay/68470e9cb034fd3528f94a76/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/refs/heads/main/gifs/dune/gif2.gif",
+        obsUrl: "https://streamelements.com/overlay/68470f4726bbae8e3ac373e7/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+     {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/refs/heads/main/gifs/dune/gif3.gif",
+        obsUrl: "https://streamelements.com/overlay/68470f9b0efafa2322f8cfa0/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    },
+    {
+        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/refs/heads/main/gifs/dune/gif4.gif",
+        obsUrl: "https://streamelements.com/overlay/68471150ee4054631e0f43e0/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+    }
+    // Aggiungi altre GIF di Dune Awakening secondo necessità
+];
+
 // ===== FUNZIONI UTILITY =====
 function loadGifs(container, list) {
     if (!container) return;
@@ -378,7 +399,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Caricamento GIF
     loadGifs(document.getElementById("asianGifContainer"), asianGifList);
     loadGifs(document.getElementById("gifContainer"), gifList);
-
+    loadGifs(document.getElementById("duneGifContainer"), duneGifList); // Aggiungi questa riga
+    
     // Setup Banner
     setupBannerPresentations();
 
