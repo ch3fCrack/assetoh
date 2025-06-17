@@ -35,34 +35,30 @@ function updateTimerDisplay() {
 }
 
 function updateMessage() {
-    console.log("Updating message with phase:", phase); // Debug
-    console.log("Banner 1 text:", textBanner1Input?.value); // Debug
-    console.log("Banner 2 text:", textBanner2Input?.value); // Debug
-    
     if (phase === "gravitational") {
-        messageElement.textContent = textBanner2Input?.value || "Gravitational Phase - 30 min";
+        // Usa esplicitamente il messaggio predefinito se il campo è vuoto
+        const customText = textBanner2Input?.value;
+        messageElement.textContent = (customText && customText.trim() !== '') ? 
+            customText : "Lunar gravity has begun";
+        
         timerContainer.className = "container gravitational";
         
-        const bgUrl = bgBanner2Input?.value;
-        if (bgUrl && bgUrl.trim() !== '') {
-            console.log("Setting gravitational background:", bgUrl); // Debug
-            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
-        } else {
-            console.log("Using default gravitational background"); // Debug
-            timerContainer.style.backgroundImage = `url('${DEFAULT_BG_GRAVITATIONAL}')`;
-        }
+        // Usa l'immagine predefinita se non è stato fornito un URL personalizzato
+        const bgUrl = bgBanner2Input?.value && bgBanner2Input.value.trim() !== '' ? 
+            bgBanner2Input.value : DEFAULT_BG_GRAVITATIONAL;
+        timerContainer.style.backgroundImage = `url('${bgUrl}')`;
     } else {
-        messageElement.textContent = textBanner1Input?.value || "Normal Phase - 30 min";
+        // Usa esplicitamente il messaggio predefinito se il campo è vuoto
+        const customText = textBanner1Input?.value;
+        messageElement.textContent = (customText && customText.trim() !== '') ? 
+            customText : "Lunar Gravity Is Coming";
+            
         timerContainer.className = "container normal";
         
-        const bgUrl = bgBanner1Input?.value;
-        if (bgUrl && bgUrl.trim() !== '') {
-            console.log("Setting normal background:", bgUrl); // Debug
-            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
-        } else {
-            console.log("Using default normal background"); // Debug
-            timerContainer.style.backgroundImage = `url('${DEFAULT_BG_NORMAL}')`;
-        }
+        // Usa l'immagine predefinita se non è stato fornito un URL personalizzato
+        const bgUrl = bgBanner1Input?.value && bgBanner1Input.value.trim() !== '' ? 
+            bgBanner1Input.value : DEFAULT_BG_NORMAL;
+        timerContainer.style.backgroundImage = `url('${bgUrl}')`;
     }
 }
 
@@ -335,14 +331,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (textBanner1Input) textBanner1Input.placeholder = "Lunar Gravity Is Coming";
     if (textBanner2Input) textBanner2Input.placeholder = "Lunar gravity has begun";
 
+    // Aggiorna esplicitamente l'anteprima all'inizializzazione
     initializeFromURL();
     rotateSignatures();
+    
+    // Forza un aggiornamento dell'anteprima
+    updateMessage();
+    applyStyles();
+    
+    // Aggiungi ascoltatori di eventi per l'anteprima in tempo reale
     setupLivePreview();
 });
 
 // Aggiungi questo alla fine del tuo file timer.js
 function setupLivePreview() {
-    // Aggiorna l'anteprima quando cambia qualsiasi input di testo o URL
+    // Aggiorna l'anteprima quando cambia qualsiasi input
     const allInputs = [
         bgBanner1Input, textBanner1Input,
         bgBanner2Input, textBanner2Input,
@@ -363,3 +366,14 @@ function setupLivePreview() {
 
 // Avvia il timer con maggiore precisione
 setInterval(timerTick, 100);
+
+// Nuovo codice per il ripristino dei messaggi predefiniti
+document.getElementById('resetDefaultMessagesBtn')?.addEventListener('click', function() {
+    // Pulisci i campi di input
+    if (textBanner1Input) textBanner1Input.value = '';
+    if (textBanner2Input) textBanner2Input.value = '';
+    
+    // Aggiorna l'anteprima
+    updateMessage();
+    alert('Messaggi predefiniti ripristinati');
+});
