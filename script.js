@@ -150,6 +150,10 @@ const presentations = [
         images: ["banners/banner79.png","banners/banner80.png", "banners/banner81.png", "banners/banner82.png"]
     },
     {
+        containerId: "presentation20",
+        images: ["banners/banner83.png","banners/banner84.png", "banners/banner85.png", "banners/banner86.png"]
+    },
+    {
         containerId: "presentation13",
         images: ["banners/private/private-banner1.png", "banners/private/private-banner1.png"]
     }

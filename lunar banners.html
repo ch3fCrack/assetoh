@@ -108,15 +108,17 @@
     </div>
 
     <script>
+const DEFAULT_BG_GRAVITATIONAL = "https://i.imgur.com/3koyFlo.png";
+const DEFAULT_BG_NORMAL = "https://i.imgur.com/3koyFlo.png";
 
-        var CONFIG = {
-            eventStartMinute: 52,
-            eventStartSecond: 25
-        };
+var CONFIG = {
+    eventStartMinute: 52,
+    eventStartSecond: 30
+};
 
-        let timerMinutes = 45;
-        let secondsRemaining = timerMinutes * 60;
-        let phase = "main";
+let timerMinutes = 30;
+let secondsRemaining = timerMinutes * 60;
+let phase = "normal"; // Cambiato da "main" a "normal"
 
         const timerElement = document.getElementById('timer');
         const messageElement = document.getElementById('message');
@@ -189,31 +191,40 @@
 
         function updateMessage() {
             const params = new URLSearchParams(window.location.search);
-            if (phase === "main") {
-                messageElement.textContent = params.has('text1') ? 
-                    decodeURIComponent(params.get('text1')) : "Timer Text 45 min";
-                timerContainer.className = "container main";
-                if (params.has('bg1')) {
-                    timerContainer.style.backgroundImage = `url('${params.get('bg1')}')`;
+            
+            if (phase === "normal") {
+                messageElement.textContent = params.has('text1') && params.get('text1') !== '' ? 
+                    decodeURIComponent(params.get('text1')) : "Lunar Gravity Is Coming";
+                timerContainer.className = "container normal";
+                
+                // Usa il banner predefinito se non è specificato o è vuoto
+                let bgUrl = params.get('bg1');
+                if (!bgUrl || bgUrl === '') {
+                    bgUrl = DEFAULT_BG_NORMAL;
                 }
+                timerContainer.style.backgroundImage = `url('${bgUrl}')`;
             } else {
-                messageElement.textContent = params.has('text2') ? 
-                    decodeURIComponent(params.get('text2')) : "Timer Text 15 min";
-                timerContainer.className = "container short";
-                if (params.has('bg2')) {
-                    timerContainer.style.backgroundImage = `url('${params.get('bg2')}')`;
+                messageElement.textContent = params.has('text2') && params.get('text2') !== '' ? 
+                    decodeURIComponent(params.get('text2')) : "Lunar gravity has begun";
+                timerContainer.className = "container gravitational";
+                
+                // Usa il banner predefinito se non è specificato o è vuoto
+                let bgUrl = params.get('bg2');
+                if (!bgUrl || bgUrl === '') {
+                    bgUrl = DEFAULT_BG_GRAVITATIONAL;
                 }
+                timerContainer.style.backgroundImage = `url('${bgUrl}')`;
             }
         }
 
         function switchPhase() {
-            if (phase === "main") {
-                phase = "short";
-                timerMinutes = 15;
+            if (phase === "normal") {
+                phase = "gravitational";
             } else {
-                phase = "main";
-                timerMinutes = 45;
+                phase = "normal";
             }
+            // Entrambe le fasi durano 30 minuti
+            timerMinutes = 30;
             secondsRemaining = timerMinutes * 60;
             updateMessage();
             saveState();
@@ -238,33 +249,44 @@
             const now = new Date();
             const currentMinute = now.getMinutes();
             const currentSecond = now.getSeconds();
-
-            const currentTimeInSeconds = currentMinute * 60 + currentSecond;
-            const targetTimeInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
-
-            // Se siamo nei primi minuti dell'ora (es. 05:00)
-            if (currentTimeInSeconds < targetTimeInSeconds) {
-                // Verifica se dovremmo essere nella fase "short" dall'ora precedente
-                const timeFromPreviousTarget = (60 * 60) - (targetTimeInSeconds - currentTimeInSeconds);
-                const shortTimerSec = 15 * 60;
-
-                if (timeFromPreviousTarget < shortTimerSec) {
-                    // Siamo ancora nel ciclo di 15 minuti dall'ora precedente
-                    phase = "short";
-                    secondsRemaining = shortTimerSec - timeFromPreviousTarget;
+            
+            const totalSecondsFromHourStart = currentMinute * 60 + currentSecond;
+            const gravitationalPhaseStartInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
+            
+            let secondsUntilPhaseChange;
+            
+            if (totalSecondsFromHourStart >= gravitationalPhaseStartInSeconds) {
+                // Siamo dopo il minuto 52:30, quindi siamo nella fase gravitazionale
+                phase = "gravitational";
+                
+                // Calcola i secondi rimanenti in questa fase gravitazionale
+                const gravitationalPhaseEndInSeconds = gravitationalPhaseStartInSeconds + 30 * 60;
+                
+                if (gravitationalPhaseEndInSeconds <= 3600) {
+                    // La fase finisce nella stessa ora
+                    secondsUntilPhaseChange = gravitationalPhaseEndInSeconds - totalSecondsFromHourStart;
                 } else {
-                    // Siamo nel periodo principale in attesa del prossimo target
-                    phase = "main";
-                    secondsRemaining = targetTimeInSeconds - currentTimeInSeconds;
+                    // La fase finisce nell'ora successiva
+                    secondsUntilPhaseChange = (3600 - totalSecondsFromHourStart) + (gravitationalPhaseEndInSeconds - 3600);
                 }
             } else {
-                // Dopo il target time nell'ora corrente
-                phase = "short";
-                const timePassedSinceTarget = currentTimeInSeconds - targetTimeInSeconds;
-                const shortTimerSec = 15 * 60;
-                secondsRemaining = shortTimerSec - (timePassedSinceTarget % shortTimerSec);
+                // Siamo prima del minuto 52:30
+                // Dobbiamo determinare se siamo nella fase normale o ancora nella fase gravitazionale dell'ora precedente
+                const gravitationalPhaseEndInSecondsFromPreviousHour = gravitationalPhaseStartInSeconds + 30 * 60 - 3600;
+                
+                if (totalSecondsFromHourStart < gravitationalPhaseEndInSecondsFromPreviousHour) {
+                    // Siamo ancora nella fase gravitazionale dell'ora precedente
+                    phase = "gravitational";
+                    secondsUntilPhaseChange = gravitationalPhaseEndInSecondsFromPreviousHour - totalSecondsFromHourStart;
+                } else {
+                    // Siamo nella fase normale
+                    phase = "normal";
+                    secondsUntilPhaseChange = gravitationalPhaseStartInSeconds - totalSecondsFromHourStart;
+                }
             }
-
+            
+            secondsRemaining = secondsUntilPhaseChange;
+            
             updateMessage();
             updateTimerDisplay();
             saveState();

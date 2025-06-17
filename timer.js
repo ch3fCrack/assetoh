@@ -1,11 +1,15 @@
 var CONFIG = {
-    eventStartMinute: 52,
-    eventStartSecond: 25
+    eventStartMinute: 52,  // L'evento inizia al minuto 52 di ogni ora
+    eventStartSecond: 30   // e 30 secondi
 };
 
-let timerMinutes = 45;
+// Aggiungi queste costanti in cima al file per i background predefiniti
+const DEFAULT_BG_GRAVITATIONAL = "https://i.imgur.com/3koyFlo.png";
+const DEFAULT_BG_NORMAL = "https://i.imgur.com/3koyFlo.png";
+
+let timerMinutes = 30;    // La fase gravitazionale dura 30 minuti
 let secondsRemaining = timerMinutes * 60;
-let phase = "main";
+let phase = "gravitational";  // Ora abbiamo "gravitational" e "normal"
 let lastTickTime = performance.now();
 let accumulatedTime = 0;
 
@@ -31,41 +35,55 @@ function updateTimerDisplay() {
 }
 
 function updateMessage() {
-    if (phase === "main") {
-        messageElement.textContent = textBanner1Input?.value || "Timer Text 45 min";
-        timerContainer.className = "container main";
-        if (bgBanner1Input?.value) {
-            timerContainer.style.backgroundImage = `url('${bgBanner1Input.value}')`;
+    console.log("Updating message with phase:", phase); // Debug
+    console.log("Banner 1 text:", textBanner1Input?.value); // Debug
+    console.log("Banner 2 text:", textBanner2Input?.value); // Debug
+    
+    if (phase === "gravitational") {
+        messageElement.textContent = textBanner2Input?.value || "Gravitational Phase - 30 min";
+        timerContainer.className = "container gravitational";
+        
+        const bgUrl = bgBanner2Input?.value;
+        if (bgUrl && bgUrl.trim() !== '') {
+            console.log("Setting gravitational background:", bgUrl); // Debug
+            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
+        } else {
+            console.log("Using default gravitational background"); // Debug
+            timerContainer.style.backgroundImage = `url('${DEFAULT_BG_GRAVITATIONAL}')`;
         }
     } else {
-        messageElement.textContent = textBanner2Input?.value || "Timer Text 15 min";
-        timerContainer.className = "container short";
-        if (bgBanner2Input?.value) {
-            timerContainer.style.backgroundImage = `url('${bgBanner2Input.value}')`;
+        messageElement.textContent = textBanner1Input?.value || "Normal Phase - 30 min";
+        timerContainer.className = "container normal";
+        
+        const bgUrl = bgBanner1Input?.value;
+        if (bgUrl && bgUrl.trim() !== '') {
+            console.log("Setting normal background:", bgUrl); // Debug
+            timerContainer.style.backgroundImage = `url('${bgUrl}')`;
+        } else {
+            console.log("Using default normal background"); // Debug
+            timerContainer.style.backgroundImage = `url('${DEFAULT_BG_NORMAL}')`;
         }
     }
 }
 
 function switchPhase() {
-    if (phase === "main") {
-        phase = "short";
-        timerMinutes = 15;
-    } else {
-        phase = "main";
-        timerMinutes = 45;
-    }
-    secondsRemaining = timerMinutes * 60;
+    phase = (phase === "gravitational") ? "normal" : "gravitational";
+    secondsRemaining = 30 * 60; // Sempre 30 minuti per entrambe le fasi
     updateMessage();
     saveState();
 }
 
 function applyStyles() {
+    console.log("Applying styles..."); // Debug
     const textColor = textColorInput.value;
     const timerColor = timerColorInput.value;
     const textShadowColor = textShadowColorInput.value;
     const timerShadowColor = timerShadowColorInput.value;
     const shadowDistanceX = shadowDistanceXInput.value + 'px';
     const shadowDistanceY = shadowDistanceYInput.value + 'px';
+
+    console.log("Text color:", textColor); // Debug
+    console.log("Timer color:", timerColor); // Debug
 
     messageElement.style.color = textColor;
     messageElement.style.textShadow = `${shadowDistanceX} ${shadowDistanceY} ${textShadowColor}`;
@@ -96,13 +114,17 @@ function saveState() {
 }
 
 function copyToOBS() {
+    // Definiamo i banner predefiniti da usare quando non specificati dall'utente
+    const DEFAULT_BG_GRAVITATIONAL = "https://i.imgur.com/3koyFlo.png";
+    const DEFAULT_BG_NORMAL = "https://i.imgur.com/3koyFlo.png";
+
     const state = {
         minute: CONFIG.eventStartMinute,
         second: CONFIG.eventStartSecond,
-        bg1: bgBanner1Input?.value,
-        text1: encodeURIComponent(textBanner1Input?.value || ''),
-        bg2: bgBanner2Input?.value,
-        text2: encodeURIComponent(textBanner2Input?.value || ''),
+        bg1: bgBanner1Input?.value || DEFAULT_BG_NORMAL,
+        text1: encodeURIComponent(textBanner1Input?.value || 'Lunar Gravity Is Coming'),
+        bg2: bgBanner2Input?.value || DEFAULT_BG_GRAVITATIONAL,
+        text2: encodeURIComponent(textBanner2Input?.value || 'Lunar gravity has begun'),
         phase,
         transparent: true,
         startTime: Date.now(),
@@ -117,7 +139,7 @@ function copyToOBS() {
 
     const baseUrl = window.location.origin + '/lunar%20banners.html';
     const queryString = Object.entries(state)
-        .filter(([_, value]) => value !== undefined && value !== '')
+        .filter(([key, value]) => value !== undefined)
         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
         .join('&');
 
@@ -131,25 +153,51 @@ function initializeTimer() {
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
     const currentSecond = now.getSeconds();
-    const currentMs = now.getMilliseconds();
-
-    const currentTimeFromHourStart = (currentMinute * 60 + currentSecond) * 1000 + currentMs;
-    const targetTimeFromHourStart = (CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond) * 1000;
-
-    accumulatedTime = 0;
-    lastTickTime = performance.now();
-
-    if (currentTimeFromHourStart < targetTimeFromHourStart) {
-        phase = "main";
-        secondsRemaining = Math.ceil((targetTimeFromHourStart - currentTimeFromHourStart) / 1000);
+    
+    // Calcola i minuti totali dall'inizio dell'ora
+    const minutesFromHourStart = currentMinute;
+    const secondsFromHourStart = currentSecond;
+    const totalSecondsFromHourStart = minutesFromHourStart * 60 + secondsFromHourStart;
+    
+    // Calcola quando inizia la fase gravitazionale in secondi dall'inizio dell'ora
+    const gravitationalPhaseStartInSeconds = CONFIG.eventStartMinute * 60 + CONFIG.eventStartSecond;
+    
+    // Determina in quale fase siamo
+    let secondsUntilPhaseChange;
+    
+    if (totalSecondsFromHourStart >= gravitationalPhaseStartInSeconds) {
+        // Siamo dopo il minuto 52:30, quindi siamo nella fase gravitazionale
+        phase = "gravitational";
+        
+        // Calcola i secondi rimanenti in questa fase gravitazionale
+        // La fase dura 30 minuti ma dobbiamo considerare che può proseguire nell'ora successiva
+        const gravitationalPhaseEndInSeconds = gravitationalPhaseStartInSeconds + 30 * 60;
+        
+        if (gravitationalPhaseEndInSeconds <= 3600) {
+            // La fase finisce nella stessa ora
+            secondsUntilPhaseChange = gravitationalPhaseEndInSeconds - totalSecondsFromHourStart;
+        } else {
+            // La fase finisce nell'ora successiva
+            secondsUntilPhaseChange = (3600 - totalSecondsFromHourStart) + (gravitationalPhaseEndInSeconds - 3600);
+        }
     } else {
-        phase = "short";
-        const timePassedMs = currentTimeFromHourStart - targetTimeFromHourStart;
-        const shortTimerMs = 15 * 60 * 1000;
-        secondsRemaining = Math.ceil((shortTimerMs - (timePassedMs % shortTimerMs)) / 1000);
+        // Siamo prima del minuto 52:30
+        // Dobbiamo determinare se siamo nella fase normale o ancora nella fase gravitazionale dell'ora precedente
+        const gravitationalPhaseEndInSecondsFromPreviousHour = gravitationalPhaseStartInSeconds + 30 * 60 - 3600;
+        
+        if (totalSecondsFromHourStart < gravitationalPhaseEndInSecondsFromPreviousHour) {
+            // Siamo ancora nella fase gravitazionale dell'ora precedente
+            phase = "gravitational";
+            secondsUntilPhaseChange = gravitationalPhaseEndInSecondsFromPreviousHour - totalSecondsFromHourStart;
+        } else {
+            // Siamo nella fase normale
+            phase = "normal";
+            secondsUntilPhaseChange = gravitationalPhaseStartInSeconds - totalSecondsFromHourStart;
+        }
     }
-
-    timerMinutes = phase === "main" ? 45 : 15;
+    
+    secondsRemaining = secondsUntilPhaseChange;
+    
     updateMessage();
     updateTimerDisplay();
     saveState();
@@ -182,6 +230,7 @@ function initializeFromURL() {
         shadowDistanceYInput.value = state.shadowDistanceY || '2';
 
     } else {
+        // Se non ci sono stati salvati, inizializza in base all'URL o i valori predefiniti
         if (params.has('minute')) CONFIG.eventStartMinute = parseInt(params.get('minute'), 10);
         if (params.has('second')) CONFIG.eventStartSecond = parseInt(params.get('second'), 10);
         initializeTimer();
@@ -204,6 +253,7 @@ function initializeFromURL() {
     updateTimerDisplay();
     applyStyles();
 }
+
 function rotateSignatures() {
     const signatures = [
         "Created by Ch3f_nerd_art",
@@ -223,6 +273,7 @@ function rotateSignatures() {
         }, 500);
     }, 30000);
 }
+
 function timerTick() {
     const currentTime = performance.now();
     const deltaTime = currentTime - lastTickTime;
@@ -248,36 +299,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputs = document.querySelectorAll('input[type="number"]');
     if (inputs.length > 0) {
         document.getElementById('setTimeBtn')?.addEventListener('click', function() {
-            const minute = parseInt(document.getElementById('minuteInput').value, 10);
-            const second = parseInt(document.getElementById('secondInput').value, 10);
-
-            if (minute < 0 || minute > 59 || second < 0 || second > 59) {
-                alert('Inserisci valori validi (0-59) per minuti e secondi.');
-                return;
-            }
-
-            CONFIG.eventStartMinute = minute;
-            CONFIG.eventStartSecond = second;
+            CONFIG.eventStartMinute = parseInt(document.getElementById('minuteInput').value) || 52;
+            CONFIG.eventStartSecond = parseInt(document.getElementById('secondInput').value) || 30;
             initializeTimer();
+            alert(`Timer impostato al minuto ${CONFIG.eventStartMinute}:${CONFIG.eventStartSecond} di ogni ora`);
         });
 
         document.getElementById('defaultBtn')?.addEventListener('click', function() {
             document.getElementById('minuteInput').value = '52';
-            document.getElementById('secondInput').value = '25';
+            document.getElementById('secondInput').value = '30';
             CONFIG.eventStartMinute = 52;
-            CONFIG.eventStartSecond = 25;
+            CONFIG.eventStartSecond = 30;
             initializeTimer();
         });
 
         document.getElementById('applyCustomizationsBtn')?.addEventListener('click', function() {
+            console.log("Applying customizations..."); // Debug
             updateMessage();
             applyStyles();
             saveState();
-            alert('Customizations applied!');
         });
 
         document.getElementById('copyToOBSBtn')?.addEventListener('click', copyToOBS);
 
+        // Gestire gli input per i colori e le ombre
         textColorInput.addEventListener('input', applyStyles);
         timerColorInput.addEventListener('input', applyStyles);
         textShadowColorInput.addEventListener('input', applyStyles);
@@ -286,9 +331,35 @@ document.addEventListener('DOMContentLoaded', function() {
         shadowDistanceYInput.addEventListener('input', applyStyles);
     }
 
+    // Aggiorna i suggerimenti di testo predefiniti per i campi di input
+    if (textBanner1Input) textBanner1Input.placeholder = "Lunar Gravity Is Coming";
+    if (textBanner2Input) textBanner2Input.placeholder = "Lunar gravity has begun";
+
     initializeFromURL();
     rotateSignatures();
+    setupLivePreview();
 });
+
+// Aggiungi questo alla fine del tuo file timer.js
+function setupLivePreview() {
+    // Aggiorna l'anteprima quando cambia qualsiasi input di testo o URL
+    const allInputs = [
+        bgBanner1Input, textBanner1Input,
+        bgBanner2Input, textBanner2Input,
+        textColorInput, timerColorInput,
+        textShadowColorInput, timerShadowColorInput,
+        shadowDistanceXInput, shadowDistanceYInput
+    ];
+    
+    allInputs.forEach(input => {
+        if (input) {
+            input.addEventListener('input', function() {
+                updateMessage();
+                applyStyles();
+            });
+        }
+    });
+}
 
 // Avvia il timer con maggiore precisione
 setInterval(timerTick, 100);
