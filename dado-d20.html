@@ -122,23 +122,33 @@
     planeBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
     world.addBody(planeBody);
 
-    // Muri invisibili (più piccoli per limitare l'area)
-    const boxSize = 2;
+    // Modifica l'area dei muri di contenimento (più ampia e più efficace)
+    // Sostituisci la sezione dei muri invisibili con questa versione migliorata
+    // Muri invisibili (più ampi per contenere meglio il dado)
+    const boxSize = 3; // Aumentato da 2 a 3
     const wallHeight = 4;
-    const wallThickness = 0.4;
+    const wallThickness = 0.8; // Aumentato spessore da 0.4 a 0.8
 
-    addWall(new CANNON.Vec3( boxSize, wallHeight/2, 0), new CANNON.Vec3(wallThickness, wallHeight, 5));
-    addWall(new CANNON.Vec3(-boxSize, wallHeight/2, 0), new CANNON.Vec3(wallThickness, wallHeight, 5));
-    addWall(new CANNON.Vec3(0, wallHeight/2,  boxSize), new CANNON.Vec3(5, wallHeight, wallThickness));
-    addWall(new CANNON.Vec3(0, wallHeight/2, -boxSize), new CANNON.Vec3(5, wallHeight, wallThickness));
-
+    // Aggiungi muri più efficaci con rimbalzo migliore
     function addWall(pos, size) {
       const shape = new CANNON.Box(new CANNON.Vec3(size.x/2, size.y/2, size.z/2));
-      const body = new CANNON.Body({ mass: 0 });
+      const body = new CANNON.Body({ 
+        mass: 0,
+        material: new CANNON.Material({
+          friction: 0.1,
+          restitution: 0.8 // Aggiunto rimbalzo ai muri
+        })
+      });
       body.addShape(shape);
       body.position.copy(pos);
       world.addBody(body);
     }
+
+    // Crea i muri su tutti i lati (più contenitivi)
+    addWall(new CANNON.Vec3( boxSize, wallHeight/2, 0), new CANNON.Vec3(wallThickness, wallHeight, 6)); // Muro destro
+    addWall(new CANNON.Vec3(-boxSize, wallHeight/2, 0), new CANNON.Vec3(wallThickness, wallHeight, 6)); // Muro sinistro
+    addWall(new CANNON.Vec3(0, wallHeight/2,  boxSize), new CANNON.Vec3(6, wallHeight, wallThickness)); // Muro posteriore
+    addWall(new CANNON.Vec3(0, wallHeight/2, -boxSize), new CANNON.Vec3(6, wallHeight, wallThickness)); // Muro anteriore
 
     // Carica il modello 3D
     const loader = new GLTFLoader();
@@ -175,9 +185,9 @@
 
         // Usa una sfera per la fisica
         const shape = new CANNON.Sphere(1);
-        diceBody = new CANNON.Body({ mass: 300 });
+        diceBody = new CANNON.Body({ mass: 350 }); // Aumentata massa
         diceBody.addShape(shape);
-        diceBody.angularDamping = 0.4;
+        diceBody.angularDamping = 0.2; // Ridotto da 0.4 a 0.2 per più rotazione
         world.addBody(diceBody);
 
         resetDice();
@@ -202,32 +212,40 @@
     });
   }
 
+  // Modifica la funzione resetDice per posizionare il dado al lato sinistro
   function resetDice() {
     diceBody.velocity.setZero();
     diceBody.angularVelocity.setZero();
-    diceBody.position.set(0, 5, 0);
+    
+    // Posiziona il dado sul lato sinistro anziché in alto
+    diceBody.position.set(-4, 1.5, (Math.random() - 0.5) * 2);
     diceBody.quaternion.setFromEuler(0, 0, 0);
-    diceMesh.position.set(0, 5, 0);
+    diceMesh.position.copy(diceBody.position);
     diceMesh.quaternion.set(0, 0, 0, 1);
   }
 
+  // Modifica la funzione rollDice per dare un impulso laterale anziché verticale
   function rollDice() {
     if (!diceReady) return;
 
     resetDice();
 
-    // Forza verticale maggiore, meno forza orizzontale per centrare
-    const force = 1.0;
+    // Cambia completamente le forze per un lancio orizzontale
+    const force = 7.0; // Forza orizzontale maggiore
+    
+    // Lancia il dado principalmente da sinistra a destra (asse X positivo)
     diceBody.velocity.set(
-      (Math.random() - 0.5) * force * 0.5,
-      6 + Math.random() * 2,
-      (Math.random() - 0.5) * force * 0.5
+      force + Math.random() * 2,      // Forza principalmente orizzontale (X positivo)
+      2 + Math.random() * 1.5,        // Leggero impulso verso l'alto
+      (Math.random() - 0.5) * 2       // Piccola variazione laterale (Z)
     );
     
+    // Manteniamo la rotazione intensa
+    const rotForce = 15; 
     diceBody.angularVelocity.set(
-      (Math.random() - 0.5) * 8,
-      (Math.random() - 0.5) * 8,
-      (Math.random() - 0.5) * 8
+      (Math.random() - 0.5) * rotForce,
+      (Math.random() - 0.5) * rotForce,
+      (Math.random() - 0.5) * rotForce
     );
 
     resultShown = false;
@@ -265,6 +283,34 @@
       }
     }
 
+    // Controlla se il dado è fuori dai limiti e lo riporta all'interno se necessario
+    if (diceReady) {
+      // Definisci i limiti di sicurezza
+      const safeLimit = 4;
+      
+      // Verifica se il dado è andato troppo lontano
+      if (
+        Math.abs(diceBody.position.x) > safeLimit || 
+        Math.abs(diceBody.position.z) > safeLimit ||
+        diceBody.position.y > 10
+      ) {
+        console.log("Dado fuori limite, riposizionamento...");
+        
+        // Riposiziona il dado vicino al centro con meno velocità
+        diceBody.position.set(
+          (Math.random() - 0.5) * 0.5, // Piccola variazione casuale dalla posizione centrale
+          3, // Altezza moderata
+          (Math.random() - 0.5) * 0.5
+        );
+        
+        // Riduci la velocità per evitare che scappi di nuovo
+        diceBody.velocity.scale(0.5);
+        
+        // Mantieni un po' di rotazione per naturalezza
+        diceBody.angularVelocity.scale(0.7);
+      }
+    }
+
     renderer.render(scene, camera);
   }
   
@@ -283,28 +329,37 @@
     }
   };
 
+  // Modifica la funzione determineVisibleFace() per rendere più casuale il risultato
   function determineVisibleFace() {
-    // Salvare la rotazione corrente per riferimento (utile per debug)
+    // Ottieni la rotazione attuale del dado
     const currentRotation = new THREE.Euler().setFromQuaternion(diceBody.quaternion);
-    console.log("Rotazione dado:", 
-      Math.round(currentRotation.x * 180/Math.PI),
-      Math.round(currentRotation.y * 180/Math.PI), 
-      Math.round(currentRotation.z * 180/Math.PI)
-    );
     
-    // Determina il risultato basandoti sulla rotazione
-    const absY = Math.abs(currentRotation.y);
-    const absX = Math.abs(currentRotation.x);
-    const absZ = Math.abs(currentRotation.z);
+    // Converti le rotazioni in gradi per debug
+    const rotX = Math.round(currentRotation.x * 180/Math.PI);
+    const rotY = Math.round(currentRotation.y * 180/Math.PI);
+    const rotZ = Math.round(currentRotation.z * 180/Math.PI);
     
-    // Usa la somma delle rotazioni per generare un "indice di rotazione"
-    const rotIndex = (absX * 100 + absY * 10 + absZ) % 20;
+    console.log("Rotazione dado:", rotX, rotY, rotZ);
     
-    // Mappa l'indice di rotazione ai valori del D20
-    const d20Values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-    const result = d20Values[Math.floor(rotIndex * d20Values.length / 20)];
+    // Nuovo algoritmo più casuale basato su combinazioni di rotazioni
+    // Usiamo sin e cos per creare valori ciclici dalla rotazione
+    const seed = 
+      Math.abs(Math.sin(currentRotation.x * 5) * 1000) + 
+      Math.abs(Math.cos(currentRotation.y * 7) * 1000) +
+      Math.abs(Math.sin(currentRotation.z * 3) * 1000);
     
-    console.log("Indice rotazione:", rotIndex, "Risultato:", result);
+    // Genera un indice basato sulla rotazione usando una formula diversa
+    const rotIndex = Math.floor(seed % 20);
+    
+    // Mescola la mappatura dei valori D20 per avere meno prevedibilità
+    const d20Values = [
+      6, 15, 4, 18, 2, 11, 9, 20, 13, 7,  // Prima metà
+      1, 16, 5, 19, 10, 3, 14, 8, 17, 12  // Seconda metà
+    ];
+    
+    const result = d20Values[rotIndex];
+    
+    console.log("Seed:", Math.round(seed), "Indice rotazione:", rotIndex, "Risultato:", result);
     return result;
   }
 </script>
