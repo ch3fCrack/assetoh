@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>D20 Overlay</title>
+  <style>
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background-color: rgba(0,0,0,0); /* Sfondo trasparente per OBS */
+    }
+    
+    /* Rimuoviamo completamente lo stile dell'overlay */
+    #overlay {
+      display: none; /* Nascondi completamente l'overlay */
+    }
+    
+    /* Manteniamo le animazioni in caso vengano usate altrove */
+    @keyframes sparkle {
+      0% { text-shadow: 0 0 10px gold, 0 0 20px gold; }
+      50% { text-shadow: 0 0 15px gold, 0 0 30px gold, 0 0 40px gold; }
+      100% { text-shadow: 0 0 10px gold, 0 0 20px gold; }
+    }
+  </style>
+  <!-- Carica font -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Manteniamo l'elemento ma lo nascondiamo con CSS -->
+<div id="overlay"></div>
+<audio id="diceSound" src="dado.mp3" preload="auto"></audio>
+
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.module.js';
+  import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.125.2/examples/jsm/loaders/GLTFLoader.js';
+  import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js';
+
+  let scene, camera, renderer;
+  let world;
+  let diceMesh;
+  let diceBody;
+  let diceReady = false;
+  let resultShown = false;
+  let soundPlayed = false;
+  let planeBody;
+
+  const diceSound = document.getElementById('diceSound');
+  const overlay = document.getElementById('overlay');
+  
+  // Inizializzazione rapida
+  init();
+  animate();
+
+  function init() {
+    // Configura la scena per essere trasparente (per OBS)
+    scene = new THREE.Scene();
+    scene.background = null; // Sfondo trasparente
+
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 6, 6);
+    camera.lookAt(0, 0, 0);
+
+    renderer = new THREE.WebGLRenderer({ 
+      antialias: true,
+      alpha: true // Abilita trasparenza
+    });
+    renderer.setSize(800, 800); // Dimensione fissa 800x800
+    document.body.appendChild(renderer.domElement);
+
+    // Disattiva il ridimensionamento automatico
+    window.addEventListener('resize', function() {
+      // Non fare nulla - mantieni dimensioni fisse
+    });
+
+    // Luci
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
+    scene.add(hemiLight);
+
+    // Luce direzionale principale più intensa
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    dirLight.position.set(5, 10, 7);
+    scene.add(dirLight);
+
+    // Aggiunta luce ambientale per illuminazione di base
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    // Aggiungi luci di riempimento da diverse angolazioni
+    const fillLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    fillLight1.position.set(-5, 5, -5);
+    scene.add(fillLight1);
+
+    const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
+    fillLight2.position.set(5, 3, -8);
+    scene.add(fillLight2);
+
+    // Opzionale: aggiunta di una luce che segue la camera
+    const cameraLight = new THREE.PointLight(0xffffff, 0.7);
+    cameraLight.position.copy(camera.position);
+    scene.add(cameraLight);
+
+    // Aggiorna la posizione della luce della camera quando si muove la camera
+    camera.add(cameraLight);
+
+    // Piano trasparente ma "fisico"
+    const planeGeo = new THREE.PlaneGeometry(6, 6);
+    const planeMat = new THREE.MeshBasicMaterial({ 
+      opacity: 0, 
+      transparent: true 
+    });
+    const plane = new THREE.Mesh(planeGeo, planeMat);
+    plane.rotation.x = -Math.PI / 2;
+    scene.add(plane);
+
+    // Fisica
+    world = new CANNON.World();
+    world.gravity.set(0, -9.82, 0);
+
+    planeBody = new CANNON.Body({ mass: 0 });
+    planeBody.addShape(new CANNON.Plane());
+    planeBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+    world.addBody(planeBody);
+
+    // Muri invisibili (più piccoli per limitare l'area)
+    const boxSize = 2;
+    const wallHeight = 4;
+    const wallThickness = 0.4;
+
+    addWall(new CANNON.Vec3( boxSize, wallHeight/2, 0), new CANNON.Vec3(wallThickness, wallHeight, 5));
+    addWall(new CANNON.Vec3(-boxSize, wallHeight/2, 0), new CANNON.Vec3(wallThickness, wallHeight, 5));
+    addWall(new CANNON.Vec3(0, wallHeight/2,  boxSize), new CANNON.Vec3(5, wallHeight, wallThickness));
+    addWall(new CANNON.Vec3(0, wallHeight/2, -boxSize), new CANNON.Vec3(5, wallHeight, wallThickness));
+
+    function addWall(pos, size) {
+      const shape = new CANNON.Box(new CANNON.Vec3(size.x/2, size.y/2, size.z/2));
+      const body = new CANNON.Body({ mass: 0 });
+      body.addShape(shape);
+      body.position.copy(pos);
+      world.addBody(body);
+    }
+
+    // Carica il modello 3D
+    const loader = new GLTFLoader();
+    loader.load(
+      'd20.glb',
+      gltf => {
+        console.log("Modello caricato con successo!");
+        diceMesh = gltf.scene;
+        diceMesh.scale.set(0.01, 0.01, 0.01);
+        
+        // Modifica i materiali per renderli viola brillante
+        diceMesh.traverse((child) => {
+          if (child.isMesh) {
+            if (child.material) {
+              // Cambia il colore a viola brillante
+              child.material.color = new THREE.Color(0x6a0dad); // Viola
+              
+              // Aggiungi emissione per farlo apparire più brillante
+              child.material.emissive = new THREE.Color(0x300050);
+              child.material.emissiveIntensity = 0.7;
+              
+              // Rendilo più luminoso
+              child.material.metalness = 0.7;  
+              child.material.roughness = 0.2;
+              
+              // Assicurati che prenda le ombre
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          }
+        });
+        
+        scene.add(diceMesh);
+
+        // Usa una sfera per la fisica
+        const shape = new CANNON.Sphere(1);
+        diceBody = new CANNON.Body({ mass: 300 });
+        diceBody.addShape(shape);
+        diceBody.angularDamping = 0.4;
+        world.addBody(diceBody);
+
+        resetDice();
+        diceReady = true;
+        
+        // Lancio automatico del dado appena caricato
+        setTimeout(() => rollDice(), 100);
+      },
+      xhr => {
+        console.log((xhr.loaded / xhr.total * 100) + '% caricato');
+      },
+      error => {
+        console.error('Errore nel caricamento del modello:', error);
+      }
+    );
+
+    // Rilancia il dado quando si ricarica la pagina
+    window.addEventListener('focus', () => {
+      if (diceReady && resultShown) {
+        setTimeout(() => rollDice(), 100);
+      }
+    });
+  }
+
+  function resetDice() {
+    diceBody.velocity.setZero();
+    diceBody.angularVelocity.setZero();
+    diceBody.position.set(0, 5, 0);
+    diceBody.quaternion.setFromEuler(0, 0, 0);
+    diceMesh.position.set(0, 5, 0);
+    diceMesh.quaternion.set(0, 0, 0, 1);
+  }
+
+  function rollDice() {
+    if (!diceReady) return;
+
+    resetDice();
+
+    // Forza verticale maggiore, meno forza orizzontale per centrare
+    const force = 1.0;
+    diceBody.velocity.set(
+      (Math.random() - 0.5) * force * 0.5,
+      6 + Math.random() * 2,
+      (Math.random() - 0.5) * force * 0.5
+    );
+    
+    diceBody.angularVelocity.set(
+      (Math.random() - 0.5) * 8,
+      (Math.random() - 0.5) * 8,
+      (Math.random() - 0.5) * 8
+    );
+
+    resultShown = false;
+    soundPlayed = false;
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    world.step(1 / 60);
+
+    if (diceReady) {
+      diceMesh.position.copy(diceBody.position);
+      diceMesh.quaternion.copy(diceBody.quaternion);
+
+      // Suono al contatto con piano
+      if (!soundPlayed && diceBody.velocity.y < -1 && diceBody.position.y <= 1.5) {
+        diceSound.currentTime = 0;
+        diceSound.play();
+        soundPlayed = true;
+      }
+
+      if (
+        diceBody.velocity.length() < 0.1 &&
+        diceBody.angularVelocity.length() < 0.1 &&
+        !resultShown
+      ) {
+        // Determinare quale faccia è rivolta verso l'alto
+        const result = determineVisibleFace();
+        
+        // Invia il risultato alla console (per debugging o per integrazione con sistemi esterni)
+        console.log("Risultato finale:", result);
+        
+        // Non mostriamo più il risultato visivamente
+        resultShown = true;
+      }
+    }
+
+    renderer.render(scene, camera);
+  }
+  
+  // Aggiungi questo rilevatore per lanciare il dado anche quando la pagina
+  // viene riaperta in OBS (ad esempio cambiando scena)
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden && diceReady) {
+      rollDice();
+    }
+  });
+  
+  // Rilancia automaticamente anche quando OBS riceve un refresh
+  window.onload = function() {
+    if (diceReady) {
+      rollDice();
+    }
+  };
+
+  function determineVisibleFace() {
+    // Salvare la rotazione corrente per riferimento (utile per debug)
+    const currentRotation = new THREE.Euler().setFromQuaternion(diceBody.quaternion);
+    console.log("Rotazione dado:", 
+      Math.round(currentRotation.x * 180/Math.PI),
+      Math.round(currentRotation.y * 180/Math.PI), 
+      Math.round(currentRotation.z * 180/Math.PI)
+    );
+    
+    // Determina il risultato basandoti sulla rotazione
+    const absY = Math.abs(currentRotation.y);
+    const absX = Math.abs(currentRotation.x);
+    const absZ = Math.abs(currentRotation.z);
+    
+    // Usa la somma delle rotazioni per generare un "indice di rotazione"
+    const rotIndex = (absX * 100 + absY * 10 + absZ) % 20;
+    
+    // Mappa l'indice di rotazione ai valori del D20
+    const d20Values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    const result = d20Values[Math.floor(rotIndex * d20Values.length / 20)];
+    
+    console.log("Indice rotazione:", rotIndex, "Risultato:", result);
+    return result;
+  }
+</script>
+</body>
+</html>
