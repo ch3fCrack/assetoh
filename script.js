@@ -407,16 +407,13 @@ function setupPayPal() {
 document.addEventListener("DOMContentLoaded", () => {
     const currentPage = window.location.pathname.split('/').pop();
 
-    // Caricamento GIF
+    // Caricamento GIF standard
     loadGifs(document.getElementById("asianGifContainer"), asianGifList);
     loadGifs(document.getElementById("gifContainer"), gifList);
     loadGifs(document.getElementById("duneGifContainer"), duneGifList);
     
-    // Aggiungi questa riga per caricare le Twitch Drops
-    const twitchContainer = document.getElementById("twitchDropsContainer");
-    if (twitchContainer) {
-        loadGifs(twitchContainer, gifList.filter(gif => gif.title === "Twitch Drops Presentation"));
-    }
+    // Caricamento Twitch Drops
+    loadGifs(document.getElementById("twitchDropsContainer"), twitchDropsList);
     
     // Setup Banner
     setupBannerPresentations();
