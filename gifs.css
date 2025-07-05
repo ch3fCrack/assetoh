@@ -41,4 +41,33 @@ button:hover {
     background-color: #ff0044;
     transform: translateY(-2px);
 }
+.section-divider {
+    margin: 40px 0 20px 0;
+    padding: 20px;
+    border-top: 2px solid #ff0044;
+    text-align: center;
+    clear: both;
+}
+
+.section-divider h2 {
+    color: #00aaff;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.section-divider p {
+    color: #ccc;
+    font-style: italic;
+    margin: 5px 0;
+}
+
+#twitchDropsContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#twitchDropsContainer .asset {
+    margin: 0 auto;
+}
 

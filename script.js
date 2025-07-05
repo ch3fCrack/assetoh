@@ -55,12 +55,6 @@ const gifList = [
     {
         preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif5.gif",
         obsUrl: "https://streamelements.com/overlay/67c4e22c586aed6967b99e08/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    },
-    {
-        // Correzione: usa un'immagine statica invece di un file HTML come preview
-        preview: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html",
-        obsUrl: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html", // Questo punterà al file locale
-        title: "Twitch Drops Presentation"
     }
 ];
 
