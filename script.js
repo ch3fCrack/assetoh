@@ -57,20 +57,10 @@ const gifList = [
         obsUrl: "https://streamelements.com/overlay/67c4e22c586aed6967b99e08/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
     },
     {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif12.gif",
-        obsUrl: "https://streamelements.com/overlay/6809370b9774c3054f6d67a1/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    }, 
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif13.gif",
-        obsUrl: "https://streamelements.com/overlay/680938b4adecf7dce8b71a2a/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    }, 
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif14.gif",
-        obsUrl: "https://streamelements.com/overlay/680939039774c3054f6e46ec/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
-    }, 
-    {
-        preview: "https://raw.githubusercontent.com/ch3fCrack/assetoh2.0/main/gifs/gif15.gif",
-        obsUrl: "https://streamelements.com/overlay/6809395d9774c3054f6e7845/_wWx9n2QwU4zKYil4BWDqZKNT9snXeat9bCDplNzG9YZ9agj"
+        // Correzione: usa un'immagine statica invece di un file HTML come preview
+        preview: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html",
+        obsUrl: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html", // Questo punterà al file locale
+        title: "Twitch Drops Presentation"
     }
 ];
 
@@ -156,6 +146,14 @@ const presentations = [
     {
         containerId: "presentation13",
         images: ["banners/private/private-banner1.png", "banners/private/private-banner1.png"]
+    }
+];
+// ===== CONFIGURAZIONE TWITCH DROPS =====
+const twitchDropsList = [
+    {
+        preview: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html", // Usa direttamente il file HTML come preview
+        obsUrl: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html",
+        title: "Twitch Drops Presentation"
     }
 ];
 
@@ -244,9 +242,24 @@ function loadGifs(container, list) {
     list.forEach((gif, index) => {
         const div = document.createElement("div");
         div.classList.add("asset");
+        
+        // Gestisci l'URL per OBS - se è un file locale, usa l'URL completo
+        let obsUrl = gif.obsUrl;
+        if (obsUrl.endsWith('.html') && !obsUrl.startsWith('http')) {
+            obsUrl = window.location.origin + '/' + obsUrl;
+        }
+        
+        // Gestisci la preview - se è un file HTML, usa un iframe
+        let previewElement;
+        if (gif.preview.endsWith('.html')) {
+            previewElement = `<iframe src="${gif.preview}" width="150" height="225" style="border: none; border-radius: 8px; pointer-events: none;"></iframe>`;
+        } else {
+            previewElement = `<img src="${gif.preview}" alt="GIF ${index + 1}">`;
+        }
+        
         div.innerHTML = `
-            <img src="${gif.preview}" alt="GIF ${index + 1}">
-            <button class="obs-btn" data-translate="copyForOBS" onclick="copyToOBS('${gif.obsUrl}')">Copy for OBS</button>
+            ${previewElement}
+            <button class="obs-btn" data-translate="copyForOBS" onclick="copyToOBS('${obsUrl}')">Copy for OBS</button>
         `;
         container.appendChild(div);
     });
@@ -403,7 +416,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Caricamento GIF
     loadGifs(document.getElementById("asianGifContainer"), asianGifList);
     loadGifs(document.getElementById("gifContainer"), gifList);
-    loadGifs(document.getElementById("duneGifContainer"), duneGifList); // Aggiungi questa riga
+    loadGifs(document.getElementById("duneGifContainer"), duneGifList);
+    
+    // Aggiungi questa riga per caricare le Twitch Drops
+    const twitchContainer = document.getElementById("twitchDropsContainer");
+    if (twitchContainer) {
+        loadGifs(twitchContainer, gifList.filter(gif => gif.title === "Twitch Drops Presentation"));
+    }
     
     // Setup Banner
     setupBannerPresentations();

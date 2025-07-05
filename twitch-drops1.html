@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitch Drops Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: transparent;
+        }
+        .gif-container {
+            width: 300px;
+            height: 450px;
+            background: radial-gradient(circle, #58375e, #3d254c);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-family: 'Teko', sans-serif;
+            color: white;
+            text-align: center;
+            
+        }
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            animation: fadeCycle 16s infinite;
+        }
+        .scene img {
+            max-width: 70%;
+            height: auto;
+            margin-bottom: 100px;
+            
+        }
+        .scene h2 {
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+        .scene.scene-1 {
+            animation-delay: 0s;
+        }
+        .scene.scene-2 {
+            animation-delay: 4s;
+        }
+        .scene.scene-3 {
+            animation-delay: 8s;
+        }
+        .scene.scene-4 {
+            animation-delay: 12s;
+        }
+        @keyframes fadeCycle {
+            0% { opacity: 0; transform: scale(0.95); }
+            6.25% { opacity: 1; transform: scale(1); }
+            25% { opacity: 1; transform: scale(1); }
+            31.25% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 0; }
+        }
+        .twitch-logo {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gif-container">
+        <!-- Scena 1: Watch 1 Hour -->
+        <div class="scene scene-1">
+            <h2>Watch 1 Hour</h2>
+            <img src="banners/Drops/1.png" alt="Watch 1 Hour Drop">
+        </div>
+
+        <!-- Scena 2: Watch 2 Hours -->
+        <div class="scene scene-2">
+            <h2>Watch 2 Hours</h2>
+            <img src="banners/Drops/2.png" alt="Watch 2 Hours Drop">
+        </div>
+
+        <!-- Scena 3: Watch 4 Hours -->
+        <div class="scene scene-3">
+            <h2>Watch 4 Hours</h2>
+            <img src="banners/Drops/3.png" alt="Watch 4 Hours Drop">
+        </div>
+
+        <!-- Scena 4: Watch 6 Hours -->
+        <div class="scene scene-4">
+            <h2>Watch 6 Hours</h2>
+            <img src="banners/Drops/4.png" alt="Watch 6 Hours Drop">
+        </div>
+
+        <!-- Logo Twitch -->
+        <svg class="twitch-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1563.8 1792.1" fill="white">
+            <path d="M224 0H0v1280h448v352h256l256-256h320l288-288V0H224zm1248 896l-224 224h-320l-256 256v-256H416V128h1056v768z"/>
+            <path d="M864 320h128v384H864V320zM1248 320h128v384h-128V320z"/>
+        </svg>
+    </div>
+</body>
+</html>

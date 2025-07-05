@@ -6,6 +6,7 @@
 }
 .asset {
     margin: 10px;
+    position: relative;
 }
 .asset img {
     width: 200px;
@@ -13,6 +14,19 @@
     border: 2px solid #00aaff; /* Aggiunta della cornice */
     border-radius: 5px;
     background-color: #55459b; /* Opzionale: arrotondamento degli angoli */
+}
+.asset iframe {
+    width: 150px;
+    height: 225px;
+    border: none;
+    border-radius: 8px;
+    pointer-events: none;
+    transform: scale(0.5);
+    transform-origin: top left;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 button {
     background-color: #00aaff;
