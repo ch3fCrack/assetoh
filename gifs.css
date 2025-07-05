@@ -16,8 +16,8 @@
     background-color: #55459b; /* Opzionale: arrotondamento degli angoli */
 }
 .asset iframe {
-    width: 150px;
-    height: 225px;
+    width: 200px;
+    height: auto;
     border: none;
     border-radius: 8px;
     pointer-events: none;
