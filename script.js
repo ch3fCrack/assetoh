@@ -148,6 +148,16 @@ const twitchDropsList = [
         preview: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html", // Usa direttamente il file HTML come preview
         obsUrl: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html",
         title: "Twitch Drops Presentation"
+    },
+     {
+        preview: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops2.html", // Usa direttamente il file HTML come preview
+        obsUrl: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html",
+        title: "Twitch Drops Presentation"
+    },
+     {
+        preview: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops3.html", // Usa direttamente il file HTML come preview
+        obsUrl: "https://ch3f-nerd-art-asset.netlify.app/twitch-drops1.html",
+        title: "Twitch Drops Presentation"
     }
 ];
 
