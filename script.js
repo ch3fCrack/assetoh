@@ -244,31 +244,52 @@ function loadGifs(container, list) {
     if (!container) return;
     
     list.forEach((gif, index) => {
-        const div = document.createElement("div");
-        div.classList.add("asset");
-        
-        // Gestisci l'URL per OBS - se è un file locale, usa l'URL completo
-        let obsUrl = gif.obsUrl;
-        if (obsUrl.endsWith('.html') && !obsUrl.startsWith('http')) {
-            obsUrl = window.location.origin + '/' + obsUrl;
-        }
-        
-        // Gestisci la preview - se è un file HTML, usa un iframe
-        let previewElement;
-        if (gif.preview.endsWith('.html')) {
-            previewElement = `<iframe src="${gif.preview}" width="150" height="225" style="border: none; border-radius: 8px; pointer-events: none;"></iframe>`;
+        // Se è il container Twitch Drops, usa un wrapper
+        if (container.id === 'twitchDropsContainer') {
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("asset-wrapper");
+            
+            const div = document.createElement("div");
+            div.classList.add("asset");
+            
+            let obsUrl = gif.obsUrl;
+            if (obsUrl.endsWith('.html') && !obsUrl.startsWith('http')) {
+                obsUrl = window.location.origin + '/' + obsUrl;
+            }
+            
+            if (gif.preview.endsWith('.html')) {
+                div.innerHTML = `<iframe src="${gif.preview}" frameborder="0"></iframe>`;
+            } else {
+                div.innerHTML = `<img src="${gif.preview}" alt="GIF ${index + 1}">`;
+            }
+            
+            const button = document.createElement("button");
+            button.classList.add("obs-btn");
+            button.setAttribute("data-translate", "copyForOBS");
+            button.textContent = "Copy for OBS";
+            button.onclick = () => copyToOBS(obsUrl);
+            
+            wrapper.appendChild(div);
+            wrapper.appendChild(button);
+            container.appendChild(wrapper);
         } else {
-            previewElement = `<img src="${gif.preview}" alt="GIF ${index + 1}">`;
+            // Codice normale per altri container
+            const div = document.createElement("div");
+            div.classList.add("asset");
+            
+            let obsUrl = gif.obsUrl;
+            if (obsUrl.endsWith('.html') && !obsUrl.startsWith('http')) {
+                obsUrl = window.location.origin + '/' + obsUrl;
+            }
+            
+            div.innerHTML = `
+                <img src="${gif.preview}" alt="GIF ${index + 1}">
+                <button class="obs-btn" data-translate="copyForOBS" onclick="copyToOBS('${obsUrl}')">Copy for OBS</button>
+            `;
+            container.appendChild(div);
         }
-        
-        div.innerHTML = `
-            ${previewElement}
-            <button class="obs-btn" data-translate="copyForOBS" onclick="copyToOBS('${obsUrl}')">Copy for OBS</button>
-        `;
-        container.appendChild(div);
     });
 
-    // Update translations for new elements
     updatePageLanguage();
 }
 
